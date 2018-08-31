@@ -1,0 +1,7 @@
+extends layout
+
+block content  
+    h1 Croeso!        
+    each story in stories
+        p
+            a(href=`${siteRoot}/stories/${story.path}`) #{story.title}

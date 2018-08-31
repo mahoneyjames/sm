@@ -1,0 +1,13 @@
+mixin storyCard(story={"title":"Test"}, rule={})
+    .story    
+        .title 
+            h2 #{story.title}
+        span.page-divider
+            span.one
+            span.two
+        -// const storyBody = helpers.storyBody(story,rule) 
+        -//.body !{storyBody}
+            p #{story.content}
+        .author 
+            | by 
+            a(href=`${siteRoot}/pobol/${story.author}`) #{story.author}
