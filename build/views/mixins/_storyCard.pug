@@ -7,7 +7,7 @@ mixin storyCard(story={"title":"Test"}, rule={})
             span.two
         -// const storyBody = helpers.storyBody(story,rule) 
         -//.body !{storyBody}
-            p #{story.content}
+            p !{story.content}
         .author 
             | by 
             a(href=`${siteRoot}/pobol/${story.author}`) #{story.author}
