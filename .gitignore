@@ -1,3 +1,4 @@
 docs/aws-credentials.json
 lambda/aws-credentials.json
 lambda/node_modules
+lambda/variables.env

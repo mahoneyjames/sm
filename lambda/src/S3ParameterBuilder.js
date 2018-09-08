@@ -34,6 +34,13 @@ var createParams = {
             ContentType: mimeType
         };
     },
+    listObjects:function(bucketName, prefix){
+        return {
+            Bucket: bucketName, 
+            prefix: prefix,
+            [list-type]: 2
+        };
+    },
     putBucketWebsite:function(bucketName,index,error) {
         var params = {
             Bucket:bucketName,

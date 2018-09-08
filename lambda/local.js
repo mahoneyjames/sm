@@ -1,13 +1,15 @@
-const htmlGenerator = require('./src/htmlGenerator');
+require('dotenv').config({ path: 'variables.env' });
+//console.log(process.env.AWS_SECRET);
+process.on('unhandledRejection', error => {
+  // Will print "unhandledRejection err is not defined"
+  console.log('unhandledRejection', error.message);
+});
 
-
-    console.log("haro");
-
-const bucketName = "preview.storymarmalade.co.uk";
-
+const sm = require('./src/marmalade');
+const lambda = require('./lambdaHttp');
 
 var stories = [
-{"title":"All at badger","author":"JamesM","link":"","permaLinks":["barry"],"format":"google","content":"So Pete was naked in my car again. Not just butt naked, he was ball naked, stretched out on the back seat with it all on show. No sign of his clothes, nor his wallet or shoes, but as Tim said, at least she left the keys.\n \nIt's not how Friday night was supposed to go. Four guys, few drinks, nice meal, and then home by midnight. The first two worked out for me, Tim and Jeremy, only Pete didn't get the message. What he got was forty drinks, not all for him, at least half went on the girl and her friends. They were half smashed before they even met Pete, so I guess that’s why she was fine with it being nine o’clock on the edge of the dance floor and Pete, total stranger, with his fingers where they really should not have been in polite company.\n \nI wasn’t going to give him the keys to the car, not again. Only when he came over he put both hands around Tim’s face and kissed him on the forehead.\n \nTim’s idea was that we leave him in the street. Maybe a naked night on the tiles will shock him into acting like a normal person. The problem with that – Pete’s mother. There’s only one thing she loves more than her Samurai sword collection, and that’s her sweet baby Pete. We couldn’t even drive him home and come back, at forty five minutes each way our swanky restaurant table was a gonna.\n  \nSo that was us, Friday night over, driving home to soggy fish and chips and warm lager from the offy. All of us talking big, how it’s the last time Pete comes out with us, how we’re going to tell him how rank we find his behaviour, but all of us knowing that come next month it’ll be the same thing over again.\n \nI didn’t think the night could dive any lower, and then Tim started shrieking in horror. I was looking in the mirror, I was looking at Pete’s still sleeping, yet strangely happy face, Tim was shouting about walking, and that's how I hit the badger.\n \nNot a killing blow, as it turns out, but at the time that poor badger sure looked a gonna, lying there all floppy on the side of the road. Lying there right under the sign for the boating lake. The boating lake we went to as kids, the one with the gate at the front where you pay to get in, and it looks like it has fences all round, only the wood’s all rotted where they let the hedges grow too close.\n \nFriday night was saved! Me, Tim, and Jeremy, three young guys yet we sat around that table like three old men, saying how nice it was to not have to shout to be heard. How it was Pete the one who'd need to bellow to be heard, out there in the middle of that lake, naked in a boat with a badger.\n \nAnd like I said, we all thought that badger was a gonna. \n"}
+{"title":"All at badgers","author":"JamesM","link":"","permaLinks":["barry"],"format":"google","content":"So Pete was naked in my car again. Not just butt naked, he was ball naked, stretched out on the back seat with it all on show. No sign of his clothes, nor his wallet or shoes, but as Tim said, at least she left the keys.\n \nIt's not how Friday night was supposed to go. Four guys, few drinks, nice meal, and then home by midnight. The first two worked out for me, Tim and Jeremy, only Pete didn't get the message. What he got was forty drinks, not all for him, at least half went on the girl and her friends. They were half smashed before they even met Pete, so I guess that’s why she was fine with it being nine o’clock on the edge of the dance floor and Pete, total stranger, with his fingers where they really should not have been in polite company.\n \nI wasn’t going to give him the keys to the car, not again. Only when he came over he put both hands around Tim’s face and kissed him on the forehead.\n \nTim’s idea was that we leave him in the street. Maybe a naked night on the tiles will shock him into acting like a normal person. The problem with that – Pete’s mother. There’s only one thing she loves more than her Samurai sword collection, and that’s her sweet baby Pete. We couldn’t even drive him home and come back, at forty five minutes each way our swanky restaurant table was a gonna.\n  \nSo that was us, Friday night over, driving home to soggy fish and chips and warm lager from the offy. All of us talking big, how it’s the last time Pete comes out with us, how we’re going to tell him how rank we find his behaviour, but all of us knowing that come next month it’ll be the same thing over again.\n \nI didn’t think the night could dive any lower, and then Tim started shrieking in horror. I was looking in the mirror, I was looking at Pete’s still sleeping, yet strangely happy face, Tim was shouting about walking, and that's how I hit the badger.\n \nNot a killing blow, as it turns out, but at the time that poor badger sure looked a gonna, lying there all floppy on the side of the road. Lying there right under the sign for the boating lake. The boating lake we went to as kids, the one with the gate at the front where you pay to get in, and it looks like it has fences all round, only the wood’s all rotted where they let the hedges grow too close.\n \nFriday night was saved! Me, Tim, and Jeremy, three young guys yet we sat around that table like three old men, saying how nice it was to not have to shout to be heard. How it was Pete the one who'd need to bellow to be heard, out there in the middle of that lake, naked in a boat with a badger.\n \nAnd like I said, we all thought that badger was a gonna. \n"}
 ,{"title":"Doggy style","author":"JennyA","link":"","permaLinks":["dogs-are-everywhere"],"format":"google","content":"Doggy Style\n\n“You can’t do that to him - he’ll be a laughing stock.”\n\n“Why? It’s so cute - isn’t it Andre?”\n\nIt was my final argument. I’d tried telling her it was cruel, a waste of time, that it was exploitative. Nothing. Even this appeal for Andre’s dignity failed to move her.\n\nAndre looked balefully out from his basket under the table. I shot him a glance of commiseration, but we both knew there was nothing I could do. He tried to retreat back under his blanket but Ellie had already picked him up by his pudgy middle and was trying to squeeze the tiny plastic raincoat over his head. He didn’t struggle.\n\n“Why would a dog need a raincoat? They love water! They love being wet!” \n\nUseless. My arguments, like Andre, were lost to Ellie’s latest fad. She was already Instagramming the two of them together, she pouting, he defeatedly gazing at the screen, his little legs dangling through the yellow plastic sleeves. Poor little sod. She added a flattering filter, some little cartoon raindrops and a few lurid hearts. Her phone was soon buzzing with Likes and she tapped happily away at it, revelling in the adulation.\n\nI had to be fair; as sorry as I felt for Andre and as awful, vacuous and shallow as I found my little sister’s passion for dressing him up and posing, I had to admit that she had a flair for fashion. The little coat was meticulously designed and sewn together with real skill. She’d been making paper dresses for Barbie since she was old enough to be allowed scissors, despite our mother’s best attempts to interest her in nature, The Great Outdoors, sports - anything that wasn’t pink and frilly. My sister turned out a rebel in glittery shoes.\n\nAnd now it was Andre’s turn. Barbie was old news, abandoned in a corner without a stitch on. Humiliated. ‘At least’ I thought ‘this probably won’t last long - she’s probably bored of it already and when she grows up she’ll start working on clothes for real people. When she’s a famous designer, we’ll look back and laugh. Andre will be alright...’\n\n“Aren’t you a bit old for dressing up toys and pets now?” I said in my most patronising tone. I wanted to embarrass her. Ellie looked at me with undisguised contempt. I squirmed, uncomfortably.\n\n“This shit sells for silly money. People love dressing their pets up - Instagram is full of it. Why do you think I never need cash? Knock a few of these out, share them online and the requests come flooding in. Some people” she told me wisely “have more money than sense.”\n\nShe emptied the contents of her school satchel onto the carpet. There was a tiny, four-legged sailor outfit, complete with hat; a little stetson and gun holster, with fringed chaps; four perfect replica Converse daps and even a pink tutu and tiara. I shuddered and felt old. Ellie picked up her camera determinedly. Andre whimpered.\n\n\n\n\n"}
 ,{"title":"Death and mutilation","author":"LewisG","link":"","content":null}
 ,{"title":"Dive right in","author":"JamesM","link":"https://docs.google.com/document/d/1Ba-x5yUSyHE8TD3kG7SW98G2-c-lcn7evFk8fDeMR_g/edit","format":"google","content":"‘I love it.’\n‘I hate it.’\n‘Well I love it.’\n‘And I hate it.’\n\nIt was two triangles without bases, and in between at the bottom was a small diamond ringed by small clouds. It was called “Mountains and lake”, done in freehand charcoal and nothing else. Of course they were going to buy it; she only had to turn those eyes on him and he was putty, but he liked the journey. He knew without asking it was going over the fireplace but he asked anyway, wanting to see her pout.\nIt was a talking point, this plain white canvas five foot by four with nothing on it but black lines, and nothing to frame it because the artist – Beverley – said that frames were cages and art should be free to soar.\nPeople said it was striking, or it was interesting.  But most often people would turn and look at him and say, ‘What is it?’\nIt was abstract. He’d say it firmly, and people not into art would nod sagely as if they knew, and people into art would nod sagely because they knew. Abstract is a genius artist, someone that persuades you stump up hard cash and do all the work in figuring it out.\nCouldn’t say that back to people.\nBut she loved it, and that was the main thing. He’d come home and find her stood in front of it. One time she had her arms folded on the shelf above the hearth, leaning so close she could have reached out with her tongue and licked it. He could barely stand the heat coming off the hearth but she seemed not to care, and she seemed not to notice until he put his arms on her shoulders and pulled her away.\nGlazed eyes looked back for a moment until she focussed. It was a breathy voice that spoke to him.\n‘I could see it. I could see the waters of the lake, and they were calling to me. Dive in, dive! And so I dove, deeper and deeper, and then I couldn’t breathe, and then…’\nAnd then she kissed him. And then she took him upstairs.\nAnd then it was different. There was something different about it, something he couldn’t quite put his finger on despite how hard he tried.\nWhen he showed the picture to his mother she stared hard for a long time as well. She turned her hard stare on both of them, and then sat on the sofa, knees pressed together, tartan handbag on top as a shield.\nIt was the most disgusting thing she’d ever seen.\n‘But…it’s abstract! It’s mountains and a lake, with little trees around.’\nAnd his mother said, ‘It’s a woman on her back. Those mountains are her legs, and she’s showing you her business.’\nAnd for the first time he looked, he really looked.\nAnd then he looked at his wife. Who was sat down with her knees pressed firmly together, one hand over her mouth. \n"}
@@ -16,16 +18,16 @@ var stories = [
 {"title":"terry","author":"JamesM","link":"","permaLinks":[],"format":"markdown","content":"\nThis is my story about terry\n\n> It is using [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)\n\n# Yes, that’s correct"}];
 
 
-
-var helpers = {siteName:"PREVIEW: Story Marmalade"};
 var validStories = [];
 
+const site = "preview";
 
 async function processStories()
 {
     await stories.reduce(async(promise, story)=>{
-        await promise;
-        var result = await htmlGenerator.buildAndPublishStory(helpers,story,bucketName);
+        
+        var result = await sm.saveStory(site,story);
+
         if(result.errors.length==0)
         {
             validStories[validStories.length] = result;
@@ -37,23 +39,38 @@ async function importSite(){
 
     //TODO - try getting the stories processed in parallel
     await processStories();
-
-    htmlGenerator.upload(bucketName,"index", "storyList", {helpers,stories:validStories});
-
-
+    const helpers = sm.getHelpers(site);
     
-    htmlGenerator.upload(bucketName,"about", "about", {helpers});
-
-    htmlGenerator.upload(bucketName, "pobol/JamesM", "who", {helpers, author:{name:"James", about:"Yay!"}});
-    htmlGenerator.upload(bucketName, "pobol/JennyA", "who", {helpers, author:{name:"Jenny", about:"Always not dissapointing!"}});
-    htmlGenerator.upload(bucketName, "pobol/LewisG", "who", {helpers, author:{name:"Lewis", about:"Not a good sepller"}});
-    htmlGenerator.upload(bucketName,"oops", "oops", {helpers});
+    await sm.buildPageAndUpload(site,"index", "storyList", {helpers,stories:validStories});   
+    await sm.buildPageAndUpload(site,"about", "about", {helpers});
+    await sm.buildPageAndUpload(site,"pobol/JamesM", "who", {helpers, author:{name:"James", about:"Yay!x"}});
+    await sm.buildPageAndUpload(site,"pobol/JennyA", "who", {helpers, author:{name:"Jenny", about:"Always not dissapointing!x"}});
+    await sm.buildPageAndUpload(site,"pobol/LewisG", "who", {helpers, author:{name:"Lewis", about:"Not a good sepllerx"}});
+    await sm.buildPageAndUpload(site,"oops", "oops", {helpers});
         
-
-
-
 }
 
-importSite();
+async function buildAuthorIndex(author)
+{    
+    await lambda.buildAuthorIndex({author:author}, null);
+}
+//blah();
 
+//console.log("ha");
+/*
+ - [x] build a single story
+ - [x] build the static pages
+ - [ ] build an author index
 
+*/
+
+//    sm.buildAndPublishStory(site, stories[0]);    
+//importSite();
+
+async function rebuildStoriesForAuthor(author)
+{
+    await sm.rebuildAuthorStories(site, author);
+}
+
+rebuildStoriesForAuthor('JennyA');
+rebuildStoriesForAuthor('JamesM');

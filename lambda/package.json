@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node ./local.js"
+    "test": "node ./local.js",
+    "s3": "node ./aws.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "aws-sdk": "^2.1.17",    
     "pug": "2.0.0-beta6",
     "meta-marked": "^0.4.2",
-    "q": "~0.9.6"
+    "q": "~0.9.6",
+    "dotenv": "4.0.0"
     }
 }
