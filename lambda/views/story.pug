@@ -1,4 +1,6 @@
 extends layout
 include mixins/_storyCard
+include mixins/_comments
 block content         
-    +storyCard(story,rule)
+    +storyCard(story,rule,displayAuthor)
+    +comments("http://preview.storymarmalade.co.uk/" + story.path,story.id)

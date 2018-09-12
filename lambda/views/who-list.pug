@@ -3,4 +3,5 @@ extends layout
 block content
     h1 #{author.name}
     each story in stories
-        p #{story.title}
+        p 
+            a(href=`${siteRoot}/${story.path}`) #{story.title}

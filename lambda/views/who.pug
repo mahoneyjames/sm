@@ -1,5 +1,10 @@
 extends layout
-
+include mixins/_comments
 block content
     h1 #{author.name}
     p #{author.about}
+    p
+        a(href=`${siteRoot}/authors/${author.id}`) Stories by this author
+
+    h1 comments
+        +comments("","")

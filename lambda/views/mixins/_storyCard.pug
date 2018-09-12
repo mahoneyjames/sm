@@ -1,4 +1,4 @@
-mixin storyCard(story={"title":"Test"}, rule={})
+mixin storyCard(story={"title":"Test"}, rule={},displayAuthor=true)
     .story    
         .title 
             h2 #{story.title}
@@ -8,6 +8,7 @@ mixin storyCard(story={"title":"Test"}, rule={})
         -// const storyBody = helpers.storyBody(story,rule) 
         -//.body !{storyBody}
             p !{html}
-        .author 
-            | by 
-            a(href=`${siteRoot}/pobol/${story.author}`) #{story.author}
+        if displayAuthor==true
+            .author 
+                | by 
+                a(href=`${siteRoot}/pobol/${story.author}`) #{story.author}

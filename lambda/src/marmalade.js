@@ -1,7 +1,6 @@
 const pug = require('pug');
-const marked = require('meta-marked');
 const storyData = require('./storyData');
-
+const marked = require('meta-marked');
 const markdownToHtmlConvertor = new marked.Renderer();
 
 exports.getHelpers = (site)=>{
@@ -13,6 +12,10 @@ exports.getHelpers = (site)=>{
     }
 
     return helpers;
+}
+exports.saveAuthor = async(site, author)=>{
+
+    await storyData.saveAuthor(site, author);
 }
 
 exports.saveStory = async(site,story)=>{
@@ -78,7 +81,8 @@ exports.buildAuthorIndex = async(site, author)=>{
     //generate a page
     //write to a file author/stories    
     const stories = await storyData.listAuthorStories(site, author);    
-    await buildPageAndUpload(site,`authors/${author}`,"who-list",{stories});
+    await exports.buildPageAndUpload(site,`authors/${author}`,"who-list",
+        {helpers:exports.getHelpers(site),stories,author:{name:author}});
     return;
 }
 

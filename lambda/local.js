@@ -24,35 +24,58 @@ const site = "preview";
 
 async function processStories()
 {
-    await stories.reduce(async(promise, story)=>{
-        
-        var result = await sm.saveStory(site,story);
 
-        if(result.errors.length==0)
-        {
-            validStories[validStories.length] = result;
-        }
-    },Promise.resolve());    
+    var storyPromises = stories.map(async(story)=>
+    {
+        return await sm.saveStory(site,story);
+    });
+console.log("process1");   
+    const storyResults = await Promise.all(storyPromises);
+    console.log("process2");   
+    validStories = storyResults.filter((story)=>story.errors.length==0);
+
+    
 }
 
-async function importSite(){
+const authors = [{id: "JamesM", name:"James", about:"Yay!x"},
+{id:"JennyA",name:"Jenny", about:"Always not dissapointing!x"},
+{id:"LewisG",name:"Lewis", about:"Not a good sepllerx"}];
 
-    //TODO - try getting the stories processed in parallel
+async function processAuthors()
+{
+    var promises = authors.map(async(author)=>await sm.saveAuthor(site, author));
+    await Promise.all(promises);
+}
+
+
+async function importSite(){
+    
     await processStories();
+    await processAuthors();
+    console.log("after process");
     const helpers = sm.getHelpers(site);
+    console.log(validStories.length);
+    
     
     await sm.buildPageAndUpload(site,"index", "storyList", {helpers,stories:validStories});   
+    
     await sm.buildPageAndUpload(site,"about", "about", {helpers});
-    await sm.buildPageAndUpload(site,"pobol/JamesM", "who", {helpers, author:{name:"James", about:"Yay!x"}});
-    await sm.buildPageAndUpload(site,"pobol/JennyA", "who", {helpers, author:{name:"Jenny", about:"Always not dissapointing!x"}});
-    await sm.buildPageAndUpload(site,"pobol/LewisG", "who", {helpers, author:{name:"Lewis", about:"Not a good sepllerx"}});
+    await sm.buildPageAndUpload(site,"pobol/JamesM", "who", {helpers, author:{id: "JamesM", name:"James", about:"Yay!x"}});
+    await sm.buildPageAndUpload(site,"pobol/JennyA", "who", {helpers, author:{id:"JennyA",name:"Jenny", about:"Always not dissapointing!x"}});
+    await sm.buildPageAndUpload(site,"pobol/LewisG", "who", {helpers, author:{id:"LewisG",name:"Lewis", about:"Not a good sepllerx"}});
     await sm.buildPageAndUpload(site,"oops", "oops", {helpers});
         
 }
 
+async function importSingleAuthor()
+{
+    const helpers = sm.getHelpers(site);
+    await sm.buildPageAndUpload(site,"pobol/LewisG", "who", {helpers, author:{id:"LewisG",name:"Lewis", about:"Not a good sepllerx"}});
+}
+
 async function buildAuthorIndex(author)
 {    
-    await lambda.buildAuthorIndex({author:author}, null);
+    await lambda.buildAuthorIndex({site,author:author}, null);
 }
 //blah();
 
@@ -67,10 +90,13 @@ async function buildAuthorIndex(author)
 //    sm.buildAndPublishStory(site, stories[0]);    
 //importSite();
 
-async function rebuildStoriesForAuthor(author)
+async function rebuildStoriesForAuthor( author)
 {
     await sm.rebuildAuthorStories(site, author);
 }
-
-rebuildStoriesForAuthor('JennyA');
-rebuildStoriesForAuthor('JamesM');
+//importSite();
+//rebuildStoriesForAuthor('JennyA');
+//rebuildStoriesForAuthor('JamesM');
+//buildAuthorIndex('JamesM');
+//buildAuthorIndex('JennyA');
+importSingleAuthor();
