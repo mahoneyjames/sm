@@ -20,3 +20,18 @@ exports.publishStoryClubStory = async(event, context)=>{
 exports.publishThemeAnonymously = async(event, context)=>{
     return await storyclub.publishThemeAnonymously(event.themeId);
 }
+
+exports.genericFunction = async(event, context)=>{
+    switch(event.action)
+    {
+        case "sc-story":
+            return await storyclub.publishThemeStory(event.themeId, event.story);
+        case "sc-theme":
+            return await storyclub.publishThemeAnonymously(event.themeId);
+        case "sc-echo":
+            return event;
+        default:
+            return "dim byd!";
+    }
+
+}

@@ -1,0 +1,10 @@
+extends sc-layout
+include mixins/_storyCard
+include mixins/_comments
+block content         
+    +storyCard(story,rule,displayAuthor)
+    span.page-divider
+        span.one
+        span.two
+    h2 Feedback please!
+    +comments("http://www.storyclub.co.uk/" + story.path,story.id,"storyclub")

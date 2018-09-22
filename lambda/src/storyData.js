@@ -51,6 +51,8 @@ exports.bucketNameFromSite = (site) => {
             return "preview.storymarmalade.co.uk";
         case "prod":        
             return "www.storymarmalade.co.uk";
+        case "storyclub":
+            return "www.storyclub.co.uk";
         default:
             throw `'${site}' did not map to an S3 buket'`;
     }

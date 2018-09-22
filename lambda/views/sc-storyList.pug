@@ -1,0 +1,15 @@
+extends sc-layout
+
+block content  
+    h1 Current challenge        
+    each story in stories
+        p
+            a(href=`${siteRoot}/${story.path}`) #{story.title}
+            |  [
+            a(href=`${siteRoot}/${story.path}#disqus_thread`) 0 comments
+            | ]
+
+
+    a(href=`${siteRoot}/${themePath}/all`) Single page view
+    
+    script(id="dsq-count-scr" src="//storyclub.disqus.com/count.js" async)

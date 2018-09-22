@@ -7,10 +7,10 @@ const markdownToHtmlConvertor = new marked.Renderer();
 exports.tidyStory = (story)=>{
 
     //if the first line of the story text contains the title, remove it
-    if(story.content!=null && story.title!=null && story.content.slice(0, story.title.length).toLowerCase() == story.title.toLowerCase())
-    {
-        story.content = story.content.slice(story.title.length);
-    }
+    // if(story.content!=null && story.title!=null && story.content.slice(0, story.title.length).toLowerCase() == story.title.toLowerCase())
+    // {
+    //     story.content = story.content.slice(story.title.length);
+    // }
 
     //A google drive file, so replace single new lines with double, to get the correct line breaks inserted by markdown
     if(story.format=="google")

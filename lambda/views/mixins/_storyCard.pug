@@ -7,7 +7,7 @@ mixin storyCard(story={"title":"Test"}, rule={},displayAuthor=true)
             span.two
         -// const storyBody = helpers.storyBody(story,rule) 
         -//.body !{storyBody}
-            p !{html}
+            p !{story.html}
         if displayAuthor==true
             .author 
                 | by 

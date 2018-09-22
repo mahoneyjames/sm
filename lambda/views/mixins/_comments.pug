@@ -1,4 +1,4 @@
-mixin comments(url,identifier)
+mixin comments(url,identifier,site)
     div(id="disqus_thread")
     script.
         var disqus_config = function () {
@@ -8,7 +8,7 @@ mixin comments(url,identifier)
 
         (function() { // DON'T EDIT BELOW THIS LINE
             var d = document, s = d.createElement('script');
-            s.src = 'https://storymarmalade.disqus.com/embed.js';
+            s.src = 'https://#{site}.disqus.com/embed.js';
             s.setAttribute('data-timestamp', +new Date());
             (d.head || d.body).appendChild(s);
             })();

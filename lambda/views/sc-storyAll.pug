@@ -1,0 +1,10 @@
+extends sc-layout
+include mixins/_storyCard
+include mixins/_comments
+block content
+    h1 All stories
+    each story in stories         
+        +storyCard(story,rule,displayAuthor)
+        span.page-divider
+            span.one
+            span.two        

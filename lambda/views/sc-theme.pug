@@ -1,0 +1,14 @@
+extends sc-layout
+include mixins/_storySubmit
+block content
+    h1 Theme
+    p #{theme.themeText}
+    h1 Must include
+    ul
+        each thing in theme.things
+            li #{thing}
+    h1 Deadline
+    p #{theme.deadline}
+    h1 Ready already?
+    p Well then, get submitting here
+    +storySubmit(theme, authors)

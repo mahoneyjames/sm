@@ -1,0 +1,89 @@
+mixin storySubmit(theme, authors)                    
+    div
+        label(for="author") Who are you?
+        div
+            select(id="author")
+                option
+                each author in authors
+                    option(value=author.name) #{author.name}
+            
+            p This currently works on the honour system, so no submitting of dodgy stories under other people's names (however hilarious that might be)
+
+    div
+        label(for="title") Title
+        div
+            input(type="text" id="title")
+
+    div    
+        label(for="content") Content
+        div
+            textarea(id="content" rows="50" cols="50" placeholder="Enter your story. Use markdown to include formatting")
+
+    div
+        button(onclick="submitStory();") Submit
+
+    script.
+        function submitStory()
+        {
+            const authorDropdown=document.querySelector("#author");
+            console.log(authorDropdown);
+            let author = null;
+            if(authorDropdown.selectedIndex>0)
+            {
+                author = authorDropdown.options[authorDropdown.selectedIndex].value;
+            }
+
+            if(author==null)
+            {
+                alert("select an author");
+                return;
+            }
+            
+            const title = document.querySelector("#title").value;
+            if(title.trim()=="")
+            {
+                alert("add a title");
+                return;
+            }          
+
+            const content=document.querySelector("#content").value;
+            if(content.trim()=="")
+            {
+                alert("where's the story??");
+                return;
+            }
+
+            axios.post("#{helpers.formSubmitUrl}",{
+                action:"sc-story",
+                themeId:"#{theme.id}",
+                story: {
+                    author,
+                    title,
+                    content
+                }                
+            })
+            .then(function(response)
+            {                
+                
+                const data = response.data;
+                console.log(data);
+                if(data.errors!=undefined)
+                {
+                    if(data.errors.length==0)
+                    {
+                        //console.log();
+                        window.open(getRootUrl(window.location) + "/" + data.path);
+                    }
+                    else
+                    {
+                        alert(string.json(data.errors));
+                    }
+                }
+                
+            })
+            .catch(function(error){alert(error);});
+        }
+
+        function getRootUrl(url) {
+             return url.toString().replace(/^(.*\/\/[^\/?#]*).*$/,"$1");
+        }

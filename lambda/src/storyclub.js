@@ -5,8 +5,8 @@ const storyHelpers = require('./storyHelpers');
     Generate a random id and return it
 */
 
-const site = "preview";
-const objectPrefix = "storyclub/";
+const site = "storyclub";
+const objectPrefix = "her/";
 
 exports.registerTheme = async (groupId, theme)=>{}
 
@@ -31,15 +31,65 @@ exports.publishThemeStory = async (themeId, story) => {
         const storyPath = `${objectPrefix}${themeId}/${story.id}`;
         story.path = storyPath;
 
-        //save the json
-        await storyData.saveStoryClubStory(site, story);
+        
 
         //generate html, and save that
         const storyHtml = storyHelpers.markdownToHtml(story.content);
+        story.html = storyHtml;
+        //save the json
+        await storyData.saveStoryClubStory(site, story);        
 
-        await storyHelpers.buildPageAndUpload(site, `${story.path}`,"story",{ story,helpers:getHelpers(),html:storyHtml,displayAuthor:false});
+        const pageTitle = story.title!=undefined && story.title != null && story.title!="" ? story.title : "Storyclub";
+        await storyHelpers.buildPageAndUpload(site, `${story.path}`,"sc-story",{title: pageTitle, story,helpers:getHelpers(),displayAuthor:false});
     }
     return story;
+}
+
+exports.generateThemePage = async(theme)=>{
+
+
+    if(theme.errors==undefined)
+    {
+        theme.errors = [];
+    }
+
+    if(theme.themeText==undefined || theme.themeText==null || theme.themeText.trim()=="")
+    {
+        theme.errors[theme.errors.length] = "No theme.themeText supplied";
+    }
+
+    if( theme.things==undefined 
+        || theme.things==null 
+        || theme.things.reduce((validThingCount, currentThing)=>{
+        if(currentThing==null || currentThing.trim()=="")
+        {
+            return validThingCount;
+        }
+        else 
+        {
+            return validThingCount+1;
+        }
+    },0) <3)
+    {
+        theme.errors[theme.errors.length] = "theme.things does not have 3 entries";
+    }
+   
+
+    
+
+    if(theme.id==undefined || theme.id==null || theme.id=="")
+    {
+        theme.id = uniqid();
+    }
+
+    if(theme.errors.length==0)
+    {
+        const themePath = `${objectPrefix}${theme.id}`;
+        const authors = [{id:"mahoneyjames@gmail.com", name:"James"},{id:"jeanny@asomething.com", name:"Jenny"}];
+        await storyHelpers.buildPageAndUpload(site,themePath,"sc-theme",{theme:theme, title:theme.themeText, helpers:getHelpers(),authors});
+    }
+
+    return theme;
 }
 
 
@@ -50,11 +100,37 @@ exports.publishThemeStory = async (themeId, story) => {
 */
 exports.publishThemeAnonymously = async(themeId)=>{
     const stories = await storyData.listStoryClubThemeStories(site, objectPrefix, themeId);
+
+    stories.sort((a,b)=>{
+        if(a.order==undefined 
+            || b.order==undefined
+            || a.order==null
+            || b.order==null
+            || a.order==b.order)
+        {
+            return 0;
+        }
+        else if(a.order<b.order)
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    });
+
     const themePath = `${objectPrefix}${themeId}`;
-    await storyHelpers.buildPageAndUpload(site, themePath,"storyList",{stories,helpers:getHelpers()});
+    await storyHelpers.buildPageAndUpload(site, themePath,"sc-storyList",{stories,helpers:getHelpers(), themePath});
+    await exports.generateSingleThemeStoryPage(themeId,stories);
+}
+
+exports.generateSingleThemeStoryPage = async (themeId,stories)=>{
+    const themePath = `${objectPrefix}${themeId}/all`;
+    await storyHelpers.buildPageAndUpload(site, themePath,"sc-storyAll",{stories,helpers:getHelpers(),displayAuthor:false});
 }
 
 function getHelpers()
 {
-    return {siteName:"StoryClub"};
+    return {siteName:"StoryClub", formSubmitUrl:"https://nt1h0wmf85.execute-api.eu-west-2.amazonaws.com/dev/any"};
 }
