@@ -1,7 +1,11 @@
 extends sc-layout
 include mixins/_storyCard
 include mixins/_comments
+include mixins/_themeCard
 block content
+    h1 
+        if options.displayThemeInfo
+            +themeCard(theme)
     h1 All stories
     each story in stories         
         +storyCard(story,rule,displayAuthor)

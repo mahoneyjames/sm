@@ -1,5 +1,5 @@
 const pug = require('pug');
-const storyData = require('./storyData');
+const storyData = require('./storyData.fs');
 
 const marked = require('meta-marked');
 const markdownToHtmlConvertor = new marked.Renderer();

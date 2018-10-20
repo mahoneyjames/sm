@@ -1,5 +1,5 @@
 const uniqid = require('uniqid');
-const storyData = require('./storyData');
+const storyData = require('./storyData.fs');
 const storyHelpers = require('./storyHelpers');
 /*
     Generate a random id and return it
@@ -47,42 +47,7 @@ exports.publishThemeStory = async (themeId, story) => {
 
 exports.generateThemePage = async(theme)=>{
 
-
-    if(theme.errors==undefined)
-    {
-        theme.errors = [];
-    }
-
-    if(theme.themeText==undefined || theme.themeText==null || theme.themeText.trim()=="")
-    {
-        theme.errors[theme.errors.length] = "No theme.themeText supplied";
-    }
-
-    if( theme.things==undefined 
-        || theme.things==null 
-        || theme.things.reduce((validThingCount, currentThing)=>{
-        if(currentThing==null || currentThing.trim()=="")
-        {
-            return validThingCount;
-        }
-        else 
-        {
-            return validThingCount+1;
-        }
-    },0) <3)
-    {
-        theme.errors[theme.errors.length] = "theme.things does not have 3 entries";
-    }
-   
-
-    
-
-    if(theme.id==undefined || theme.id==null || theme.id=="")
-    {
-        theme.id = uniqid();
-    }
-
-    if(theme.errors.length==0)
+    if(exports.validateTheme(theme))
     {
         const themePath = `${objectPrefix}${theme.id}`;
         const authors = [{id:"mahoneyjames@gmail.com", name:"James"},{id:"jeanny@asomething.com", name:"Jenny"}];
@@ -125,9 +90,48 @@ exports.publishThemeAnonymously = async(themeId)=>{
     await exports.generateSingleThemeStoryPage(themeId,stories);
 }
 
-exports.generateSingleThemeStoryPage = async (themeId,stories)=>{
-    const themePath = `${objectPrefix}${themeId}/all`;
-    await storyHelpers.buildPageAndUpload(site, themePath,"sc-storyAll",{stories,helpers:getHelpers(),displayAuthor:false});
+exports.publishTheme = async(theme, options)=>{
+
+    if(!exports.validateTheme(theme))
+    {
+        return theme;
+    }
+
+    if(options==null)
+    {
+        options = {displayAuthors:false, displayThemeInfo:false};
+    }
+
+    const stories = await storyData.listStoryClubThemeStories(site, objectPrefix, theme.id);
+
+    stories.sort((a,b)=>{
+        if(a.order==undefined 
+            || b.order==undefined
+            || a.order==null
+            || b.order==null
+            || a.order==b.order)
+        {
+            return 0;
+        }
+        else if(a.order<b.order)
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    });
+
+    const themePath = `${objectPrefix}${theme.id}`;
+    await storyHelpers.buildPageAndUpload(site, themePath,"sc-storyList",{theme, stories,helpers:getHelpers(), themePath, options});
+    await exports.generateSingleThemeStoryPage(theme,stories,options);
+}
+
+
+exports.generateSingleThemeStoryPage = async (theme,stories,options)=>{
+    const themePath = `${objectPrefix}${theme.id}/all`;
+    await storyHelpers.buildPageAndUpload(site, themePath,"sc-storyAll",{theme, stories, helpers:getHelpers(),displayAuthor:options.displayAuthor, options});
 }
 
 function getHelpers()

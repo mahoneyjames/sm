@@ -1,7 +1,10 @@
 extends sc-layout
-
+include mixins/_themeCard
 block content  
-    h1 Current challenge        
+    
+    if options.displayThemeInfo
+        +themeCard(theme)
+
     each story in stories
         p
             a(href=`${siteRoot}/${story.path}`) #{story.title}
@@ -11,5 +14,3 @@ block content
 
 
     a(href=`${siteRoot}/${themePath}/all`) Single page view
-    
-    script(id="dsq-count-scr" src="//storyclub.disqus.com/count.js" async)

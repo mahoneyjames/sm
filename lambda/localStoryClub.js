@@ -7,6 +7,7 @@ process.on('unhandledRejection', error => {
 });
 
 const storyClub = require('./src/storyclub');
+const data = require('./src/storyData.fs')
 const lambda = require('./lambdaHttp');
 
 var stories = [
@@ -35,15 +36,60 @@ async function processStories(themeId)
 }
 
 
-async function publishThemeAnonymously(themeId)
+async function publishTheme(theme)
 {
-    await storyClub.publishThemeAnonymously(themeId);
+    await storyClub.publishTheme(theme,{displayThemeInfo:true, displayAuthor:true});
 }
 
 
-//processStories("testytesty");
+//processStories("booyah");
 //publishThemeAnonymously("testytesty");
 
 const themeDetails = {"deadline":"2018-09-18T23:00:00.000Z","themeText":"Zombie","things":["Chimney","The Village People","boris"],"id":"booyah"};
 
-console.log(storyClub.generateThemePage(themeDetails));
+//console.log(storyClub.generateThemePage(themeDetails));
+
+
+//data.upload(data.bucketNameFromSite("storyclub"),"myfile.txt", "boo","text/plain");
+
+//data.saveStoryClubStory("storyclub",{id:'barry',path:'bob',theme:'be'});
+
+//console.log(publishTheme(themeDetails));
+async function testStuff(dataLayer)
+{
+
+
+    await dataLayer.writeFile("file/something/here/1/i.json",JSON.stringify({path:'path1'}),"application/json");
+    await dataLayer.writeFile("file/something/here/2/i.json",JSON.stringify({path:'path2'}),"application/json");
+    await dataLayer.writeFile("file/something/here/am/page","<html/>","text/html"); 
+    var thing = await dataLayer.readObjectFromJson("file/something/here/1/i.json");
+    console.log(thing.path);
+
+    var things = await dataLayer.listObjectsFromJson("file/something/here");
+    console.log(things);
+
+
+}
+
+
+//testStuff(require('./src/club/data-local.js')({path:"_site/club/"}));
+
+//testStuff(require('./src/club/data-s3.js')({bucket:"www.storyclub.co.uk"}));
+
+// const theme = require('./src/club/theme');
+// const themeData = {};
+// console.log(theme.validate(themeData));
+// console.log(themeData);
+
+async function testData(storage)
+{
+    
+    const data = require('./src/club/data')(storage);
+    await data.saveStory("testytesty",stories[2]);
+    await data.saveStory("testytesty",stories[6]);
+    console.log(await data.listThemeStories("testytesty"));
+
+
+}
+
+testData(require('./src/club/storage/storage-local.js')({path:"_site/club/"}));
