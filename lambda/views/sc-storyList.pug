@@ -2,8 +2,8 @@ extends sc-layout
 include mixins/_themeCard
 block content  
     
-    if options.displayThemeInfo
-        +themeCard(theme)
+
+    +themeCard(theme)
 
     each story in stories
         p
@@ -13,4 +13,4 @@ block content
             | ]
 
 
-    a(href=`${siteRoot}/${themePath}/all`) Single page view
+    a(href=`${siteRoot}/${theme.path}/all`) Single page view

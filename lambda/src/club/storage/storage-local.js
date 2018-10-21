@@ -22,6 +22,7 @@ module.exports =  function(options){
 
 async function loadSingleFileIntoJson(path)
 {
+    //console.log(path);
     return await readJson(`${this.path}${path}`);
 }
 async function writeSingleFile (path, content, mimeType){
@@ -39,9 +40,10 @@ async function writeSingleFile (path, content, mimeType){
 
 async function listJsonFromFiles(prefix)
 {
-    console.log(`${this.path}${prefix}/*.json`);
+    const filter =`${this.path}${prefix}/*.json`; 
+    console.log(filter);
     const files = await new Promise((resolve, reject)=>{
-        glob(`${this.path}${prefix}/*/*.json`,null,(err, files)=>{
+        glob(filter,null,(err, files)=>{
             if(err)
             {
                 reject(err);
