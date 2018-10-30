@@ -29,7 +29,7 @@ module.exports = function (theme)
         theme.errors[theme.errors.length] = "theme.things does not have 3 entries";
     }
     
-
+    //TODO - clean up the public theme id? or always generate it?
     if(!theme.publicId)
     {
         theme.publicId = sanitiseId(theme.themeText);

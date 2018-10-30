@@ -1,0 +1,10 @@
+extends sc-layout
+block content
+
+    each theme in themes
+        .theme
+            h1 
+                a(href=`${theme.path}`) #{theme.themeText}
+            ul
+                each thing in theme.things
+                    li #{thing}

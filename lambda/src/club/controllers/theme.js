@@ -14,8 +14,9 @@ module.exports =  function(storageForData, storageForHtml){
         {
             if(validateTheme(theme))
             {
-                await this.data.saveTheme(theme);
+                
                 await this.htmlBuilder.generateInitialThemePage(theme);
+                await this.data.saveTheme(theme);
             }
 
             return theme;    
@@ -31,6 +32,11 @@ module.exports =  function(storageForData, storageForHtml){
         await publishThemeForReview(this.htmlBuilder, this.data, publicThemeId);
     }
 
+    module.buildThemesPage = async()=>
+    {
+        var themes = await this.data.listThemes();
+        await this.htmlBuilder.buildThemesPage(themes);
+    }
     return module;
 };
 

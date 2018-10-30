@@ -109,6 +109,8 @@ async function previewStory(storage,themeId, story)
 }
 //previewStory(require('./src/club/storage/storage-local.js')({path:"_site/club/"}),"a-nice-little-sausage", stories[6]);
 
+//previewStory(require('./src/club/storage/storage-local.js')({path:"_site/club/"}),"a-nice-little-sausage", stories[1]);
+
 
 
 async function publishThemeForReview(storage,themeId)
@@ -116,4 +118,19 @@ async function publishThemeForReview(storage,themeId)
     const controller = require('./src/club/controllers/theme')(storage,storage);
     await controller.publishThemeForReview(themeId);
 }
-publishThemeForReview(require('./src/club/storage/storage-local.js')({path:"_site/club/"}),"a-nice-little-sausage");
+//publishThemeForReview(require('./src/club/storage/storage-local.js')({path:"_site/club/"}),"a-nice-little-sausage");
+
+async function testLambda()
+{
+    const lambda = require('./lambdaHttp');
+    // await lambda.genericFunction({action:"sc-theme-new", theme:{"themeText":"a nice little sausage","things":["1","2","3"],"errors":[],"publicId":"a-nice-little-sausage"} });
+
+    // await lambda.genericFunction({action: "sc-story", story: stories[3], publicThemeId:"a-nice-little-sausage"});
+    // await lambda.genericFunction({action: "sc-story", story: stories[4], publicThemeId:"a-nice-little-sausage"});
+    // await lambda.genericFunction({action: "sc-story", story: stories[5], publicThemeId:"a-nice-little-sausage"});
+
+    await lambda.genericFunction({action:"sc-theme-publish", publicThemeId:"the-jazz-age"});
+    //await lambda.genericFunction({action:"sc-themes"});
+}
+
+testLambda();

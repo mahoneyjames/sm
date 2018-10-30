@@ -10,6 +10,10 @@ module.exports =  function(storage){
         return await storage.listObjectsFromJson(`data/${publicThemeId}/stories`);
     };
 
+    module.listThemes = async()=>{
+        return await storage.listObjectsFromJson(`data/themes`);
+    }
+
     module.saveThemeStory = async(publicThemeId, story)=> {
         if(!story.id)
         {
@@ -23,11 +27,11 @@ module.exports =  function(storage){
         {
             theme.id = uniqid();
         }
-        await storage.writeFile(`data/${theme.publicId}/theme.json`, JSON.stringify(theme), "application/json");
+        await storage.writeFile(`data/themes/${theme.publicId}.json`, JSON.stringify(theme), "application/json");
     };
 
     module.loadTheme = async(publicThemeId)=>{        
-        return await storage.readObjectFromJson(`data/${publicThemeId}/theme.json`);
+        return await storage.readObjectFromJson(`data/themes/${publicThemeId}.json`);
     };
     return module;
 };

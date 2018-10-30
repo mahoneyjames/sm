@@ -4,13 +4,9 @@ block content
     
 
     +themeCard(theme)
-
+    h1 Entries
     each story in stories
         p
             a(href=`${siteRoot}/${story.path}`) #{story.title}
-            |  [
-            a(href=`${siteRoot}/${story.path}#disqus_thread`) 0 comments
-            | ]
-
 
     a(href=`${siteRoot}/${theme.path}/all`) Single page view

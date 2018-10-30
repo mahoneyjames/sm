@@ -1,7 +1,7 @@
 html
     head
         if title
-            title= `${title} | ${helpers.siteName}`
+            title= `${title}`
         else
             title= `${helpers.siteName}`
         link(rel='stylesheet', href=`${siteRoot}/current.css`)
@@ -11,7 +11,7 @@ html
         meta(charset="UTF-8")
 
     body
-        //-pre= helpers.dump(helpers)
+        pre= helpers.dump(helpers)
         header.site-header
             .wrapper
                 a.site-title(href=`${siteRoot}/`) #{helpers.siteName}

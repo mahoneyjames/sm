@@ -1,33 +1,26 @@
-const htmlGenerator = require('./src/marmalade');
-const storyclub = require('./src/storyclub')
+// const dataStorage = require('./src/club/storage/storage-local')({path:"_site/club/"});
+// const htmlStorage = require('./src/club/storage/storage-local')({path:"_site/club/"});
 
-exports.publishStory = function(event, context, callback) {
-    callback(null, "Success");
-};
+const dataStorage = require('./src/club/storage/storage-s3')({bucket:process.env.BUCKET});
+const htmlStorage = require('./src/club/storage/storage-s3')({bucket:process.env.BUCKET});
 
-exports.publishStoryAsync = async (event, context) => {    
-    return await htmlGenerator.buildAndPublishStory(event.site, event.story);       
-};
+const themeController = require('./src/club/controllers/theme')(dataStorage,htmlStorage);
 
-exports.buildAuthorIndex = async (event, context) => {
-    return await htmlGenerator.buildAuthorIndex(event.site, event.author);        
-};
 
-exports.publishStoryClubStory = async(event, context)=>{
-    return await storyclub.publishThemeStory(event.themeId, event.story);
-}
-
-exports.publishThemeAnonymously = async(event, context)=>{
-    return await storyclub.publishThemeAnonymously(event.themeId);
-}
 
 exports.genericFunction = async(event, context)=>{
     switch(event.action)
     {
         case "sc-story":
-            return await storyclub.publishThemeStory(event.themeId, event.story);
-        case "sc-theme":
-            return await storyclub.publishThemeAnonymously(event.themeId);
+            return await themeController.previewStory(event.publicThemeId, event.story);
+        case "sc-theme-new":
+            return await themeController.createThemeChallenge(event.theme);
+        case "sc-theme-publish":
+            return await themeController.publishThemeForReview(event.publicThemeId);
+
+        case "sc-themes":
+            return await themeController.buildThemesPage();
+                        
         case "sc-echo":
             return event;
         default:
