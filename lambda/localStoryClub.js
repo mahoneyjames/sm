@@ -123,13 +123,13 @@ async function publishThemeForReview(storage,themeId)
 async function testLambda()
 {
     const lambda = require('./lambdaHttp');
-    // await lambda.genericFunction({action:"sc-theme-new", theme:{"themeText":"a nice little sausage","things":["1","2","3"],"errors":[],"publicId":"a-nice-little-sausage"} });
+     await lambda.genericFunction({action:"sc-theme-new", theme:{"themeText":"a nice little sausage","things":["1","2","3"],"errors":[],"publicId":"a-nice-little-sausage"} });
 
-    // await lambda.genericFunction({action: "sc-story", story: stories[3], publicThemeId:"a-nice-little-sausage"});
+     await lambda.genericFunction({action: "sc-story", story: stories[3], publicThemeId:"a-nice-little-sausage"});
     // await lambda.genericFunction({action: "sc-story", story: stories[4], publicThemeId:"a-nice-little-sausage"});
     // await lambda.genericFunction({action: "sc-story", story: stories[5], publicThemeId:"a-nice-little-sausage"});
 
-    await lambda.genericFunction({action:"sc-theme-publish", publicThemeId:"the-jazz-age"});
+    //await lambda.genericFunction({action:"sc-theme-publish", publicThemeId:"the-jazz-age"});
     //await lambda.genericFunction({action:"sc-themes"});
 }
 

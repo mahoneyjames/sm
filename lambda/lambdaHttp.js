@@ -1,8 +1,8 @@
-// const dataStorage = require('./src/club/storage/storage-local')({path:"_site/club/"});
-// const htmlStorage = require('./src/club/storage/storage-local')({path:"_site/club/"});
+const dataStorage = require('./src/club/storage/storage-local')({path:"_site/club/"});
+const htmlStorage = require('./src/club/storage/storage-local')({path:"_site/club/"});
 
-const dataStorage = require('./src/club/storage/storage-s3')({bucket:process.env.BUCKET});
-const htmlStorage = require('./src/club/storage/storage-s3')({bucket:process.env.BUCKET});
+// const dataStorage = require('./src/club/storage/storage-s3')({bucket:process.env.BUCKET});
+// const htmlStorage = require('./src/club/storage/storage-s3')({bucket:process.env.BUCKET});
 
 const themeController = require('./src/club/controllers/theme')(dataStorage,htmlStorage);
 
