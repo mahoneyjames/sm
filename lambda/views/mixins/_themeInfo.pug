@@ -1,0 +1,10 @@
+mixin themeInfo(theme, displayDetails=true)
+    .theme           
+        h2 
+            a(href=`${siteRoot}/${theme.path}`) #{theme.themeText}
+        if displayDetails    
+            .details    
+                h5 Must include
+                ul
+                    each thing in theme.things
+                        li #{thing} 

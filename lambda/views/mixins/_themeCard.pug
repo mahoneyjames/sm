@@ -1,11 +1,5 @@
-mixin themeCard(theme)
-    .theme    
-        .title 
-            h2 #{theme.themeText}
-        span.page-divider
-            span.one
-            span.two
-        h2 Must include
-        ul
-            each thing in theme.things
-                li #{thing} 
+include _themeInfo
+mixin themeCard(theme, displayDetails=true)
+    section    
+        +themeInfo(theme,displayDetails)       
+        

@@ -7,6 +7,7 @@
     "test": "node ./local.js",
     "s3": "node ./aws.js",
     "club": "node ./localStoryClub.js",
+    "static":"node ./sc-staticPages.js",
     "club-build": "node ./sc-build.js",
     "browse": "node ./browser.js",
     "test-data": "node ./test/test-data.js"

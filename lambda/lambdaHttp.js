@@ -32,7 +32,10 @@ exports.genericFunction = async(event, context)=>{
 
         case "sc-themes":
             return await themeController.buildThemesPage();
-                        
+        
+        case "sc-static":
+            return await require('./src/club/views/html')(htmlStorage).buildStaticPages();
+
         case "sc-echo":
             return event;
         default:

@@ -1,10 +1,13 @@
 extends sc-layout
+include mixins/_themeInfo
 block content
+    section.themes
+        each theme in themes
+            .theme
+                h1 
+                    a(href=`${theme.path}`) #{theme.themeText}
+                ul
+                    each thing in theme.things
+                        li #{thing}
 
-    each theme in themes
-        .theme
-            h1 
-                a(href=`${theme.path}`) #{theme.themeText}
-            ul
-                each thing in theme.things
-                    li #{thing}
+                        

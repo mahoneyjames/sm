@@ -27,6 +27,7 @@ module.exports =  function(storage){
             await buildPageAndSave(storage, story.path, "sc-story",{story, 
                                                                     displayAuthor: false,
                                                                     title:story.title,
+                                                                    theme,
                                                                     hack_backLink: getThemeLinkDetails(theme)}); 
         }));
         
@@ -43,6 +44,12 @@ module.exports =  function(storage){
         await buildPageAndSave(storage, `themes`, "sc-themeList",{themes});
     }
     
+    module.buildStaticPages = async()=>{
+        await buildPageAndSave(storage,"index","sc-home",{title:"storyclub"});
+        await buildPageAndSave(storage,"about","sc-about",{title:"about storyclub"});
+        await buildPageAndSave(storage,"oops","sc-oops",{title:"Aaaargh"});
+
+    }
     
     return module;
 };

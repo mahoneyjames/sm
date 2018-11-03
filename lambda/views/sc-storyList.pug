@@ -1,12 +1,14 @@
 extends sc-layout
-include mixins/_themeCard
-block content  
-    
+include mixins/_themeInfo
+block content      
 
-    +themeCard(theme)
     h1 Entries
     each story in stories
         p
             a(href=`${siteRoot}/${story.path}`) #{story.title}
 
     a(href=`${siteRoot}/${theme.path}/all`) Single page view
+
+
+block aside
+    +themeInfo(theme,true)

@@ -5,7 +5,8 @@ html
         else
             title= `${helpers.siteName}`
         link(rel='stylesheet', href=`${siteRoot}/grid.css`)
-        link(rel='stylesheet', href=`${siteRoot}/reset.css`)
+        link(rel='stylesheet', href=`${siteRoot}/grid_style.css`)
+        //-link(rel='stylesheet', href=`${siteRoot}/reset.css`)
         //-link(rel="shortcut icon" type="image/png" href="/images/icons/doughnut.png")
         meta(name="viewport" content="width=device-width, initial-scale=1")        
         meta(charset="UTF-8")
@@ -13,33 +14,19 @@ html
 
     body
         
-        header.site-header
-            .wrapper
-                a.site-title(href=`${siteRoot}/`) #{helpers.siteName}
-                if hack_backLink
-                    span.site-title  /  
-                    a.site-title(href=`${siteRoot}/${hack_backLink.path}`) #{hack_backLink.displayText}
-                nav.site-nav
-                    .trigger
-                        a.page-link(href=`${siteRoot}/about`) About
+        header  
+            nav              
+                a(href=`${siteRoot}/`) storyclub
+                a(href=`${siteRoot}/themes`) themes                    
+                a(href=`${siteRoot}/about`) about            
+        main
+            block content
+        aside
+            block aside            
 
-        main.page-content
-            .wrapper
-                //-pre= helpers.dump(locals)
-                block content
 
         block footer
-            footer.site-footer
-                .wrapper
-                    .footer-col-wrapper
-                        .footer-col.footer-col-1
-                            ul.contact-list
-                                li 
-                                    a(href="mailto:storymarmalade@gmail.com") storymarmalade@gmail.com                                
-                        .footer-col.footer-col-2
-                            ul.social-media-list
-                                li 
-                                    a(href="https://twitter.com/storymarmalade") twitter: storymarmalade
-                                li (c) Storyclub
-                        .footer-col.footer-col-3
-                            p 
+            footer                
+                a(href="mailto:storymarmalade@gmail.com") storymarmalade@gmail.com                                
+                a(href="https://twitter.com/storymarmalade") twitter: storymarmalade
+                
