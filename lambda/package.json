@@ -7,7 +7,7 @@
     "test": "node ./local.js",
     "s3": "node ./aws.js",
     "club": "node ./localStoryClub.js",
-    "static":"node ./sc-staticPages.js",
+    "static": "node ./sc-staticPages.js",
     "club-build": "node ./sc-build.js",
     "browse": "node ./browser.js",
     "test-data": "node ./test/test-data.js"
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1.17",
+    "claudia-api-builder": "^4.1.1",
     "dotenv": "4.0.0",
     "es6-promisify": "5.0.0",
     "fs-extra": "^7.0.0",
@@ -27,6 +28,7 @@
     "uniqid": "5.0.3"
   },
   "devDependencies": {
-    "express": "4.15.2",    "mkdirp": "0.5.1"
+    "express": "^4.16.4",
+    "mkdirp": "0.5.1"
   }
 }

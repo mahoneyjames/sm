@@ -12,6 +12,7 @@ else
     console.log(`running with s3:${process.env.BUCKET}`);
     dataStorage = require('./src/club/storage/storage-s3')({bucket:process.env.BUCKET});
     htmlStorage = require('./src/club/storage/storage-s3')({bucket:process.env.BUCKET});
+    //htmlStorage = require('./src/club/storage/storage-local')({path:"_site/club/"});
 }
 
 

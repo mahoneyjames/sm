@@ -130,7 +130,7 @@ async function testLambda()
     // await lambda.genericFunction({action: "sc-story", story: stories[5], publicThemeId:"a-nice-little-sausage"});
 
     //await lambda.genericFunction({action:"sc-theme-publish", publicThemeId:"zombie"});
-    //await lambda.genericFunction({action:"sc-theme-publish", publicThemeId:"a-nice-little-sausage"});
+   // await lambda.genericFunction({action:"sc-theme-publish", publicThemeId:"new-beginnings"});
     await lambda.genericFunction({action:"sc-themes"});
 }
 

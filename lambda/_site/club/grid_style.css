@@ -32,4 +32,35 @@
 
 }
 
-.themes{display:flex;flex-wrap:wrap;}
+.themes{display:flex;
+flex-wrap: wrap;
+justify-content: center;
+}
+
+.themes .theme{
+    flex-basis:300px;
+    flex-shrink:1;
+    
+}
+
+.themes .theme ul{
+    margin:0px 0px 10px 0px;
+}
+.themes .theme h5{
+    margin:0px 0px 0px 10px;
+}
+/*
+.themes .theme ul{
+      display: inline;
+  list-style: none;
+}
+
+.themes .theme ul li{
+      display: inline;
+}
+
+.themes .theme ul li:after {
+  content: ", ";
+}*/
+
+/*body > * {border: 1px solid red;}*/
