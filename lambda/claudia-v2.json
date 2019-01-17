@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "storyclub2-executor",
+    "name": "storyclub2",
+    "region": "eu-west-2"
+  },
+  "api": {
+    "id": "x4mh2bve0c",
+    "module": "src/club/http"
+  }
+}

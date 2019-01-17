@@ -2,3 +2,5 @@ docs/aws-credentials.json
 lambda/aws-credentials.json
 lambda/node_modules
 lambda/variables.env
+lambda/_site/*
+lambda/src/club/variables.env

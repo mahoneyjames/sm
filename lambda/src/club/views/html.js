@@ -59,7 +59,7 @@ async function buildPageAndSave (storage, path, view, options){
     options.siteRoot="";
     options.helpers = {siteName:'storyclub', dump: function(thing){return JSON.stringify(thing);}};
 
-    //console.log(path);
+    console.log(path);
 
     const fullHtml = pug.renderFile(`./views/${view}.pug`,options);    
     
