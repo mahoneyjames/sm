@@ -34,6 +34,11 @@ api.get('/api/themes/list', ()=>{
     return model.listThemes();
 });
 
+api.get('/api/site/refreshStaticPages', async ()=>{    
+    await require('./views/html')(htmlStorage).buildStaticPages();    
+    return "done";
+});
+
 api.get('/api/site/refreshThemeList', async ()=>{    
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     await themeController.buildThemesPage();
