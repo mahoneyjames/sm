@@ -15,3 +15,13 @@ Since these are immutable for a given function version, the dev/prod approach is
 
 # To host the site locally for testing
 npm run browse
+
+# Get start deving locally
+
+ - serve the website locally
+   - cmd.exe, then npm run browse
+   - http://localhost:9999
+ - host the web api locally
+   - cmd.exe, then npm run local
+   - postman
+

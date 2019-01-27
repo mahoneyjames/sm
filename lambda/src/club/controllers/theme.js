@@ -17,6 +17,7 @@ module.exports =  function(storageForData, storageForHtml){
                 
                 await this.htmlBuilder.generateInitialThemePage(theme);
                 await this.data.saveTheme(theme);
+                await this.htmlBuilder.buildStaticPages(theme);
             }
 
             return theme;    

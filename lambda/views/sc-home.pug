@@ -1,5 +1,11 @@
 extends sc-layout
+include mixins/_themeInfo
+
 
 block content
     p Yo. This is Storyclub. Just don't talk about it. Okay?
     p But you can feedback. And you bloody should, you non-feedbacking slacker. 
+
+    if theme
+        h1 Latest theme!
+        +themeInfo(theme,true)

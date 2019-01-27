@@ -22,6 +22,18 @@ async function dataLayerTests(dataLayer)
 
 }
 
-dataLayerTests(require('../src/club/data-s3.js')({bucket:"www.storyclub.co.uk"}));
+//dataLayerTests(require('../src/club/data-s3.js')({bucket:"www.storyclub.co.uk"}));
 
-dataLayerTests(require('../src/club/data-local.js')({path:"_site/unittest/"}));
+//dataLayerTests(require('../src/club/data-local.js')({path:"_site/unittest/"}));
+
+async function rebuildThemes()
+{
+  var dataStorage = require('../src/club/storage/storage-local.js')({path:"_site/club/"});
+  var htmlStorage = require('../src/club/storage/storage-local.js')({path:"_site/club/"});
+
+  var themeController = require('../src/club/controllers/theme')(dataStorage,htmlStorage);
+  await themeController.buildThemesPage();
+
+} 
+
+rebuildThemes();

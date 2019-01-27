@@ -41,11 +41,42 @@ module.exports =  function(storage){
     };
 
     module.buildThemesPage = async(themes)=>{
-        await buildPageAndSave(storage, `themes`, "sc-themeList",{themes});
+
+        //group the themes by year
+        //TODO - do this here? or a utility function in the actual view
+        //TODO - also - ugh, horrid grouping code, must be something simpler!
+        var themesGrouped = themes.reduce((group, theme)=>{
+            
+            let year = "sometime";
+            if(theme.deadline)
+            {
+                year = theme.deadline.slice(0,4);
+            }
+            
+            if(!group.has(year))
+            {                
+                group.set(year, new Set());             
+            }
+            group.get(year).add(theme);
+            return group;
+        }, new Map());
+
+        var themesGroupedArray = new Array();
+        for ( const [key,val] of themesGrouped)
+        {
+            var themesInner = new Array();
+            val.forEach((theme)=>themesInner[themesInner.length] = theme);
+            themesGroupedArray[themesGroupedArray.length] =  {year: key, themes:themesInner};
+        }
+        //var themesGrouped = themesGrouped.map((year)=> new {year: year.key, themes:year.value});
+
+        
+        console.log(themes); 
+        await buildPageAndSave(storage, `themes`, "sc-themeList",{themes, themesGrouped:themesGroupedArray});
     }
     
-    module.buildStaticPages = async()=>{
-        await buildPageAndSave(storage,"index","sc-home",{title:"storyclub"});
+    module.buildStaticPages = async(theme)=>{
+        await buildPageAndSave(storage,"index","sc-home",{title:"storyclub",theme});
         await buildPageAndSave(storage,"about","sc-about",{title:"about storyclub"});
         await buildPageAndSave(storage,"oops","sc-oops",{title:"Aaaargh"});
 
@@ -59,7 +90,7 @@ async function buildPageAndSave (storage, path, view, options){
     options.siteRoot="";
     options.helpers = {siteName:'storyclub', dump: function(thing){return JSON.stringify(thing);}};
 
-    console.log(path);
+    console.log(options);
 
     const fullHtml = pug.renderFile(`./views/${view}.pug`,options);    
     
