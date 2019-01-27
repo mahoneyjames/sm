@@ -62,17 +62,28 @@ module.exports =  function(storage){
         }, new Map());
 
         var themesGroupedArray = new Array();
+        var years = new Array();
+        
         for ( const [key,val] of themesGrouped)
         {
             var themesInner = new Array();
             val.forEach((theme)=>themesInner[themesInner.length] = theme);
             themesGroupedArray[themesGroupedArray.length] =  {year: key, themes:themesInner};
+            years[years.length] = key;
+        }
+
+        
+        for(var index in themesGroupedArray)
+        {
+            const year = themesGroupedArray[index];
+            await buildPageAndSave(storage, `themes-${year.year}`, "sc-themeList",{themes:year.themes, year:year.year, years});
+        
         }
         //var themesGrouped = themesGrouped.map((year)=> new {year: year.key, themes:year.value});
 
         
-        console.log(themes); 
-        await buildPageAndSave(storage, `themes`, "sc-themeList",{themes, themesGrouped:themesGroupedArray});
+        //console.log(themes); 
+        
     }
     
     module.buildStaticPages = async(theme)=>{
@@ -88,7 +99,8 @@ module.exports =  function(storage){
 
 async function buildPageAndSave (storage, path, view, options){
     options.siteRoot="";
-    options.helpers = {siteName:'storyclub', dump: function(thing){return JSON.stringify(thing);}};
+    options.helpers = {siteName:'storyclub',
+                     dump: function(thing){return JSON.stringify(thing);}};
 
     console.log(options);
 

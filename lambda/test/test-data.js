@@ -28,7 +28,7 @@ async function dataLayerTests(dataLayer)
 
 async function rebuildThemes()
 {
-  var dataStorage = require('../src/club/storage/storage-local.js')({path:"_site/club/"});
+  var dataStorage = require('../src/club/storage/storage-s3.js')({bucket:"www.storyclub.co.uk"});
   var htmlStorage = require('../src/club/storage/storage-local.js')({path:"_site/club/"});
 
   var themeController = require('../src/club/controllers/theme')(dataStorage,htmlStorage);

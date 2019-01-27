@@ -34,6 +34,29 @@ footer{
     grid-area: footer;    
 }
 
+.innerNav
+{
+    padding:5px;	
+	display:flex;
+	justify-content: space-evenly;
+	flex-direction: row;
+}
+
+.innerNav li 
+{
+    list-style: none;
+    border-bottom:2px solid var(--main-colour);
+}
+.innerNav li a
+{
+    text-decoration: none;
+}
+
+.innerNav li.selected
+{
+    border-bottom: none;
+}
+
 /*
 
 body > * {
@@ -83,7 +106,7 @@ footer{
 
 @media screen and (max-width: 300px)
 {
-	nav,footer{flex-wrap: wrap;
+	.innerNav, nav,footer{flex-wrap: wrap;
 	/*justify-content: space-between;*/
 	align-items:center;padding:10px;}
 
