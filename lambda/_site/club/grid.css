@@ -45,7 +45,7 @@ footer{
 .innerNav li 
 {
     list-style: none;
-    border-bottom:2px solid var(--main-colour);
+    border-bottom: none;
 }
 .innerNav li a
 {
@@ -54,7 +54,8 @@ footer{
 
 .innerNav li.selected
 {
-    border-bottom: none;
+    
+    border-bottom:2px solid var(--main-colour);
 }
 
 /*
