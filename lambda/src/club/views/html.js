@@ -31,9 +31,14 @@ module.exports =  function(storage){
                                                                     hack_backLink: getThemeLinkDetails(theme)}); 
         }));
         
-        await buildPageAndSave(storage, theme.path, "sc-storyList", {theme,stories, displayAuthor:false});
+        await buildPageAndSave(storage, theme.path, "sc-storyList", {theme,
+            stories, 
+            displayAuthor:false,
+            title: "storyclub - " + theme.themeText});
+            
         await buildPageAndSave(storage, `${theme.path}/all`, "sc-storyAll", {theme,
                                                                     stories, 
+                                                                    title: "storyclub - " + theme.themeText, 
                                                                     displayAuthor:false,
                                                                     hack_backLink: getThemeLinkDetails(theme)});
       

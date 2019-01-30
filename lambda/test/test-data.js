@@ -36,4 +36,48 @@ async function rebuildThemes()
 
 } 
 
-rebuildThemes();
+//rebuildThemes();
+
+function testGrouping()
+{
+  var items = [ 
+    { deadline: "2019-01-01", Step: "Step 1", Task: "Task 1", Value: "5" },
+    { deadline: "2018-01-01", Step: "Step 1", Task: "Task 2", Value: "10" },
+    { deadline: "2017-01-01", Step: "Step 2", Task: "Task 1", Value: "15" },
+    { deadline: "2017-01-01", Step: "Step 2", Task: "Task 2", Value: "20" },
+    { deadline: "2018-01-01", Step: "Step 1", Task: "Task 1", Value: "25" },
+    { deadline: "2017-01-01", Step: "Step 1", Task: "Task 2", Value: "30" },
+    { deadline: "2019-01-01", Step: "Step 2", Task: "Task 1", Value: "35" },
+    { deadline: "2019-01-01", Step: "Step 2", Task: "Task 2", Value: "40" }
+];
+
+  const groupedMap = items.reduce(
+      (group, theme) => {
+        let year = "sometime";
+            if(theme.deadline)
+            {
+                year = theme.deadline.slice(0,4);
+            }
+            
+            if(!group.has(year))
+            {                
+                group.set(year, new Set());             
+            }
+            group.get(year).add(theme);
+            return group;
+          },
+      new Map()
+  );
+
+console.log(groupedMap);
+
+console.log(Array.from(groupedMap.entries(),(entry)=>({year: entry[0], themes:Array.from(entry[1])})));
+
+var something = null;
+  return groupedMap;
+
+
+
+}
+
+testGrouping();
