@@ -80,4 +80,12 @@ var something = null;
 
 }
 
-testGrouping();
+//testGrouping();
+
+async function testUsers()
+{
+  var storage = require('../src/club/model/data.js')(require('../src/club/storage/storage-local.js')({path:"_site/club/"}));
+  console.log(await storage.loadUsers());
+} 
+
+testUsers();

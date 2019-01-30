@@ -1,8 +1,10 @@
 mixin storyCard(story={"title":"Test"}, rule={},displayAuthor=true)
     article    
-        h2 #{story.title}
+        .heading
+            h2 #{story.title}
+            if displayAuthor==true
+                p.author
+                    | by                     
+                    a(href=`${siteRoot}/pobol/${story.authorUser.id}`) #{story.authorUser.name}                    
+
         p !{story.html}
-        if displayAuthor==true
-            details
-                | by 
-                a(href=`${siteRoot}/pobol/${story.author}`) #{story.author}

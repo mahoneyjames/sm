@@ -18,14 +18,14 @@ module.exports =  function(storage){
 
     }
 
-    module.buildThemeNavigation = async(theme, stories)=>{
+    module.buildThemeNavigation = async(theme, stories, displayAuthor = false)=>{
         buildThemePath(theme);
         
         await Promise.all(stories.map(async(story)=>{
             buildStoryPath(theme.publicId, story);
             //TODO - deal with navigation links
             await buildPageAndSave(storage, story.path, "sc-story",{story, 
-                                                                    displayAuthor: false,
+                                                                    displayAuthor: displayAuthor,
                                                                     title:story.title,
                                                                     theme,
                                                                     hack_backLink: getThemeLinkDetails(theme)}); 
@@ -33,13 +33,13 @@ module.exports =  function(storage){
         
         await buildPageAndSave(storage, theme.path, "sc-storyList", {theme,
             stories, 
-            displayAuthor:false,
+            displayAuthor: displayAuthor,
             title: "storyclub - " + theme.themeText});
-            
+
         await buildPageAndSave(storage, `${theme.path}/all`, "sc-storyAll", {theme,
                                                                     stories, 
                                                                     title: "storyclub - " + theme.themeText, 
-                                                                    displayAuthor:false,
+                                                                    displayAuthor: displayAuthor,
                                                                     hack_backLink: getThemeLinkDetails(theme)});
       
 

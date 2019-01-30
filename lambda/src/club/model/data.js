@@ -33,5 +33,13 @@ module.exports =  function(storage){
     module.loadTheme = async(publicThemeId)=>{        
         return await storage.readObjectFromJson(`data/themes/${publicThemeId}.json`);
     };
+
+    module.loadUsers = async ()=>{
+        const userJson = await storage.readObjectFromJson(`data/users.json`);
+        
+        return userJson.usersGoogle.map((user)=>({id:user.id.toLowerCase(), 
+                                                    name: user.name, 
+                                                    disqusIds:user.disqusId.split(",")} ));
+    }
     return module;
 };

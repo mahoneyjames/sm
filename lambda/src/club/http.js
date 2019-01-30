@@ -51,6 +51,11 @@ api.post('/api/site/publishThemeForReview', async (request)=>{
     return "done";
 });
 
+api.post('/api/site/closeTheme', async (request)=>{    
+    var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+    await themeController.closeTheme(request.body.publicThemeId);
+    return "done";
+});
 
 api.post('/api/themes/save', async (request)=>{
     console.log(request.body);

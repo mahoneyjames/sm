@@ -30,7 +30,13 @@ module.exports =  function(storageForData, storageForHtml){
 
     module.publishThemeForReview = async(publicThemeId)=>
     {
-        await publishThemeForReview(this.htmlBuilder, this.data, publicThemeId);
+        //await publishThemeForReview(this.htmlBuilder, this.data, publicThemeId);
+        await publishTheme(this.htmlBuilder,this.data, publicThemeId,"review");
+    }
+
+    module.closeTheme = async(publicThemeId)=>
+    {
+        await publishTheme(this.htmlBuilder,this.data, publicThemeId,"complete");
     }
 
     module.buildThemesPage = async()=>
@@ -106,17 +112,37 @@ async function publishThemeForReview(pageBuilder, dataLayer, publicThemeId)
 
 }
 
-function closeThemeChallenge(themeId)
-{
 
+
+async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
+{    
     //load the theme json
+    const theme = await dataLayer.loadTheme(publicThemeId);
 
     //load stories for the theme
+    const allStories = await dataLayer.listThemeStories(publicThemeId);
 
-    //generate and save a theme page, containing links to all the stories
-    //perhaps put in author names here, a feedback summary or something
+    const users = await dataLayer.loadUsers();
+    //augment the stories with author info
+    const unknownUser = {id:"oops", name:"unknown...."};
+    allStories.map((story)=>{
+        const storyUser = users.find((user)=>user.id===story.author.toLowerCase());
+                
+        story.authorUser = storyUser!=null ? storyUser : unknownUser;
+    });
 
-    //generate and save the story pages, with links to the theme, and next/back links
-    //include the author's name
+    console.log(allStories);
+    //1 - generate and save a theme page, containing links to all the stories
+    //2 - generate and save the story pages, with links to the theme, and next/back links anonymous
+    
+    const displayAuthor = themeStatus==="complete"? true: false;
+
+    await pageBuilder.buildThemeNavigation(theme,allStories, displayAuthor);
+    
+    
+    theme.status=themeStatus;
+
+ 
+    await dataLayer.saveTheme(theme);
 
 }

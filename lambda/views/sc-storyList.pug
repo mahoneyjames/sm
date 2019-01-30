@@ -2,14 +2,16 @@ extends sc-layout
 include mixins/_themeInfo
 block content      
 
-    h1 Entries
+    h1 Entries    
     each story in stories
         p
             a(href=`${siteRoot}/${story.path}`) #{story.title}
+            if displayAuthor 
+                span  - #{story.authorUser.name}
     
     h2 All stories in one handy page!
     a(href=`${siteRoot}/${theme.path}/all`) Single page view
 
-
+    
 block aside
     +themeInfo(theme,true)
