@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "local": "claudia-local-api --api-module src/club/test/lambdaTest.js | bunyan --output short",
-    "test": "node ./local.js",
+    "test": "mocha ",
     "s3": "node ./aws.js",
     "club": "node ./localStoryClub.js",
     "static": "node ./sc-staticPages.js",
@@ -35,8 +35,10 @@
   },
   "devDependencies": {
     "bunyan": "^1.8.12",
+    "chai": "^4.2.0",
     "claudia-local-api": "^2.0.0",
     "express": "^4.16.4",
-    "mkdirp": "0.5.1"
+    "mkdirp": "0.5.1",
+    "mocha": "^5.2.0"
   }
 }

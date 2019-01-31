@@ -88,4 +88,4 @@ async function testUsers()
   console.log(await storage.loadUsers());
 } 
 
-testUsers();
+//testUsers();
