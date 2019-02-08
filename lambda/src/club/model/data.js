@@ -1,3 +1,4 @@
+const debug = require('debug')("data");
 const uniqid = require('uniqid');
 
 module.exports =  function(storage){   

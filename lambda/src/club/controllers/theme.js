@@ -126,12 +126,17 @@ async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
     //augment the stories with author info
     const unknownUser = {id:"oops", name:"unknown...."};
     allStories.map((story)=>{
-        const storyUser = users.find((user)=>user.id===story.author.toLowerCase());
+        
+        let storyUser = null; 
+        if(story.author)
+        {
+            storyUser = users.find((user)=>user.id===story.author.toLowerCase());
+        }
                 
         story.authorUser = storyUser!=null ? storyUser : unknownUser;
     });
 
-    console.log(allStories);
+    //console.log(allStories);
     //1 - generate and save a theme page, containing links to all the stories
     //2 - generate and save the story pages, with links to the theme, and next/back links anonymous
     
