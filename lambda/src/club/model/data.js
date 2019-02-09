@@ -42,5 +42,13 @@ module.exports =  function(storage){
                                                     name: user.name, 
                                                     disqusIds:user.disqusId.split(",")} ));
     }
+
+    module.saveCommentDoc = async(fullDoc)=>{
+        await storage.writeFile(`data/everything.json`, JSON.stringify(fullDoc),"application/json");
+    }
+
+    module.loadCommentDoc = async()=>{
+        return await storage.readObjectFromJson(`data/everything.json`);
+    }
     return module;
 };
