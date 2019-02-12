@@ -97,6 +97,12 @@ module.exports =  function(storage){
         await buildPageAndSave(storage,"oops","sc-oops",{title:"Aaaargh"});
 
     }
+
+    module.stats_buildCommentPage = async(leagueTable)=>{
+        await buildPageAndSave(storage, "stats/comments","sc-comments", {title:"top commenters", leagueTable});
+    }
+
+    module.buildStoryPath =buildStoryPath;
     
     return module;
 };

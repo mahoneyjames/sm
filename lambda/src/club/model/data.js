@@ -1,5 +1,6 @@
 const debug = require('debug')("data");
 const uniqid = require('uniqid');
+const moment = require('moment');
 
 module.exports =  function(storage){   
 
@@ -40,7 +41,8 @@ module.exports =  function(storage){
         
         return userJson.usersGoogle.map((user)=>({id:user.id.toLowerCase(), 
                                                     name: user.name, 
-                                                    disqusIds:user.disqusId.split(",")} ));
+                                                    disqusIds:user.disqusId.split(","),
+                                                    joined: moment(user.joined)} ));
     }
 
     module.saveCommentDoc = async(fullDoc)=>{

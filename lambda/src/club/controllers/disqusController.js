@@ -1,10 +1,12 @@
 const debug = require('debug')("disqusController");
 const axios = require('axios');
+const moment = require('moment');
 
-module.exports = function(accessToken, apiKey, apiSecret, forum, dataLayer){
+module.exports = function(accessToken, apiKey, apiSecret, forum, storageForData, storageForHtml){
 
     var module = {};
-    module.data = dataLayer;
+    module.data = require('../model/data')(storageForData);
+    module.html = require('../views/html')(storageForHtml);
     module.users = null;
     //TODO - what's the better node way of doing this type of caching? 
     
@@ -59,11 +61,11 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, dataLayer){
 
         debug("generate comment doc");
 
-        commentDoc.themes = await dataLayer.listThemes();
+        commentDoc.themes = await module.data.listThemes();
         for (theme of commentDoc.themes)
         {        
             debug("Theme '%'", theme.publicId);
-            theme.stories = (await dataLayer.listThemeStories(theme.publicId)).map((story)=>({id:story.id,author:story.author,title:story.title,publicId:story.publicId}));
+            theme.stories = (await module.data.listThemeStories(theme.publicId)).map((story)=>({id:story.id,author:story.author,title:story.title,publicId:story.publicId}));
             
             for(story of theme.stories)
             {
@@ -72,48 +74,161 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, dataLayer){
             }
         }
 
-        dataLayer.saveCommentDoc(commentDoc);
+        await module.data.saveCommentDoc(commentDoc);
         return commentDoc;
     }
 
     //build a league table out of the comment doc
     module.getCommentLeagueTable = async () =>
     {
-        const commentDoc = await dataLayer.loadCommentDoc();
+        const commentDoc = await module.data.loadCommentDoc();
         const users = await module.get_users();
         const leagueTable = {};
+        const results = {totalStories:0,
+            totalThemes:0,
+            totalStoriesSinceDisqus:0,
+            totalStoriesLastTwoMonths:0,
+            users:[]};
+        const momentWhenDisqusStarted = moment("2018-10-10");
+        const momentTwoMonthsAgo = moment().add(-1,'M');
+        const allStories = [];
+                        
         for(user of users)
         {
-            leagueTable[user.id] = {user:user, totalComments:0, storyIds:new Set()};
+            leagueTable[user.id] = {user:user, 
+                                    totalComments:0,
+                                    totalStories:0,
+                                    totalStoriesSinceJoined: 0,
+                                    totalStoriesSinceDisqus:0,
+                                    totalStoriesLastTwoMonths:0,
+                                    storiesCommentedOnSinceJoined:new Set(),                                             
+                                    allStoriesCommentedOn:new Set(),
+                                    storiesCommentedOnSinceDisqus:new Set(),
+                                    storiesCommentOnLastTwoMonths: new Set()};
         } 
+
+        
 
         for(theme of commentDoc.themes)
         {
+            results.totalThemes++;
+            const themeDeadline = moment(theme.deadline);
+
+
+
+           
+            
+
             for(story of theme.stories)
             {
+                results.totalStories++;
+                //add the public path to our story
+                //TODO hmm - right that we have to know to do this here? but the story shouldn;t know...
+                module.html.buildStoryPath(theme.publicId,story);
+                allStories.push(story);
+                
                 for(comment of story.comments)
                 {
                     if(leagueTable[comment.user]!=undefined)
                     {
-                        leagueTable[comment.user].totalComments++;
-                        leagueTable[comment.user].storyIds.add(story.id);
+                        const leagueTableUser = leagueTable[comment.user];
+                        leagueTableUser.totalComments++;
+                        leagueTableUser.allStoriesCommentedOn.add(story.id);
+                        if(user.joined.isSameOrBefore(themeDeadline))
+                        {
+                            leagueTableUser.storiesCommentedOnSinceJoined.add(story.id);
+                        }
+
+                        if(themeDeadline.isSameOrAfter(momentWhenDisqusStarted))
+                        {
+                            leagueTableUser.storiesCommentedOnSinceDisqus.add(story.id);
+                        }
+
+                        if(themeDeadline.isSameOrAfter(momentTwoMonthsAgo))
+                        {
+                            
+                            leagueTableUser.storiesCommentOnLastTwoMonths.add(story.id);
+                        }
                     }
                 }
+
+                for (const userId in leagueTable)
+                {
+                    const user = leagueTable[userId];
+                    if(user.id!=story.author)
+                    {               
+                        user.totalStories++;     
+                        if(user.user.joined.isSameOrBefore(themeDeadline))
+                        {
+                            user.totalStoriesSinceJoined++;
+                        }
+
+                        if(themeDeadline.isSameOrAfter(momentWhenDisqusStarted))
+                        {
+                            user.totalStoriesSinceDisqus++;
+                        }
+
+                        if(themeDeadline.isSameOrAfter(momentTwoMonthsAgo))
+                        {
+                            user.totalStoriesLastTwoMonths++;
+                        }
+                    }                        
+                }
+
+                
             }
         }
 
         for (const userId in leagueTable)
         {
+            
             const user = leagueTable[userId];
-            user.totalStories = user.storyIds.size;            
+            const newUser = 
+            {
+                user: user.user,
+                totalComments: user.totalComments,
+                totalStoriesCommentedOn: user.allStoriesCommentedOn.size,    
+                totalStoryCoveragePercentage: Math.round((user.allStoriesCommentedOn.size/user.totalStories)*100),
+                totalStoriesSinceJoined: user.totalStoriesSinceJoined,
+                totalStoriesCommentedOnSinceJoined: user.storiesCommentedOnSinceJoined.size,
+                coverageSinceJoinedPercentage: Math.round((user.storiesCommentedOnSinceJoined.size/user.totalStoriesSinceJoined)*100),
+                coverageSinceDisqusPercentage: Math.round((user.storiesCommentedOnSinceDisqus.size/user.totalStoriesSinceDisqus)*100),
+                coverageLastTwoMonths: Math.round((user.storiesCommentOnLastTwoMonths.size/user.totalStoriesLastTwoMonths)*100)                 
+            };
+
+            if(user.user.joined.isAfter(momentWhenDisqusStarted))
+            {
+                newUser.effectiveCoverage = newUser.coverageSinceJoinedPercentage;
+            }
+            else
+            {
+                newUser.effectiveCoverage = newUser.coverageSinceDisqusPercentage;
+            }
+
+            newUser.missedStories = [];
+            for(const story of allStories)
+            {
+                //console.log(story.author,user.user.id);
+                if(story.author.toLowerCase()!=user.user.id.toLowerCase() && !user.allStoriesCommentedOn.has(story.id))
+                {
+                    newUser.missedStories.push(story);
+                    //onsole.log(story);
+                }
+
+            }
+            
+            results.users.push(newUser); 
         }
 
-        return Object.keys(leagueTable).reduce((array, key)=>{
-            array.push(leagueTable[key]);
-            return array
-                },[]).sort((a,b)=>b.totalComments-a.totalComments);
 
-        
+        results.users =  results.users.sort((a,b)=>b.effectiveCoverage-a.effectiveCoverage);
+
+        return results;
+    }
+
+    module.generateCommentLeagueTablePage = async()=>{
+        const leagueTable = await module.getCommentLeagueTable();
+        await module.html.stats_buildCommentPage(leagueTable);
     }
 
     return module;

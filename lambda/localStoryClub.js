@@ -8,9 +8,9 @@ process.on('unhandledRejection', error => {
 
 async function blah()
 {    
-    //const dataLayer = require('./src/club/model/data')(require('./src/club/storage/storage-s3.js')({bucket:process.env.BUCKET}));
-    const dataLayer = require('./src/club/model/data')(require('./src/club/storage/storage-local.js')({path:"_site/club/"}));
-    const disqusController = require('./src/club/controllers/disqusController')(process.env.disqus_accessToken, process.env.disqus_apiKey, process.env.disqus_apiSecret, "storyclub",dataLayer);
+    //const storage = (require('./src/club/storage/storage-s3.js')({bucket:process.env.BUCKET}));
+    const storage = require('./src/club/storage/storage-local.js')({path:"_site/club/"});
+    const disqusController = require('./src/club/controllers/disqusController')(process.env.disqus_accessToken, process.env.disqus_apiKey, process.env.disqus_apiSecret, "storyclub",storage,storage);
 
 
     // const themes = await dataLayer.listThemes();
@@ -29,11 +29,14 @@ async function blah()
     //console.log(await disqusController.generateCommentDoc());
     console.log("user\tcomments\tstory count")
     console.log("----\t--------\t-----------")
-    for(const position of await disqusController.getCommentLeagueTable())
+    //console.log(await disqusController.getCommentLeagueTable());
+    for(const position of (await disqusController.getCommentLeagueTable()).users)
     {
             //console.log(user);
         console.log(`${position.user.id}\t${position.totalComments}\t\t${position.totalStories}`);
     }
+
+    await disqusController.generateCommentLeagueTablePage();
     
 
 }
