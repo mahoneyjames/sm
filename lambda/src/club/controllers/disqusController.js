@@ -1,13 +1,17 @@
 const debug = require('debug')("disqusController");
 const axios = require('axios');
 const moment = require('moment');
+const {Comment} = require('../model/comment');
+
 
 module.exports = function(accessToken, apiKey, apiSecret, forum, storageForData, storageForHtml){
 
     var module = {};
     module.data = require('../model/data')(storageForData);
     module.html = require('../views/html')(storageForHtml);
+    module.api =require('../disqusApi')(accessToken, apiKey, apiSecret);
     module.users = null;
+    module.forum = forum
     //TODO - what's the better node way of doing this type of caching? 
     
     module.get_users = async ()=>
@@ -20,38 +24,48 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, storageForData,
         return module.users;
     }
 
-    module.listStoryComments = async (storyId)=>
+
+    module.syncAllComments = async()=>
     {
-        try
-            {            
-            const url = `https://disqus.com/api/3.0/threads/listPosts.json?access_token=${accessToken}&api_key=${apiKey}&api_secret=${apiSecret}&forum=${forum}&thread:ident=${storyId}`;
-            const response = await axios.get(url)
+        const users = await module.get_users();
 
-            const users = await module.get_users();
+        const commentDoc = {comments:[]};
 
-            var comments = response.data.response.map((item)=>{
-                const disqusId = item.author.username;
-                const ourUser = users.find((u)=>u.disqusIds.find((s)=>s==disqusId)!=null);
+        debug("generate comment doc");
 
-
-                return {
-                    id:item.id, 
-                    createdAt: item.createdAt,                  
-                    message: item.message, 
-                    messageRaw:item.raw_message, 
-                    parent: item.parent,
-                    user: ourUser!=null ? ourUser.id : item.author.name
-                }
-            });
+        const themes = await module.data.listThemes();
+        for (theme of themes)
+        {        
+            debug("Theme '%'", theme.publicId);
+            const stories = (await module.data.listThemeStories(theme.publicId)).map((story)=>({id:story.id,author:story.author,title:story.title,publicId:story.publicId}));
             
-            return comments;
+            for(story of stories)
+            {
+                debug("Story '%'", story.publicId);
+
+                
+                for(const comment of await module.api.listStoryComments(module.forum, story.id))
+                {
+//                    debug(JSON.stringify(comment));
+                    const ourUser = users.find((u)=>u.disqusIds.find((s)=>s==comment.userId)!=null);
+                    commentDoc.comments.push(new Comment(
+                        {
+                            themeId: theme.publicId,
+                            storyId: story.id, 
+                            storyPublicId: story.publicId,
+                            id: comment.id,
+                            userId: ourUser.id,
+                            text: comment.messageRaw,
+                            when: comment.createdAt,
+                            parentId: comment.parent,
+                            storyTitle: story.title
+                        }));
+                }
+            }
         }
-        catch(error)
-        {
-            //console.log(error);
-            //TODO - wrap up an exception?
-            return [];
-        }       
+
+        await module.data.saveAllComments(commentDoc);
+        return commentDoc;
     }
 
 //generate a single doc containing ALL themes, stories and comments

@@ -25,3 +25,5 @@ npm run browse
    - cmd.exe, then npm run local
    - postman
 
+# Syncing comments
+Have to run this locally at the moment - AWS API gateway timeout is a hard 30 seconds

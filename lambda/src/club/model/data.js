@@ -1,12 +1,14 @@
 const debug = require('debug')("data");
 const uniqid = require('uniqid');
 const moment = require('moment');
+const {Comment} = require('./comment');
 
 module.exports =  function(storage){   
 
     var module = {};
 
     module.storage = storage;
+
 
     module.listThemeStories = async (publicThemeId)=>{
         return await storage.listObjectsFromJson(`data/${publicThemeId}/stories`);
@@ -36,6 +38,13 @@ module.exports =  function(storage){
         return await storage.readObjectFromJson(`data/themes/${publicThemeId}.json`);
     };
 
+    module.saveLatestTheme = async(theme)=>{
+        await storage.writeFile(`data/latestTheme.json`, JSON.stringify(theme), "application/json");        
+    }
+    module.getLatestTheme = async()=>{
+        return await storage.readObjectFromJson(`data/latestTheme.json`);
+    }
+
     module.loadUsers = async ()=>{
         const userJson = await storage.readObjectFromJson(`data/users.json`);
         
@@ -52,5 +61,37 @@ module.exports =  function(storage){
     module.loadCommentDoc = async()=>{
         return await storage.readObjectFromJson(`data/everything.json`);
     }
+
+    module.saveAllComments = async(commentsDoc)=>{
+
+        if(commentsDoc.comments==undefined)
+        {
+            commentsDoc.comments = [];
+        }
+
+        if(commentsDoc.lastCommentData==undefined)
+        {
+            commentsDoc.lastCommentDate = null;
+        }
+        await storage.writeFile(`data/comments.json`, JSON.stringify(commentsDoc),"application/json");
+    }
+
+
+    /*
+        {
+            lastCommentDate:"datetime",
+            comments:[]
+        }
+    */
+    module.listAllComments = async()=>{
+        const commentsDoc = await storage.readObjectFromJson(`data/comments.json`);
+
+        commentsDoc.comments = commentsDoc.comments.map((comment)=>new Comment(comment));
+
+        return commentsDoc;
+    }
+
+    
+
     return module;
 };

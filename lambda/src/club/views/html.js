@@ -98,6 +98,11 @@ module.exports =  function(storage){
 
     }
 
+    module.buildHomePage = async(theme, comments)=>
+    {
+        await buildPageAndSave(storage,"index","sc-home",{title:"storyclub",theme,comments});
+    }
+
     module.stats_buildCommentPage = async(leagueTable)=>{
         await buildPageAndSave(storage, "stats/comments","sc-comments", {title:"top commenters", leagueTable});
     }

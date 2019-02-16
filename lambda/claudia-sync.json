@@ -1,0 +1,7 @@
+{
+  "lambda": {
+    "role": "disqus-sync-executor",
+    "name": "disqus-sync",
+    "region": "eu-west-2"
+  }
+}

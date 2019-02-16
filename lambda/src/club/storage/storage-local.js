@@ -18,6 +18,11 @@ module.exports =  function(options){
     module.writeFile = writeSingleFile;
     module.listObjectsFromJson = listJsonFromFiles;
     module.readObjectFromJson = loadSingleFileIntoJson;
+
+    // module.readString = async(path)
+    // {
+    //     return await readFile(path,"utf8");
+    // };
     return module;
 };
 

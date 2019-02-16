@@ -23,6 +23,12 @@ module.exports =  function(storageForData, storageForHtml){
             return theme;    
         };
 
+    module.setThemeAsLatest = async(publicThemeId)=>
+    {
+        const theme = await this.data.loadTheme(publicThemeId);
+        await data.saveLatestTheme(theme);
+    }
+    
     module.previewStory = async (publicThemeId, story)=>
     {
         return await previewThemeStory(this.htmlBuilder, this.data, publicThemeId, story)

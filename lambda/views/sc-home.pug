@@ -3,9 +3,19 @@ include mixins/_themeInfo
 
 
 block content
+    //-pre= helpers.dump(comments)
     p Yo. This is Storyclub. Just don't talk about it. Okay?
     p But you can feedback. And you bloody should, you non-feedbacking slacker. 
 
     if theme
         h1 Latest theme!
+        //-p get it done by #{theme.deadline}
         +themeInfo(theme,true)
+    if comments
+        h1 Recent feedback
+        ul
+            each comment in comments
+                li by #{comment.userId} on 
+                    a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
+                    ul
+                        li #{comment.text}

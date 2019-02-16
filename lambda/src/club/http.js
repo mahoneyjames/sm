@@ -39,11 +39,14 @@ api.get('/api/site/refreshStaticPages', async ()=>{
     return "done";
 });
 
+
 api.get('/api/site/refreshThemeList', async ()=>{    
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     await themeController.buildThemesPage();
     return "done";
 });
+
+
 
 api.post('/api/site/publishThemeForReview', async (request)=>{    
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
@@ -57,11 +60,22 @@ api.post('/api/site/closeTheme', async (request)=>{
     return "done";
 });
 
+api.get('/api/site/home', async (request)=>{    
+    var controller = require('./controllers/siteController')(dataStorage,htmlStorage);
+    await controller.rebuildHomePage();
+    return "done";
+});
+
 api.post('/api/themes/save', async (request)=>{
     console.log(request.body);
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     var theme = await themeController.createThemeChallenge(request.body.theme);
     return theme;    
+});
+
+api.post('/api/themes/setLatest', async(request)=>{
+    var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+    await themeController.setThemeAsLatest(request.body.publicThemeId);
 });
 
 api.post('/api/stories/save', async (request)=>{
@@ -71,3 +85,15 @@ api.post('/api/stories/save', async (request)=>{
     return story;    
 });
 
+
+api.get('/api/comments/sync', async (request)=>{
+    const disqusController = require('./controllers/disqusController')
+    (process.env.disqus_accessToken, 
+        process.env.disqus_apiKey, 
+        process.env.disqus_apiSecret,
+        process.env.disqus_forum,
+        dataStorage,
+        htmlStorage);
+
+    return await disqusController.syncAllComments();
+});

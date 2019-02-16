@@ -16,3 +16,6 @@ To add a new author
  - add them to the users sheet
  - update the JSON in _site/club/data/users.JSON
  - update this in S3
+
+# 16 Jan 2019
+Added a method to pull all comments from disqus and write to a json doc
