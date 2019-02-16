@@ -41,4 +41,35 @@ async function blah()
 
 }
 
-blah();
+//blah();
+
+
+function reporting()
+{
+    var items = [ 
+    { deadline: "2019-01-01", Step: "Step 1", Task: "Task 1", Value: "5" },
+    { deadline: "2018-01-01", Step: "Step 1", Task: "Task 2", Value: "10" },
+    { deadline: "2017-01-01", Step: "Step 2", Task: "Task 1", Value: "15" },
+    { deadline: "2017-01-01", Step: "Step 2", Task: "Task 2", Value: "20" },
+    { deadline: "2018-01-01", Step: "Step 1", Task: "Task 1", Value: "25" },
+    { deadline: "2017-01-01", Step: "Step 1", Task: "Task 2", Value: "30" },
+    { deadline: "2019-01-01", Step: "Step 2", Task: "Task 1", Value: "35" },
+    { deadline: "2019-01-01", Step: "Step 2", Task: "Task 2", Value: "40" }
+    ];
+
+    const dataForge = require('data-forge');
+    const transformedData = new dataForge.DataFrame(items)
+                            .parseFloats("Value")
+                            .orderBy(row=>row.deadline)
+                            .groupBy(row=>row.deadline)
+                            .select(group=>({
+                                deadline: group.first().deadline, 
+                                count: group.count(),
+                                total: group.deflate(row=>row.Value).sum()
+                            }))
+                            .toArray();
+    console.log(transformedData);
+
+}
+
+reporting();
