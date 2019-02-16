@@ -26,4 +26,5 @@ npm run browse
    - postman
 
 # Syncing comments
-Have to run this locally at the moment - AWS API gateway timeout is a hard 30 seconds
+A dedicated lambda function for comment syncing, since the API gateway is 30 seconds
+This is triggered by a CloudWatch rule every hour
