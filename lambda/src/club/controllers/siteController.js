@@ -41,7 +41,7 @@ module.exports = function(storageForData, storageForHtml){
                 {
                     return 1;
                 }
-        }).slice(0,10);
+        }).slice(0,15);
         //TODO sort descending and take 10
         //TODO work out the story path?
         await module.html.buildHomePage(latestTheme,recentComments);

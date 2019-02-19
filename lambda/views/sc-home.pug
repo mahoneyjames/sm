@@ -13,9 +13,22 @@ block content
         +themeInfo(theme,true)
     if comments
         h1 Recent feedback
-        ul
-            each comment in comments
-                li by #{comment.userId} on 
-                    a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
-                    ul
-                        li #{comment.text}
+        each comment in comments        
+            .comment
+                .header
+                    span.author #{comment.userId}
+                    span •
+                    span.when #{comment.when}                    
+                    span.story on 
+                        a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
+                .body
+                    span.text #{comment.text}                        
+                    
+block code
+    script.
+        for(const span of document.querySelectorAll("span.when"))
+        {
+            
+            console.log("#" + span.innerText.trim() + "#");
+            span.innerText = moment(span.innerText.trim()).fromNow();
+        }

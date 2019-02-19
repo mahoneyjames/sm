@@ -63,7 +63,7 @@ api.post('/api/site/closeTheme', async (request)=>{
 api.get('/api/site/home', async (request)=>{    
     var controller = require('./controllers/siteController')(dataStorage,htmlStorage);
     await controller.rebuildHomePage();
-    return "done";
+    return "doned";
 });
 
 api.post('/api/themes/save', async (request)=>{

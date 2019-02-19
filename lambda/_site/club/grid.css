@@ -218,3 +218,17 @@ th[role=columnheader]:not(.no-sort):hover:after {
     margin:0px;
     padding:0px;
 }
+
+.comment
+{
+    padding: 10px;
+}
+
+.comment span{
+    padding-right:5px;
+}
+
+.comment .author{
+    font-style: italic;
+    font-size:unset; 
+}
