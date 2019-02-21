@@ -9,6 +9,19 @@ module.exports =  function(storage){
 
     module.storage = storage;
 
+    module.listAllThemesAndStories = async () =>{
+        //TODO - store this doc in s3? or does this build it and cache it?
+        
+        const themes = await module.listThemes();
+        return await Promise.all(themes.map (async (theme)=>
+        
+        {theme.stories = await module.listThemeStories(theme.publicId);
+            //console.log(theme.stories);
+            return theme;
+            }
+        ));
+
+    }
 
     module.listThemeStories = async (publicThemeId)=>{
         return await storage.listObjectsFromJson(`data/${publicThemeId}/stories`);
@@ -89,6 +102,23 @@ module.exports =  function(storage){
         commentsDoc.comments = commentsDoc.comments.map((comment)=>new Comment(comment));
 
         return commentsDoc;
+    }
+
+    module.sortThemesByDate = (themes)=>{
+        return themes.sort((a,b)=>{
+                if(!a.deadline || !b.deadline)
+                {
+                    return 0;
+                }
+                else if(a.deadline > b.deadline)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 1;
+                }
+        });
     }
 
     

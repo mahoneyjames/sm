@@ -47,7 +47,6 @@ api.get('/api/site/refreshThemeList', async ()=>{
 });
 
 
-
 api.post('/api/site/publishThemeForReview', async (request)=>{    
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     await themeController.publishThemeForReview(request.body.publicThemeId);
@@ -63,6 +62,13 @@ api.post('/api/site/closeTheme', async (request)=>{
 api.get('/api/site/home', async (request)=>{    
     var controller = require('./controllers/siteController')(dataStorage,htmlStorage);
     await controller.rebuildHomePage();
+    return "doned";
+});
+
+
+api.get('/api/site/no-comments', async (request)=>{    
+    var controller = require('./controllers/siteController')(dataStorage,htmlStorage);
+    await controller.rebuildAuthorMissingCommentsPages();
     return "doned";
 });
 

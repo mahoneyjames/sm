@@ -35,6 +35,14 @@ module.exports = async function(storage){
 
     });
 
+    describe ('data-list all themes and stories', ()=>{
+        it('list all', async ()=>{
+            const all = await data.listAllThemesAndStories();
+            console.log(all);
+        });
+
+    });
+
             
     return module;
 }

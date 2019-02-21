@@ -13,11 +13,9 @@ module.exports =  function(storageForData, storageForHtml){
     module.createThemeChallenge = async (theme)=>
         {
             if(validateTheme(theme))
-            {
-                
+            {                
                 await this.htmlBuilder.generateInitialThemePage(theme);
-                await this.data.saveTheme(theme);
-                await this.htmlBuilder.buildStaticPages(theme);
+                await this.data.saveTheme(theme);                
             }
 
             return theme;    
@@ -48,20 +46,7 @@ module.exports =  function(storageForData, storageForHtml){
     module.buildThemesPage = async()=>
     {
         var themes = await this.data.listThemes();
-        themes = themes.sort((a,b)=>{
-                if(!a.deadline || !b.deadline)
-                {
-                    return 0;
-                }
-                else if(a.deadline > b.deadline)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return 1;
-                }
-        });
+        themes = this.data.sortThemesByDate(themes);
         await this.htmlBuilder.buildThemesPage(themes);
     }
     return module;

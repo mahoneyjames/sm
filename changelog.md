@@ -17,5 +17,8 @@ To add a new author
  - update the JSON in _site/club/data/users.JSON
  - update this in S3
 
-# 16 Jan 2019
+# 16 Feb 2019
 Added a method to pull all comments from disqus and write to a json doc
+
+# 21 Feb 2019
+Added a method to build pages for each user listing stories they have not commented on

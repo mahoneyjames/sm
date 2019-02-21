@@ -108,6 +108,11 @@ module.exports =  function(storage){
     }
 
     module.buildStoryPath =buildStoryPath;
+
+    module.buildUserPrivatePage = async(user,themesWithStoriesWithoutComments)=>
+    {
+        await buildPageAndSave(storage, `u/${user.id}/missing-comments`, 'sc-user-missing-comments',{title: 'missing comments', themesWithStoriesWithoutComments});
+    }
     
     return module;
 };

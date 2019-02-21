@@ -16,6 +16,7 @@ exports.handler = async function (event, context) {
 
     const siteController = require('./src/club/controllers/siteController')(dataStorage,htmlStorage);
     await siteController.rebuildHomePage();
+    await siteController.rebuildAuthorMissingCommentsPages();
 
     return comments;
 };

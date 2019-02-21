@@ -21,8 +21,7 @@ block content
                     span.when #{comment.when}                    
                     span.story on 
                         a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
-                .body
-                    span.text #{comment.text}                        
+                .body !{comment.text}                        
                     
 block code
     script.

@@ -55,7 +55,7 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, storageForData,
                             storyPublicId: story.publicId,
                             id: comment.id,
                             userId: ourUser.id,
-                            text: comment.messageRaw,
+                            text: comment.message,
                             when: comment.createdAt,
                             parentId: comment.parent,
                             storyTitle: story.title
