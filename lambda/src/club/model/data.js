@@ -61,12 +61,25 @@ module.exports =  function(storage){
     module.loadUsers = async ()=>{
         const userJson = await storage.readObjectFromJson(`data/users.json`);
         
-        return userJson.usersGoogle.map((user)=>({id:user.id.toLowerCase(), 
+        if(userJson.users)
+        {
+            return userJson.users.map(user=>{
+                user.join = moment(user.joined);
+                return user;
+            });
+        }
+        else{
+
+            return userJson.usersGoogle.map((user)=>({id:user.id.toLowerCase(), 
                                                     name: user.name, 
-                                                    disqusIds:user.disqusId.split(","),
+                                                    disqusIds: user.disqusIds!=undefined ? user.disqusIds : user.disqusId.split(","),
                                                     joined: moment(user.joined)} ));
+        }
     }
 
+    module.saveUsers = async (users)=>{
+        await storage.writeFile('data/users.json',JSON.stringify(users), "application/json" );
+    }
     module.saveCommentDoc = async(fullDoc)=>{
         await storage.writeFile(`data/everything.json`, JSON.stringify(fullDoc),"application/json");
     }

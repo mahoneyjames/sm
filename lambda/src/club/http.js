@@ -1,6 +1,7 @@
 'use strict';
 let dataStorage = null;
 let htmlStorage = null;
+
 console.log("here");
 if(process.env.DATA && process.env.DATA.toLowerCase()=="local")
 {
@@ -14,6 +15,8 @@ else
     dataStorage = require('./storage/storage-s3')({bucket:process.env.BUCKET});
     htmlStorage = require('./storage/storage-s3')({bucket:process.env.BUCKET});    
 }
+
+const eventQueue = require('./eventQueue/htmlnow')(dataStorage,htmlStorage);
 
 var ApiBuilder = require('claudia-api-builder'),
   api = new ApiBuilder();
@@ -102,4 +105,13 @@ api.get('/api/comments/sync', async (request)=>{
         htmlStorage);
 
     return await disqusController.syncAllComments();
+});
+
+
+api.post('/api/users/save', async (request)=>{
+   // console.log(request.body);
+
+    var userController = require('./controllers/userController')(dataStorage,eventQueue);
+    return await userController.saveUserData(request.body);
+        
 });

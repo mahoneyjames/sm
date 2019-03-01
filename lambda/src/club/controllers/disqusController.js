@@ -29,7 +29,7 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, storageForData,
     {
         const users = await module.get_users();
 
-        const commentDoc = {comments:[]};
+        const commentDoc = {comments:[], unknownUsers:[]};
 
         debug("generate comment doc");
 
@@ -48,18 +48,37 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, storageForData,
                 {
 //                    debug(JSON.stringify(comment));
                     const ourUser = users.find((u)=>u.disqusIds.find((s)=>s==comment.userId)!=null);
-                    commentDoc.comments.push(new Comment(
-                        {
-                            themeId: theme.publicId,
-                            storyId: story.id, 
-                            storyPublicId: story.publicId,
-                            id: comment.id,
-                            userId: ourUser.id,
-                            text: comment.message,
-                            when: comment.createdAt,
-                            parentId: comment.parent,
-                            storyTitle: story.title
-                        }));
+
+                    if(ourUser!=null)
+                    {
+                        commentDoc.comments.push(new Comment(
+                            {
+                                themeId: theme.publicId,
+                                storyId: story.id, 
+                                storyPublicId: story.publicId,
+                                id: comment.id,
+                                userId: ourUser.id,
+                                text: comment.message,
+                                when: comment.createdAt,
+                                parentId: comment.parent,
+                                storyTitle: story.title
+                            }));
+                    }
+                    else
+                    {
+                        commentDoc.unknownUsers.push(new Comment(
+                            {
+                                themeId: theme.publicId,
+                                storyId: story.id, 
+                                storyPublicId: story.publicId,
+                                id: comment.id,
+                                userId: ourcomment.userId,
+                                text: comment.message,
+                                when: comment.createdAt,
+                                parentId: comment.parent,
+                                storyTitle: story.title
+                            }));
+                    }
                 }
             }
         }

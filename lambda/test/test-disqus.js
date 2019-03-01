@@ -10,10 +10,11 @@ const disqusApi = require('../src/club/disqusApi')(
 describe ('disqus-api-list-by-story',()=>{
     it('list', async ()=>{
         const comments = await disqusApi.listStoryComments("storyclub","nd21jm0g26cw");
+        //console.log(comments);
         expect(comments.length).to.equal(3);
-        expect(comments[0].user).to.equal("James");
-        expect(comments[1].user).to.equal("Jenny Allan");
-        expect(comments[2].user).to.equal("James");
+        expect(comments[0].userName).to.equal("James");
+        expect(comments[1].userName).to.equal("Jenny Allan");
+        expect(comments[2].userName).to.equal("James");
         // for(const comment of comments)
         // {
         //     console.log(comment.message);

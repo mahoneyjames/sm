@@ -115,7 +115,7 @@ async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
 
     const users = await dataLayer.loadUsers();
     //augment the stories with author info
-    const unknownUser = {id:"oops", name:"unknown...."};
+    const unknownUser = {id:"oops", publicId:'mystery', name:"unknown...."};
     allStories.map((story)=>{
         
         let storyUser = null; 

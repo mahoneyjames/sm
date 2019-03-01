@@ -1,0 +1,12 @@
+extends sc-layout
+include mixins/_storyCard
+include mixins/_comments
+include mixins/_themeInfo
+block content         
+        
+    h1 #{user.id}
+
+    if user.about && user.about.html
+        p !{user.about.html}
+
+block aside

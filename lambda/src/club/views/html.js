@@ -1,10 +1,17 @@
 const pug = require('pug');
+
 module.exports =  function(storage){   
 
     var module = {};
 
     module.storage = storage;
 
+    module.buildUserPage = async(user)=>{
+        
+
+        await buildPageAndSave(storage, `a/${user.publicId}`, 'sc-user',{user,title: `about ${user.name}`});
+    };
+    
     module.generateInitialThemePage = async (theme)=>{
         buildThemePath(theme);
         await buildPageAndSave(storage, theme.path, "sc-theme", {theme});
