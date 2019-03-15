@@ -4,7 +4,7 @@ include mixins/_comments
 include mixins/_themeInfo
 block content         
         
-    h1 #{user.id}
+    h1 #{user.publicId}
 
     if user.about && user.about.html
         p !{user.about.html}
