@@ -24,7 +24,7 @@ var ApiBuilder = require('claudia-api-builder'),
 module.exports = api;
 
 api.get('/hello', function () {
-  return 'hello world';
+  return 'hello world:' + process.env.BUCKET;
 });
 
 api.get('/exception', function () {
@@ -35,6 +35,11 @@ api.get('/exception', function () {
 api.get('/api/themes/list', ()=>{    
     var model = require('./model/data')(dataStorage);
     return model.listThemes();
+});
+
+api.get('/api/themes/listEverything', ()=>{    
+    var model = require('./model/data')(dataStorage);
+    return model.listAllThemesAndStories();
 });
 
 api.get('/api/site/refreshStaticPages', async ()=>{    

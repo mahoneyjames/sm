@@ -14,7 +14,8 @@
     "test-data": "node ./test/test-data.js",
     "start": "ntl",
     "http-install": "claudia --profile claudia create --region eu-west-2 --api-module src/club/http --name storyclub2 --version dev  --config claudia-v2.json --timeout 60 --set-env BUCKET=preview.storymarmalade.co.uk",
-    "http-update": "set BUCKET=blah&& claudia --profile claudia update --config claudia-v2.json",
+    "http-update": "set BUCKET=blah&& claudia --profile claudia update --config claudia-v2.json --version prod",
+    "http-update-preview": "set BUCKET=blah&& claudia --profile claudia update --config claudia-v2-preview.json --version preview",
     "sync-install": "claudia --profile claudia create --region eu-west-2 --handler lambdaDisqus.handler --name disqus-sync --version dev  --config claudia-sync.json --timeout 60 --set-env BUCKET=preview.storymarmalade.co.uk",
     "sync-update": "set BUCKET=blah&& claudia --profile claudia update --config claudia-sync.json"
   },

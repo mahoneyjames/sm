@@ -5,13 +5,16 @@ npm run http-install
 npm run http-update
 
 # Manage different environments
-Environment variables control the S3 bucket that's used.
+Environment variables control the S3 bucket that's used. These are immutable for a given function version.
 
-Since these are immutable for a given function version, the dev/prod approach is
- - use latest for dev, point it at preview.storymarmalade.co.uk
- - when that is ready to become prod, change the environment variable to point to the correct bucket
- - publish a new function version to $LATEST$
- - point the prod alias at the previous version
+To keep things simple, there are *two* functions
+ - storyclub2: production
+
+ npm run http-update
+
+ - storyclub-preview: preview
+
+ npm run http-update-preview
 
 # To host the site locally for testing
 npm run browse

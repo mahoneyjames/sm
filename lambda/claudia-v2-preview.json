@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "storyclub-prevew-executor",
+    "name": "storyclub-prevew",
+    "region": "eu-west-2"
+  },
+  "api": {
+    "id": "lm2w4dk2sc",
+    "module": "src/club/http"
+  }
+}
