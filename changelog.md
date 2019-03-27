@@ -22,3 +22,6 @@ Added a method to pull all comments from disqus and write to a json doc
 
 # 21 Feb 2019
 Added a method to build pages for each user listing stories they have not commented on
+
+# 27 Mar 2019
+Changed the way we do logging. Now we output JSON

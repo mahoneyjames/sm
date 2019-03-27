@@ -1,4 +1,5 @@
-const debug = require('debug')("disqusApi");
+const log = require('./loggingHelper')("disqusApi");
+const logFailures = ('./loggingHelper')("disqusApi-storyNotFound");
 const axios = require('axios');
 module.exports = function(accessToken, apiKey, apiSecret){
 
@@ -6,10 +7,11 @@ module.exports = function(accessToken, apiKey, apiSecret){
 
     module.listStoryComments = async(forum, storyId)=>
     {
+        const url = `https://disqus.com/api/3.0/threads/listPosts.json?access_token=${accessToken}&api_key=${apiKey}&api_secret=${apiSecret}&forum=${forum}&thread:ident=${storyId}`;
         try
             {            
-            const url = `https://disqus.com/api/3.0/threads/listPosts.json?access_token=${accessToken}&api_key=${apiKey}&api_secret=${apiSecret}&forum=${forum}&thread:ident=${storyId}`;
-            debug(url);
+            
+            log.json({dependency:"disqus", url});
             const response = await axios.get(url)
             //console.log(response.data.response);
             var comments = response.data.response.map((item)=>{                
@@ -28,8 +30,10 @@ module.exports = function(accessToken, apiKey, apiSecret){
             return comments;
         }
         catch(error)
-        {
-            debug(error);
+        {           
+             
+            //TODO - a more elegant approach for there being no comments for the story?
+            logFailures.json({dependency:"disqus", url, reason:"story not found? No comments for story?", error});
             //TODO - wrap up an exception?
             return [];
         }    

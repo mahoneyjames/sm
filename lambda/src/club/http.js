@@ -1,8 +1,8 @@
 'use strict';
 let dataStorage = null;
 let htmlStorage = null;
+const codeRunner = require('./loggingHelper')("app entry point");
 
-console.log("here");
 if(process.env.DATA && process.env.DATA.toLowerCase()=="local")
 {
     console.log("running locally");
@@ -23,84 +23,103 @@ var ApiBuilder = require('claudia-api-builder'),
 
 module.exports = api;
 
-api.get('/hello', function () {
-  return 'hello world:' + process.env.BUCKET;
+//Wrap up our gets and posts with a standard bit of logging
+//Right now this grabs everything incoming and outgoing!
+//There's probably a way to do this by using api.intercept, but for the moment this works
+async function get(path, code)
+{
+    api.get(path, async function (request) {
+        return await codeRunner.run(request, async (request)=> await code(request));
+    }); 
+}
+
+
+async function post(path, code)
+{
+    api.post(path, async function (request) {
+        return await codeRunner.run(request,async (request)=> await code(request));
+    }); 
+}
+
+get('/hello', function (request) {
+    return codeRunner.run(request, ()=>'hello world:' + process.env.BUCKET);
 });
 
-api.get('/exception', function () {
+get('/hello2', function (request) {
+    return 'hello world2:' + process.env.BUCKET;
+});
+get('/exception', function () {
   throw "aargh";
 });
 
 
-api.get('/api/themes/list', ()=>{    
+get('/api/themes/list', ()=>{    
     var model = require('./model/data')(dataStorage);
     return model.listThemes();
 });
 
-api.get('/api/themes/listEverything', ()=>{    
+get('/api/themes/listEverything', ()=>{    
     var model = require('./model/data')(dataStorage);
     return model.listAllThemesAndStories();
 });
 
-api.get('/api/site/refreshStaticPages', async ()=>{    
+get('/api/site/refreshStaticPages', async ()=>{    
     await require('./views/html')(htmlStorage).buildStaticPages();    
     return "done";
 });
 
 
-api.get('/api/site/refreshThemeList', async ()=>{    
+get('/api/site/refreshThemeList', async ()=>{    
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     await themeController.buildThemesPage();
     return "done";
 });
 
 
-api.post('/api/site/publishThemeForReview', async (request)=>{    
+post('/api/site/publishThemeForReview', async (request)=>{    
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     await themeController.publishThemeForReview(request.body.publicThemeId);
     return "done";
 });
 
-api.post('/api/site/closeTheme', async (request)=>{    
+post('/api/site/closeTheme', async (request)=>{    
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     await themeController.closeTheme(request.body.publicThemeId);
     return "done";
 });
 
-api.get('/api/site/home', async (request)=>{    
+get('/api/site/home', async (request)=>{    
     var controller = require('./controllers/siteController')(dataStorage,htmlStorage);
     await controller.rebuildHomePage();
     return "doned";
 });
 
 
-api.get('/api/site/no-comments', async (request)=>{    
+get('/api/site/no-comments', async (request)=>{    
     var controller = require('./controllers/siteController')(dataStorage,htmlStorage);
     await controller.rebuildAuthorMissingCommentsPages();
     return "doned";
 });
 
-api.post('/api/themes/save', async (request)=>{
-    console.log(request.body);
+post('/api/themes/save', async (request)=>{
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     var theme = await themeController.createThemeChallenge(request.body.theme);
     return theme;    
 });
 
-api.post('/api/themes/setLatest', async(request)=>{
+post('/api/themes/setLatest', async(request)=>{
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     await themeController.setThemeAsLatest(request.body.publicThemeId);
 });
 
-api.post('/api/stories/save', async (request)=>{
-    console.log(request.body);
+post('/api/stories/save', async (request)=>{    
     var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
     var story = await themeController.previewStory(request.body.publicThemeId, request.body.story);
     return story;    
 });
 
 
-api.get('/api/comments/sync', async (request)=>{
+get('/api/comments/sync', async (request)=>{
     const disqusController = require('./controllers/disqusController')
     (process.env.disqus_accessToken, 
         process.env.disqus_apiKey, 
@@ -113,7 +132,7 @@ api.get('/api/comments/sync', async (request)=>{
 });
 
 
-api.post('/api/users/save', async (request)=>{
+post('/api/users/save', async (request)=>{
    // console.log(request.body);
 
     var userController = require('./controllers/userController')(dataStorage,eventQueue);
