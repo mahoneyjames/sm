@@ -1,5 +1,5 @@
 const log = require('./loggingHelper')("disqusApi");
-const logFailures = ('./loggingHelper')("disqusApi-storyNotFound");
+const logFailures = require('./loggingHelper')("disqusApi-storyNotFound");
 const axios = require('axios');
 module.exports = function(accessToken, apiKey, apiSecret){
 

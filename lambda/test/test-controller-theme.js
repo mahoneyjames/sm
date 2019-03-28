@@ -1,10 +1,10 @@
 var expect = require('chai').expect;
 
-describe('local storage: theme controller', ()=>{    
-    require('./_tests/_test-controller-theme')(
-        require('../src/club/storage/storage-local.js')({path:"_site/unittest/"}),
-        require('../src/club/storage/storage-local.js')({path:"_site/unittest/"})
-    )
+describe('local storage: theme controller', async ()=>{    
+    const setup = require('./setup')();
+    const debug = require('debug')("test-data-methods");
+    
+    require('./_tests/_test-controller-theme')(()=>setup.initLocalStorage("theme-controller-1"));
 });
 
 // describe('S3 storage: theme controller', ()=>{    

@@ -52,7 +52,7 @@ module.exports = function(storageForData, storageForHtml){
     {
         //load the comments doc
         //load all stories
-        console.log("yma");
+        
 
         const recentComments = (await module.data.listAllComments());
         const allStories = module.data.sortThemesByDate((await module.data.listAllThemesAndStories()));

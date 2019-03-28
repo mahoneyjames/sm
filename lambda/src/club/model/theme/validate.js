@@ -30,7 +30,7 @@ module.exports = function (theme)
     }
     
     //TODO - clean up the public theme id? or always generate it?
-    if(!theme.publicId)
+    if(!theme.publicId || theme.publicId.trim()=="")
     {
         theme.publicId = sanitiseId(theme.themeText);
     }

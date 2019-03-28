@@ -1,16 +1,25 @@
 var expect = require('chai').expect;
 const uniqid = require('uniqid');
 
-module.exports = async function(storageForData){   
+module.exports = async function(storageLoader){   
 
     var module = {};
 
     const eventQueue = require('../../src/club/eventQueue/array')();
-    var controller = require('../../src/club/controllers/userController')(storageForData,eventQueue);
+    
     //clear the storage before running?
 
     describe("controller-user-save", ()=>
     {
+        let data = null;
+        let storageForData = null;
+        let controller = null;
+        before(async function(){
+
+            
+           storageForData = await storageLoader();            
+            controller = require('../../src/club/controllers/userController')(storageForData,eventQueue);
+        });
         
 
             it("no-users", async ()=>{

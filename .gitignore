@@ -3,4 +3,6 @@ lambda/aws-credentials.json
 lambda/node_modules
 lambda/variables.env
 lambda/_site/*
+lambda/_test-runs
+lambda/test/_test-runs/*
 lambda/src/club/variables.env

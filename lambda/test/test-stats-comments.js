@@ -1,10 +1,14 @@
+const debug = require('debug')("test-stats-comments");
 var expect = require('chai').expect;
-const storage = require('../src/club/storage/storage-local')({path:'test/_stats/test1/'});
-const data = require('../src/club/model/data')(storage);
-const statsBuilder = require('../src/club/model/stats')();
+const setup = require('./setup')();
 
-describe ("stats-comments-manual", ()=>{
-    console.log("stats1");
+describe ("stats-comments-manual", async ()=>{
+
+    const storage = await setup.initLocalStorage('stats-tests/1');
+    const data = require('../src/club/model/data')(storage);
+    const statsBuilder = require('../src/club/model/stats')();
+
+
     it("stats1",async ()=>{
         const users = await data.loadUsers();
         const allThemes = await data.loadCommentDoc();
@@ -18,10 +22,10 @@ describe ("stats-comments-manual", ()=>{
         expect(results.users[0].user.id).to.equal("james");
         expect(results.users[1].user.id).to.equal("hannah");
 
-        console.log("use\ttotal\tdisqus\tone month");
+        debug("use\ttotal\tdisqus\tone month");
         for(const user of results.users)
         {
-            console.log(`${user.user.id}\t${user.totalStoriesSinceJoined}\t${user.totalStoriesSinceDisqus}\t${user.totalStoriesLastTwoMonths}`);
+            debug(`${user.user.id}\t${user.totalStoriesSinceJoined}\t${user.totalStoriesSinceDisqus}\t${user.totalStoriesLastTwoMonths}`);
         }
     });
 
@@ -38,7 +42,7 @@ describe ("stats-comments-manual", ()=>{
         expect(results.users[0].user.id).to.equal("james");
         expect(results.users[1].user.id).to.equal("hannah");
 
-        console.log(await statsBuilder.getAllCommentsAsArray(users,allThemes));
+        debug(await statsBuilder.getAllCommentsAsArray(users,allThemes));
     });
 
     it("output-stories",async ()=>{
@@ -46,7 +50,7 @@ describe ("stats-comments-manual", ()=>{
         const allThemes = await data.loadCommentDoc();
 
 
-        console.log(await statsBuilder.getStoriesAsArray(users,allThemes));
+        debug(await statsBuilder.getStoriesAsArray(users,allThemes));
     });
 
 });

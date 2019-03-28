@@ -1,4 +1,7 @@
 var expect = require('chai').expect;
+const debug = require('debug')("test-controller-user");
+const setup = require('./setup')();
+
 require('dotenv').config({ path: 'variables.env' });
 
 const disqusApi = require('../src/club/disqusApi')(
@@ -7,7 +10,7 @@ const disqusApi = require('../src/club/disqusApi')(
     process.env.disqus_apiSecret, 
 );
 
-describe ('disqus-api-list-by-story',()=>{
+describe.skip ('disqus-api-list-by-story',()=>{
     it('list', async ()=>{
         const comments = await disqusApi.listStoryComments("storyclub","nd21jm0g26cw");
         //console.log(comments);
@@ -23,8 +26,9 @@ describe ('disqus-api-list-by-story',()=>{
     });
 });
 
-describe('disqus-sync-controller-local storage', ()=>{   
-    const storage =  require('../src/club/storage/storage-local.js')({path:"./test/_data/disqus-sync-1/"}) ;
+describe.skip('disqus-sync-controller-local storage', async ()=>{   
+    const storage =  await setup.initLocalStorage("disqus-sync-1");
+
     require('./_tests/_test-disqus')(
         process.env.disqus_accessToken, 
         process.env.disqus_apiKey, 

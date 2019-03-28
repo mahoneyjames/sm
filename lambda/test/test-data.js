@@ -1,3 +1,4 @@
+const debug = require('debug')("test-data");
 const assert = require('assert');
 require('dotenv').config({ path: 'variables.env' });
 //console.log(process.env);
@@ -15,7 +16,7 @@ async function dataLayerTests(dataLayer)
     assert.equal("path1", thing.path);
 
     var things = await dataLayer.listObjectsFromJson("file/something/here");
-    //console.log(things);
+    
     assert.equal(2,things.length);
     assert.equal("path1",things[0].path);
     assert.equal("path2",things[1].path);
@@ -69,9 +70,9 @@ function testGrouping()
       new Map()
   );
 
-console.log(groupedMap);
+debug(groupedMap);
 
-console.log(Array.from(groupedMap.entries(),(entry)=>({year: entry[0], themes:Array.from(entry[1])})));
+debug(Array.from(groupedMap.entries(),(entry)=>({year: entry[0], themes:Array.from(entry[1])})));
 
 var something = null;
   return groupedMap;
@@ -85,7 +86,7 @@ var something = null;
 async function testUsers()
 {
   var storage = require('../src/club/model/data.js')(require('../src/club/storage/storage-local.js')({path:"_site/club/"}));
-  console.log(await storage.loadUsers());
+  debug(await storage.loadUsers());
 } 
 
 //testUsers();

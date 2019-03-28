@@ -4,13 +4,18 @@ var moment = require('moment');
 //https://zaiste.net/modern_node_js_async_await_based_testing_with_mocha_chai/
 //use before and beforeEach for setup?
 
-module.exports = async function(storageForData, storageForHtml){   
+module.exports = async function(storageLoader){   
 
     var module = {};
+    let controller = null;
+    let storageForData = null;
+    before(async function(){
+        storageForData = await storageLoader();
+        controller = require('../../src/club/controllers/theme')(storageForData,storageForData);
 
-    var controller = require('../../src/club/controllers/theme')(storageForData,storageForHtml);
-    //clear the storage before running?
+    });
 
+    
     describe('valid theme-full workflow', ()=>{
 
         const themeText = `unit-test-theme-${moment().format("YYYY-MM-DD-HH-mm-ss")}`;

@@ -15,14 +15,14 @@ module.exports = function(name)
     var module = {};
 
     //write a simple type
-    module.message = (msg)=>{
+    module.message = (msg, ...params)=>{
         if(debug)
         {
-            debug(msg);
+            debug(msg,...params);
         }
         else
         {
-            module.json({msg});
+            module.json({msg,params});
         }
     }
 
