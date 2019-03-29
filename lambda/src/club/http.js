@@ -1,13 +1,13 @@
 'use strict';
 let dataStorage = null;
 let htmlStorage = null;
-const codeRunner = require('./loggingHelper')("app entry point");
+const codeRunner = require('./loggingHelper')("app-http");
 
 if(process.env.DATA && process.env.DATA.toLowerCase()=="local")
 {
     console.log("running locally");
-    dataStorage = require('./storage/storage-local')({path:"_site/club/"});
-    htmlStorage = require('./storage/storage-local')({path:"_site/club/"});
+    dataStorage = require('./storage/storage-local')({path:process.env.SITEPATH});
+    htmlStorage = require('./storage/storage-local')({path:process.env.SITEPATH});
 }
 else
 {

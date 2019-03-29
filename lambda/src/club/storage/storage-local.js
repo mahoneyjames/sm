@@ -2,7 +2,7 @@ const debug = require('debug')("storage-local");
 /*
     Implemenation of our tiny "data layer" that reads/writes stuff to the local file system
 */
-const {writeFile,readFile, recurse,mkdir,ensureDir, readJson} = require('fs-extra');
+const {writeFile,readFile, recurse,mkdir,ensureDir, readJson,exists} = require('fs-extra');
 const glob = require('glob');
 
 module.exports =  function(options){   
@@ -18,6 +18,9 @@ module.exports =  function(options){
     module.writeFile = writeSingleFile;
     module.listObjectsFromJson = listJsonFromFiles;
     module.readObjectFromJson = loadSingleFileIntoJson;
+
+    //local storage specific stuff
+    module.exists = async (path)=>{return exists(path)};
 
     // module.readString = async(path)
     // {
