@@ -132,7 +132,7 @@ async function buildPageAndSave (storage, path, view, options){
 
     //console.log(options);
 
-    const fullHtml = pug.renderFile(`./views/${view}.pug`,options);    
+    const fullHtml = pug.renderFile(`./src/club/views/${view}.pug`,options);    
     
     await storage.writeFile(path, fullHtml, "text/html");
 }

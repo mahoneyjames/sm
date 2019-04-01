@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "local": "claudia-local-api --api-module src/club/test/lambdaTest.js | bunyan --output none",
-    "host-test-api-blank": "claudia-local-api --api-module test/api/setupBlankSite.js --port 34333 | bunyan --output short",
-    "host-local-api-test":"start claudia-local-api --api-module test/api/setupBlankSite.js --port 34333 | bunyan --output short && start node ./browser.js", 
+    "host-test-api-blank": "claudia-local-api --api-module test/api/setupBlankSite.js --port 34333 | bunyan --output short",    
     "test": "mocha ",
     "s3": "node ./aws.js",
     "club": "node ./localStoryClub.js",

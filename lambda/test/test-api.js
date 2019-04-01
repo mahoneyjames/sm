@@ -18,7 +18,7 @@ describe("local-api: brand new site", function(){
         it("check target", async function(){
             expect(await get('/hello')).to.equal("hello world:localstorage");
         });
-        it("static pages", async function(){
+        it.only("static pages", async function(){
             debug(await get ("/api/site/refreshStaticPages"));
 
         });
