@@ -6,10 +6,16 @@ module.exports =  function(storage){
 
     module.storage = storage;
 
-    module.buildUserPage = async(user)=>{
+    module.buildUserPage = async(user,stories)=>{
         
-
-        await buildPageAndSave(storage, `a/${user.publicId}`, 'sc-user',{user,title: `about ${user.name}`});
+        if(stories)
+        {
+            for(const story of stories)
+            {
+                buildStoryPath(story.themeId, story);
+            }
+        }
+        await buildPageAndSave(storage, `a/${user.publicId}`, 'sc-user',{user,title: `about ${user.name}`, stories});
     };
     
     module.generateInitialThemePage = async (theme)=>{

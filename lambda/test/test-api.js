@@ -18,7 +18,7 @@ describe("local-api: brand new site", function(){
         it("check target", async function(){
             expect(await get('/hello')).to.equal("hello world:localstorage");
         });
-        it.only("static pages", async function(){
+        it("static pages", async function(){
             debug(await get ("/api/site/refreshStaticPages"));
 
         });
@@ -47,13 +47,28 @@ describe("local-api: brand new site", function(){
                 {
                     "themeText":"theme 2",
                     "things":["5","6","7"],
-                    "deadline":"2019-01-10",
+                    "deadline":"2018-01-10",
                     "publicId":""
                 }
             },false);
             //debug(theme2);
             expect(theme2.errors.length).to.equal(0);
             expect(theme2.publicId).to.equal("theme-2");
+        });
+
+        it("save theme 3", async function(){
+            const theme2 = await post('/api/themes/save', {
+                "theme":
+                {
+                    "themeText":"theme 3",
+                    "things":["5","6","7"],
+                    "deadline":"2017-01-10",
+                    "publicId":""
+                }
+            },false);
+            //debug(theme2);
+            expect(theme2.errors.length).to.equal(0);
+            expect(theme2.publicId).to.equal("theme-3");
         });
 
         it("set latest", async function(){
@@ -113,6 +128,25 @@ describe("local-api: brand new site", function(){
 
         });
 
+                
+        it("theme2-story-james",async function(){
+            const result = await post("/api/stories/save", await storage.readObjectFromJson("theme-2/james.json"));
+            //debug(result);
+            expect(result.id).to.equal("xxxxx");
+            expect(result.publicId).to.equal("boddle");
+            expect(result.path).to.equal('h/theme-2/boddle');
+
+        });
+
+        it("bulk load some stories",async function(){
+            await post("/api/stories/save", await storage.readObjectFromJson("theme-3/liz.json"));
+            await post("/api/stories/save", await storage.readObjectFromJson("theme-3/james.json"));
+            await post("/api/stories/save", await storage.readObjectFromJson("theme-3/hannah.json"));
+
+        });
+
+        
+
         it("publish theme 1", async function(){
             const result = await post("/api/site/publishThemeForReview",{publicThemeId:"theme-1"});
             //debug(result);
@@ -142,6 +176,11 @@ describe("local-api: brand new site", function(){
             expect(theme1.status).to.equal("complete");
             expect(theme1.stories.length).to.equal(2);
 
+        });
+
+        it("save users again (to force a rebuild of user pages)",async function(){
+            const userResult = await post('/api/users/save',await storage.readObjectFromJson("users.json"));
+            expect(userResult.errors.length).to.equal(0);
         });
         
 

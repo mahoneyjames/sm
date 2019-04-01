@@ -1,8 +1,8 @@
 {
     "users": [{
         "id": "liz",
-        "publicId": "shy1",
-        "name": "Mr Tomato",
+        "publicId": "liz",
+        "name": "lizrandell",
         "disqusId": "lizrandell",
         "joined": "2016-11-30",
         "about": {

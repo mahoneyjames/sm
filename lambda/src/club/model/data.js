@@ -135,6 +135,25 @@ module.exports =  function(storage){
     }
 
     
+    module.sortThemesByDateOldestFirst = (themes)=>{
+        return themes.sort((a,b)=>{
+                if(!a.deadline || !b.deadline)
+                {
+                    return 0;
+                }
+                else if(a.deadline < b.deadline)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 1;
+                }
+        });
+    }
+
+
+    
 
     return module;
 };

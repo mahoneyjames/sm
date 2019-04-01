@@ -9,4 +9,11 @@ block content
     if user.about && user.about.html
         p !{user.about.html}
 
+    if stories && stories.length > 0
+        h1 All stories
+        ul
+            each story in stories
+                li
+                    a(href=`${siteRoot}/${story.path}`) #{story.title}
+
 block aside

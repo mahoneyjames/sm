@@ -7,16 +7,15 @@ module.exports =  function(storageForData, storageForHtml){
 
     module.events = [];
 
+    module.controller = require('../controllers/pageController')(storageForHtml);                
     module.add = async (type, data)=>{
         debug("add", type, data);
         module.events.push({type, data});
 
         if(type==="user-update")
-        {            
+        {                        
             
-                const controller = require('../views/html')(storageForHtml);
-                
-                await controller.buildUserPage(data);
+            await module.controller.buildAuthorPage(data.id);
                 
         }
     };
