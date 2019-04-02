@@ -4,6 +4,8 @@
 const aws = require("aws-sdk");
 const S3 = aws.S3;
 const s3 = new S3();
+const loggingHelper = require('../loggingHelper')("storage-s3");
+const debug = loggingHelper.json;
 
 module.exports =  function(options){   
 
@@ -28,36 +30,60 @@ module.exports =  function(options){
     return module;
 };
 
+async function get(bucket, key)
+{
+    const options = {Bucket: bucket, Key: key};
+    
+    debug({what:"s3-get", options});
+    
+    return await s3.getObject(options).promise();
+}
+
+async function list(bucket, prefix)
+{
+    const options = {Bucket: bucket, Prefix: prefix};
+    
+    debug({what:"s3-list", options});
+    
+    const objects = await s3.listObjectsV2(options).promise();
+
+    return objects;
+}
+
 
 async function loadSingleS3ObjectIntoJson(path)
 {    
-    var response = await s3.getObject({Bucket: this.bucket, Key: this.prefix + path}).promise();
+    
+    var response = await get(this.bucket, this.prefix + path);
+    //ebug(response);
     var json = JSON.parse(response.Body.toString("utf-8"));        
     return json;
 }
 async function writeSingleS3Object (path, content, mimeType){
     
-    await s3.putObject({
+    const options = {
         Bucket: this.bucket,
         Key:this.prefix + path,
         Body: content, 
         ContentType: mimeType
-    }).promise();    
+    };
+
+    debug({what:"s3-put", options:{Bucket: options.Bucket, Key: options.Key}});
+
+    await s3.putObject(options).promise();    
 }
 
 async function listJsonFromS3Objects(prefix)
 {
      //get a list of all objects in the author's folder
-    var objects = await s3.listObjectsV2(
-        {Bucket: this.bucket,
-        Prefix:this.prefix + prefix}).promise();
+    var objects = await list(this.bucket, this.prefix + prefix);
     
     //load all the json and return it
     var storyJsonList = await Promise.all(objects["Contents"].map(async (x)=>{
         //console.log(x.Key);
         if(x.Key!=null && x.Key.slice(x.Key.length-4)=="json")
         {
-            var response = await s3.getObject({Bucket: this.bucket, Key: x.Key}).promise();
+            var response = await  get(this.bucket, x.Key);
             var json = JSON.parse(response.Body.toString("utf-8"));        
             return json;
         }
