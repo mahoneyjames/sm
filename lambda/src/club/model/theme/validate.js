@@ -2,6 +2,10 @@ const {sanitiseId} = require('../../helpers');
 
 module.exports = function (theme)
 {
+    if(theme.constructor === String)
+    {
+        throw "Expected an object, but was supplied with a string";
+    }
     if(theme.errors==undefined)
     {
         theme.errors = [];
@@ -10,6 +14,7 @@ module.exports = function (theme)
     if(theme.themeText==undefined || theme.themeText==null || theme.themeText.trim()=="")
     {
         theme.errors[theme.errors.length] = "No theme.themeText supplied";
+        return false;
     }
 
     if( theme.things==undefined 

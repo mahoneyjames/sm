@@ -6,7 +6,7 @@ module.exports =  function(storage){
 
     module.storage = storage;
 
-    module.buildUserPage = async(user,stories)=>{
+    module.buildUserPage = async(user,stories, storiesByYear)=>{
         
         if(stories)
         {
@@ -15,7 +15,8 @@ module.exports =  function(storage){
                 buildStoryPath(story.themeId, story);
             }
         }
-        await buildPageAndSave(storage, `a/${user.publicId}`, 'sc-user',{user,title: `about ${user.name}`, stories});
+        //TODO - should this have the responsibility of grouping by year? It is a view thing...
+        await buildPageAndSave(storage, `a/${user.publicId}`, 'sc-user',{user,title: `about ${user.name}`, stories, storiesByYear});
     };
     
     module.generateInitialThemePage = async (theme)=>{

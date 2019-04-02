@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-describe('local storage: page controller', async ()=>{    
+describe('local storage: page-controller', async ()=>{    
     const setup = require('./setup')();
         
     require('./_tests/_test-controller-page')(()=>setup.initLocalStorage("page-controller-1"));

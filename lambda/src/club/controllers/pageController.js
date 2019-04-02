@@ -34,14 +34,17 @@ module.exports = function(storage)
                 if(story.author.toLowerCase()==authorId)
                 {
                     story.themeId = theme.publicId;
+                    story.deadline = theme.deadline;
                     storiesForUser.push(story);
                 }
             }
         }
 
+
             //debug(storiesForUser);
         //build the page
-        await this.htmlBuilder.buildUserPage(user, storiesForUser);
+        //debug(this.data.groupStoriesByYear(storiesForUser));
+        await this.htmlBuilder.buildUserPage(user,storiesForUser, this.data.groupStoriesByYear(storiesForUser));
 
     };
 

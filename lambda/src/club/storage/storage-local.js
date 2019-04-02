@@ -66,7 +66,7 @@ async function listJsonFromFiles(prefix)
 
     //load all the json and return it
     const storyJsonList = await Promise.all(files.map(async (x)=>{
-        
+        debug(x);
         if(x.slice(-4)=="json")
         {
             return await readJson(x);

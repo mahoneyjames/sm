@@ -7,7 +7,7 @@ const urlRoot="http://localhost:34333";
 const browseSiteRoot="http://localhost:9999";
 
 
-describe("local-api: brand new site", function(){
+describe.skip("local-api: brand new site", function(){
     
     //TODO - clear up data first. 
     //TODO - filter this out of the standard test run?
@@ -188,6 +188,20 @@ describe("local-api: brand new site", function(){
 
 });
 
+describe.skip("local-api-real-data", async function(){
+    await loadDataToSiteViaApi(require('../src/club/storage/storage-local.js')({path:"test/inputs/api-test-2/"}));    
+});
+
+describe.skip("local-api-build-site", function(){
+
+    it("do it all", async function()
+    {
+        debug(await get ("/api/site/refreshStaticPages"));
+        //TODO - something to rebuild the user pages without updating the users?
+        expect(await get("/api/site/refreshThemeList")).to.equal("done");
+    })
+});
+
 async function get(url)
 {
     try
@@ -205,6 +219,7 @@ async function post(url, data, printOutput)
 {
     try
     {       
+        //debug(data);
         const result = (await axios.post(`${urlRoot}${url}`,data)).data;
         if(printOutput)
         {
@@ -218,4 +233,60 @@ async function post(url, data, printOutput)
         debug(url,":", error);
         throw error;
     }        
+}
+
+async function loadDataToSiteViaApi(storage)
+{
+    it("load users", async function(){
+        await post('/api/users/save',await storage.readObjectFromJson("users.json"));
+    });
+
+    const themeIds = [];
+    describe("load themes", function(){
+        let allThemes = null;
+        before(async function()
+        {
+            allThemes = await storage.listObjectsFromJson("themes");
+        });
+        it("load themes", async function(){
+            this.timeout(40000);
+            for(const theme of allThemes)
+            {
+                if(theme.constuctor==String)
+                {
+                    console.log("Duff theme object - a string return instead of json '%s'", theme);
+                }
+                if(theme!=undefined && theme.constructor!=String)
+                {
+                    debug(theme);
+                    //TODO - bug in our lister, so it's returning something duff?
+                    //The string "a-fresh-start" is appearing from somewhere - are we returning the path by mistake as well?
+                    debug("load theme: " + theme.themeText);                    
+                    const importedTheme = await post('/api/themes/save', {theme},false);
+                    allThemes.push(importedTheme.publicId);
+
+                    const storiesForThemes = await storage.listObjectsFromJson(`stories/${theme.publicId}/stories`);
+                    for(const story of storiesForThemes)
+                    {
+                        if(story!=undefined)
+                        {
+                            debug("load story '%s'", story.title);
+                            await post("/api/stories/save", {publicThemeId: importedTheme.publicId, story});
+                        }
+                    }
+
+                    await post("/api/site/closeTheme",{publicThemeId: importedTheme.publicId});
+
+                }
+            }
+        });
+    });
+
+    it("build site page", async function(){
+        expect(await get("/api/site/refreshThemeList")).to.equal("done");
+    });
+
+    it("save users to trigger author page build", async function(){
+        await post('/api/users/save',await storage.readObjectFromJson("users.json"));
+    });
 }

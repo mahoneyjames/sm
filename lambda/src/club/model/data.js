@@ -2,6 +2,7 @@ const debug = require('debug')("data");
 const uniqid = require('uniqid');
 const moment = require('moment');
 const {Comment} = require('./comment');
+const {groupByIsoDate,mapToArray} = require('../helpers');
 
 module.exports =  function(storage){   
 
@@ -153,7 +154,15 @@ module.exports =  function(storage){
     }
 
 
-    
+    module.groupThemesByYear = (themes)=>{
+        return mapToArray(groupByIsoDate(themes,"deadline"), "year", "themes");        
+    }
+
+    module.groupStoriesByYear = (stories)=>{
+        return mapToArray(groupByIsoDate(stories,"deadline"), "year", "stories");       
+    }
+
+
 
     return module;
 };
