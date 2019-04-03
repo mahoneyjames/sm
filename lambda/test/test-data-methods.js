@@ -2,8 +2,17 @@ var expect = require('chai').expect;
 const setup = require('./setup')();
 const debug = require('debug')("test-data-methods");
 
-describe('local data-methods', function (){
+describe('local-data-methods', function (){
     require('./_tests/_test-data-methods')(()=>setup.initLocalStorage('data-test-1'));
+    
+});
+
+describe('local-data-methods-users', function (){
+    require('./_tests/data-methods/_test-data-methods-user')(()=>setup.initLocalStorage('data-tests-users-1'));    
+});
+
+describe('local-data-methods-themes-and-stories', function (){
+    require('./_tests/data-methods/_test-data-methods-themes-and-stories')(()=>setup.initLocalStorage('data-tests-themes-and-users-1'));
     
 });
 

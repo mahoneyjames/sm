@@ -8,11 +8,56 @@ module.exports =  function(storage){
 
     var module = {};
 
+    module.cache = {};
     module.storage = storage;
 
-    module.listAllThemesAndStories = async () =>{
-        //TODO - store this doc in s3? or does this build it and cache it?
+    const CACHE_USERS = "users";
+    const CACHE_THEMES_AND_STORIES = "all-themes-and-stories";
+
+    module.getCacheItem = async (key, loader, reloadFromStorage=false)=>
+    {
+        debug("getCacheItem %s", key);
         
+        if(reloadFromStorage==true)
+        {
+            debug("getCacheItem %s: reloadFromStorage=true", key);
+            module.cache[key] = (await loader());
+        }
+        else if(!module.cache[key])
+        {
+            debug("getCacheItem %s: cache miss", key);
+            const results = await loader();
+            //debug(results);
+            module.cache[key] = results;
+        }
+        //debug(module.cache);
+        
+        return module.cache[key];
+    }
+
+    module.setCacheItem = (key, data)=>
+    {
+        module.cache[key] = data;
+    }
+
+    module.updateCacheItem = (key, updatorFunction)=>
+    {
+        if(module.cache[key])
+        {
+           module.cache[key] =  updatorFunction(module.cache[key]);
+        }
+        else
+        {
+            debug("updateCacheItem %s: cache miss", key);
+        }
+    }
+
+    
+    module.cache_getThemesAndStories = async(reloadFromStorage=false, saveDocToStorage=false)=>{    
+        return await module.getCacheItem(CACHE_THEMES_AND_STORIES, module.listAllThemesAndStories, reloadFromStorage);
+    }
+
+    module.listAllThemesAndStories = async () =>{    
         const themes = await module.listThemes();
         return await Promise.all(themes.map (async (theme)=>
         
@@ -24,9 +69,28 @@ module.exports =  function(storage){
 
     }
 
+    module.cache_getThemeStories = async (publicThemeId, reloadFromStorage=false)=>
+    {
+        const all = await module.cache_getThemesAndStories(reloadFromStorage); 
+        const theme = all.find((t)=>t.publicId==publicThemeId);
+        if(theme!=null)
+        {
+            return theme.stories;
+        }
+        else
+        {
+            return [];
+        }
+    }
+
     module.listThemeStories = async (publicThemeId)=>{
         return await storage.listObjectsFromJson(`data/${publicThemeId}/stories`);
     };
+
+    module.cache_listThemes = async(reloadFromStorage=false)=>
+    {
+        return await module.cache_getThemesAndStories(reloadFromStorage);
+    }
 
     module.listThemes = async()=>{
         return await storage.listObjectsFromJson(`data/themes`);
@@ -38,6 +102,21 @@ module.exports =  function(storage){
             story.id = uniqid();
         }
         await storage.writeFile(`data/${publicThemeId}/stories/${story.id}.json`,JSON.stringify(story), "application/json");
+        
+        //update the cache
+        module.updateCacheItem(CACHE_THEMES_AND_STORIES, themes=>{
+            const theme = themes.find(t=>t.publicId==publicThemeId);
+            if(theme!=null)
+            {
+                const reducedStories = theme.stories.filter(s=>s.id!=story.id);
+                reducedStories.push(story);
+                theme.stories = reducedStories;
+            }
+            //debug(theme);
+            return themes;
+        });
+
+   
     };
 
     module.saveTheme = async(theme)=>{
@@ -46,6 +125,13 @@ module.exports =  function(storage){
             theme.id = uniqid();
         }
         await storage.writeFile(`data/themes/${theme.publicId}.json`, JSON.stringify(theme), "application/json");
+        
+        //update the cache
+        module.updateCacheItem(CACHE_THEMES_AND_STORIES, (themes)=>{
+            const reducedArray = themes.filter(t=>t.publicId!=theme.publicId);            
+            reducedArray.push(theme);
+            return reducedArray;
+        });
     };
 
     module.loadTheme = async(publicThemeId)=>{        
@@ -61,7 +147,7 @@ module.exports =  function(storage){
 
     module.loadUsers = async ()=>{
         const userJson = await storage.readObjectFromJson(`data/users.json`);
-        
+        //debug("load uses ran");
         if(userJson.users)
         {
             return userJson.users.map(user=>{
@@ -78,16 +164,30 @@ module.exports =  function(storage){
         }
     }
 
-    module.saveUsers = async (users)=>{
-        await storage.writeFile('data/users.json',JSON.stringify(users), "application/json" );
-    }
-    module.saveCommentDoc = async(fullDoc)=>{
-        await storage.writeFile(`data/everything.json`, JSON.stringify(fullDoc),"application/json");
+    module.cache_getUsers = async(reloadFromStorage=false)=>{
+        return await module.getCacheItem(CACHE_USERS, module.loadUsers, reloadFromStorage);
     }
 
-    module.loadCommentDoc = async()=>{
-        return await storage.readObjectFromJson(`data/everything.json`);
+    module.cache_getUser = async (userId)=>{
+        var users=await module.cache_getUsers();
+        debug(userId);
+        //debug(users);
+        return users.find(u=>u.id===userId);
     }
+
+
+    module.saveUsers = async (users)=>{
+        await storage.writeFile('data/users.json',JSON.stringify(users), "application/json" );
+        //TODO - update the cache?
+
+    }
+    // module.saveCommentDoc = async(fullDoc)=>{
+    //     await storage.writeFile(`data/everything.json`, JSON.stringify(fullDoc),"application/json");
+    // }
+
+    // module.loadCommentDoc = async()=>{
+    //     return await storage.readObjectFromJson(`data/everything.json`);
+    // }
 
     module.saveAllComments = async(commentsDoc)=>{
 

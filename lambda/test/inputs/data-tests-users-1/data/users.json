@@ -1,0 +1,58 @@
+{
+    "users": [{
+        "id": "liz",
+        "publicId": "liz",
+        "name": "lizrandell",
+        "disqusId": "lizrandell",
+        "joined": "2016-11-30",
+        "about": {
+            "link": "",
+            "content": null
+        }
+    },
+    {
+        "id": "james",
+        "publicId": "james",
+        "name": "James",
+        "disqusId": "disqus_I3Y90i5a4f",
+        "joined": "2016-11-02",
+        "about": {
+            "link": "https://docs.google.com/document/d/1O91wBAy0993sF5fPh5WMKiy3QRDrb-FOJ_CL_CRFapw/edit",
+            "format": "google",
+            "content": "James writes stuff."
+        }
+    },
+    {
+        "id": "lewis",
+        "publicId": "lewis",
+        "name": "Lewis",
+        "disqusId": "lewisgwyther",
+        "joined": "2017-11-30",
+        "about": {
+            "link": "",
+            "content": null
+        }
+    },
+    {
+        "id": "dan",
+        "publicId": "shy2",
+        "name": "Miss Renoir",
+        "disqusId": "disqus_6vIU2fBUav",
+        "joined": "2019-01-09",
+        "about": {
+            "link": "",
+            "content": null
+        }
+    },
+    {
+        "id": "jenny",
+        "publicId": "jenny",
+        "name": "Jenny",
+        "disqusId": "disqus_rrTjLPFDW1,jennyallanpoe",
+        "joined": "2016-11-02",
+        "about": {
+            "link": "",
+            "content": null
+        }
+    }]
+}
