@@ -13,7 +13,7 @@ module.exports = function(accessToken, apiKey, apiSecret){
             
             log.json({dependency:"disqus", url});
             const response = await axios.get(url)
-            //console.log(response.data.response);
+            
             var comments = response.data.response.map((item)=>{                
                 return {
                     id:item.id, 
@@ -33,7 +33,7 @@ module.exports = function(accessToken, apiKey, apiSecret){
         {           
              
             //TODO - a more elegant approach for there being no comments for the story?
-            logFailures.json({dependency:"disqus", url, reason:"story not found? No comments for story?", error});
+            logFailures.json({dependency:"disqus", url, reason:"story not found? No comments for story?"});
             //TODO - wrap up an exception?
             return [];
         }    

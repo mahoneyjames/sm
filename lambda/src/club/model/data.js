@@ -108,9 +108,16 @@ module.exports =  function(storage){
             const theme = themes.find(t=>t.publicId==publicThemeId);
             if(theme!=null)
             {
-                const reducedStories = theme.stories.filter(s=>s.id!=story.id);
-                reducedStories.push(story);
-                theme.stories = reducedStories;
+                if(theme.stories)
+                {
+                    const reducedStories = theme.stories.filter(s=>s.id!=story.id);
+                    reducedStories.push(story);
+                    theme.stories = reducedStories;
+                }
+                else
+                {
+                    theme.stories = [];
+                }
             }
             //debug(theme);
             return themes;
@@ -211,11 +218,19 @@ module.exports =  function(storage){
         }
     */
     module.listAllComments = async()=>{
-        const commentsDoc = await storage.readObjectFromJson(`data/comments.json`);
+        try{
+            const commentsDoc = await storage.readObjectFromJson(`data/comments.json`);
 
-        commentsDoc.comments = commentsDoc.comments.map((comment)=>new Comment(comment));
-
-        return commentsDoc;
+            commentsDoc.comments = commentsDoc.comments.map((comment)=>new Comment(comment));
+    
+            return commentsDoc;
+        }
+        catch(error)
+        {
+            debug(error);
+            return {comments:[]};
+        }
+        
     }
 
     module.sortThemesByDate = (themes)=>{

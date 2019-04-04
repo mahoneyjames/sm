@@ -27,9 +27,12 @@ module.exports = function(options={})
             }
 
     
-    module.initLocalStorage = async(testKey)=>
+    module.initLocalStorage = async(sourceFolder, testKey)=>
     {
-        const sourcePath = `${inputDataFolder}/${testKey}`;
+        if(testKey==null){
+            testKey = sourceFolder;
+        }
+        const sourcePath = `${inputDataFolder}/${sourceFolder}`;
         const targetPath = `${defaultTestContext.testRunFolder}/${testKey}/`;
         debug(`Copying contents from '%s' to '%s'`, sourcePath, targetPath);
 

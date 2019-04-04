@@ -7,7 +7,7 @@ const urlRoot="http://localhost:34333";
 const browseSiteRoot="http://localhost:9999";
 
 
-describe.skip("local-api: brand new site", function(){
+describe("local-api: brand new site", function(){
     
     //TODO - clear up data first. 
     //TODO - filter this out of the standard test run?

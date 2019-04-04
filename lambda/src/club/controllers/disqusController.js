@@ -4,49 +4,39 @@ const moment = require('moment');
 const {Comment} = require('../model/comment');
 
 
-module.exports = function(accessToken, apiKey, apiSecret, forum, storageForData, storageForHtml){
+module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
 
     var module = {};
-    module.data = require('../model/data')(storageForData);
-    module.html = require('../views/html')(storageForHtml);
+    module.data = data;
+    module.html = html;
     module.api =require('../disqusApi')(accessToken, apiKey, apiSecret);
-    module.users = null;
     module.forum = forum
-    //TODO - what's the better node way of doing this type of caching? 
-    
-    module.get_users = async ()=>
-    {
-        if(module.users==null)
-        {
-            module.users = await module.data.loadUsers();
-        }
-        
-        return module.users;
-    }
 
 
     module.syncAllComments = async()=>
     {
-        const users = await module.get_users();
+        const users = await module.data.cache_getUsers();
+        const themes = await module.data.cache_getThemesAndStories();
 
         const commentDoc = {comments:[], unknownUsers:[]};
 
         debug("generate comment doc");
 
-        const themes = await module.data.listThemes();
-        for (theme of themes)
+        
+        for (const theme of themes)
         {        
-            debug("Theme '%'", theme.publicId);
-            const stories = (await module.data.listThemeStories(theme.publicId)).map((story)=>({id:story.id,author:story.author,title:story.title,publicId:story.publicId}));
+            debug("Theme '%s'", theme.publicId);
+            //const stories = (await module.data.listThemeStories(theme.publicId)).map((story)=>({id:story.id,author:story.author,title:story.title,publicId:story.publicId}));
             
-            for(story of stories)
+            for(const story of theme.stories)
             {
-                debug("Story '%'", story.publicId);
+                debug("Story '%s'", story.publicId);
 
                 
                 for(const comment of await module.api.listStoryComments(module.forum, story.id))
                 {
-//                    debug(JSON.stringify(comment));
+
+                    debug(JSON.stringify(comment));
                     const ourUser = users.find((u)=>u.disqusIds.find((s)=>s==comment.userId)!=null);
 
                     if(ourUser!=null)
@@ -80,36 +70,37 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, storageForData,
                             }));
                     }
                 }
+
             }
         }
-
+        debug("Found %s comment(s)", commentDoc.comments.length);
         await module.data.saveAllComments(commentDoc);
         return commentDoc;
     }
 
 //generate a single doc containing ALL themes, stories and comments
-    module.generateCommentDoc = async()=>
-    {
-        const commentDoc = {};
+    // module.generateCommentDoc = async()=>
+    // {
+    //     const commentDoc = {};
 
-        debug("generate comment doc");
+    //     debug("generate comment doc");
 
-        commentDoc.themes = await module.data.listThemes();
-        for (theme of commentDoc.themes)
-        {        
-            debug("Theme '%'", theme.publicId);
-            theme.stories = (await module.data.listThemeStories(theme.publicId)).map((story)=>({id:story.id,author:story.author,title:story.title,publicId:story.publicId}));
+    //     commentDoc.themes = await module.data.listThemes();
+    //     for (theme of commentDoc.themes)
+    //     {        
+    //         debug("Theme '%'", theme.publicId);
+    //         theme.stories = (await module.data.listThemeStories(theme.publicId)).map((story)=>({id:story.id,author:story.author,title:story.title,publicId:story.publicId}));
             
-            for(story of theme.stories)
-            {
-                debug("Story '%'", story.publicId);
-                story.comments = await module.listStoryComments(story.id);
-            }
-        }
+    //         for(story of theme.stories)
+    //         {
+    //             debug("Story '%'", story.publicId);
+    //             story.comments = await module.listStoryComments(story.id);
+    //         }
+    //     }
 
-        await module.data.saveCommentDoc(commentDoc);
-        return commentDoc;
-    }
+    //     await module.data.saveCommentDoc(commentDoc);
+    //     return commentDoc;
+    // }
 
     //build a league table out of the comment doc
     module.getCommentLeagueTable = async () =>

@@ -10,8 +10,9 @@ const disqusApi = require('../src/club/disqusApi')(
     process.env.disqus_apiSecret, 
 );
 
-describe.skip ('disqus-api-list-by-story',()=>{
-    it('list', async ()=>{
+describe ('disqus-api-list-by-story',()=>{
+    it('list',async function  (){
+        this.timeout(10000);
         const comments = await disqusApi.listStoryComments("storyclub","nd21jm0g26cw");
         //console.log(comments);
         expect(comments.length).to.equal(3);
@@ -26,26 +27,25 @@ describe.skip ('disqus-api-list-by-story',()=>{
     });
 });
 
-describe.skip('disqus-sync-controller-local storage', async ()=>{   
-    const storage =  await setup.initLocalStorage("disqus-sync-1");
+describe('disqus-sync-controller-local storage', function (){   
+    
+ 
+    
+        const hack = {
+            storage: null,
+            loader: async function(){
+                this.storage = await setup.initLocalStorage("disqus-sync-1");
+                return this.storage;
+            }
 
-    require('./_tests/_test-disqus')(
-        process.env.disqus_accessToken, 
-        process.env.disqus_apiKey, 
-        process.env.disqus_apiSecret, 
-        "storyclub",
-        storage);     
-        
-        it("verify sync all",async()=>{
-            const comments = await storage.readObjectFromJson("data/comments.json");
-            expect(comments.comments.length).to.equal(17);
-            const themeIds = comments.comments.reduce((set, comment)=>{
-                set.add(comment.themeId);
-                return set;
-            },new Set());
-            expect(themeIds.size).to.equal(1);
-            expect(themeIds.has("new-beginnings")).to.equal(true);
-        });
+        };
+        const syncControllerTests = require('./_tests/_test-disqus')(
+            process.env.disqus_accessToken, 
+            process.env.disqus_apiKey, 
+            process.env.disqus_apiSecret, 
+            "storyclub",
+            hack);    
+
 
        
 });

@@ -1,25 +1,12 @@
 const debug = require('debug')("siteController");
 
 
-module.exports = function(storageForData, storageForHtml){
+module.exports = function(data, html){
 
     var module = {};
-    module.data = require('../model/data')(storageForData);
-    module.html = require('../views/html')(storageForHtml);
+    module.data = data;
+    module.html = html;
     
-    module.users = null;
-    //TODO - what's the better node way of doing this type of caching? 
-    
-    module.get_users = async ()=>
-    {
-        if(module.users==null)
-        {
-            module.users = await module.data.loadUsers();
-        }
-        
-        return module.users;
-    }
-
     module.rebuildHomePage=async()=>{
         const latestTheme = await module.data.getLatestTheme();
         const recentComments = (await module.data.listAllComments()).comments.map((comment)=>        
@@ -55,9 +42,9 @@ module.exports = function(storageForData, storageForHtml){
         
 
         const recentComments = (await module.data.listAllComments());
-        const allStories = module.data.sortThemesByDate((await module.data.listAllThemesAndStories()));
+        const allStories = module.data.sortThemesByDate((await module.data.cache_getThemesAndStories()));
         //console.log(allStories);
-        const users = await module.get_users();
+        const users = await module.data.cache_getUsers();
        // console.log(allStories);
 
         const flatStoryList = [];//allStories.reduce((outer,t)=>{t.stories.reduce((inner,s)=>inner.push(s),outer);}, []);

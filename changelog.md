@@ -25,3 +25,6 @@ Added a method to build pages for each user listing stories they have not commen
 
 # 27 Mar 2019
 Changed the way we do logging. Now we output JSON
+
+#4 April 2019
+Loads of unit testing, refactoring, and added some caching around the data - our s3 reads and writes were MASSIVE

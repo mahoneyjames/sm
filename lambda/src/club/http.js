@@ -17,6 +17,11 @@ else
 }
 
 const eventQueue = require('./eventQueue/htmlnow')(dataStorage,htmlStorage);
+const data = require('./model/data')(dataStorage);
+const html = require('./views/html')(htmlStorage);
+
+//TODO - refactor the controller to data data and html, instead of storage
+const themeController = require('./controllers/theme')(dataStorage,htmlStorage);
 
 var ApiBuilder = require('claudia-api-builder'),
   api = new ApiBuilder();
@@ -70,66 +75,53 @@ get('/api/site/refreshStaticPages', async ()=>{
 
 
 get('/api/site/refreshThemeList', async ()=>{    
-    var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+    
     await themeController.buildThemesPage();
     return "done";
 });
 
 
 post('/api/site/publishThemeForReview', async (request)=>{    
-    var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+    
     await themeController.publishThemeForReview(request.body.publicThemeId);
     return "done";
 });
 
-post('/api/site/closeTheme', async (request)=>{    
-    var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+post('/api/site/closeTheme', async (request)=>{        
     await themeController.closeTheme(request.body.publicThemeId);
     return "done";
 });
 
 get('/api/site/home', async (request)=>{    
-    var controller = require('./controllers/siteController')(dataStorage,htmlStorage);
+    var controller = require('./controllers/siteController')(data,html);
     await controller.rebuildHomePage();
     return "doned";
 });
 
 
 get('/api/site/no-comments', async (request)=>{    
-    var controller = require('./controllers/siteController')(dataStorage,htmlStorage);
+    var controller = require('./controllers/siteController')(data,html);
     await controller.rebuildAuthorMissingCommentsPages();
     return "doned";
 });
 
 post('/api/themes/save', async (request)=>{
-    var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+    
     var theme = await themeController.createThemeChallenge(request.body.theme);
     return theme;    
 });
 
 post('/api/themes/setLatest', async(request)=>{
-    var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+    
     await themeController.setThemeAsLatest(request.body.publicThemeId);
 });
 
 post('/api/stories/save', async (request)=>{    
-    var themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+    
     var story = await themeController.previewStory(request.body.publicThemeId, request.body.story);
     return story;    
 });
 
-
-get('/api/comments/sync', async (request)=>{
-    const disqusController = require('./controllers/disqusController')
-    (process.env.disqus_accessToken, 
-        process.env.disqus_apiKey, 
-        process.env.disqus_apiSecret,
-        process.env.disqus_forum,
-        dataStorage,
-        htmlStorage);
-
-    return await disqusController.syncAllComments();
-});
 
 
 post('/api/users/save', async (request)=>{

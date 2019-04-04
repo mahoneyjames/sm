@@ -5,20 +5,19 @@ module.exports = function(storage)
     
     this.htmlBuilder = require('../views/html')(storage);
     this.data = require('../model/data')(storage);
-    //debug(this.data);
-    this.cache = require('../model/data-cache')(this.data);
+    
 
     this.buildAuthorPage = async (authorId)=>{
         authorId = authorId.toLowerCase();
         //get the user
-        const user = await this.cache.getUser(authorId);
+        const user = await this.data.cache_getUser(authorId);
         if(user==null)
         {
             throw `User with id '${authorId} not found`;
         }
 
         //get all the stories
-        const all = this.data.sortThemesByDateOldestFirst(await this.cache.listAllThemesAndStories());
+        const all = this.data.sortThemesByDateOldestFirst(await this.data.cache_getThemesAndStories());
 
 
         //work out only the stories for this user

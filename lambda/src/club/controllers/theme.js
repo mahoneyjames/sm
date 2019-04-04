@@ -45,7 +45,7 @@ module.exports =  function(storageForData, storageForHtml){
 
     module.buildThemesPage = async()=>
     {
-        var themes = await this.data.listThemes();
+        var themes = await this.data.cache_getThemesAndStories();
         themes = this.data.sortThemesByDate(themes);
         await this.htmlBuilder.buildThemesPage(themes);
     }
@@ -83,37 +83,38 @@ function editThemeStory(themeId, story)
     //display links/author info, based on the theme status    
 }
 
-async function publishThemeForReview(pageBuilder, dataLayer, publicThemeId)
-{    
-    //load the theme json
-    const theme = await dataLayer.loadTheme(publicThemeId);
+// async function publishThemeForReview(pageBuilder, dataLayer, publicThemeId)
+// {    
+//     //load the theme json
+//     const theme = await dataLayer.loadTheme(publicThemeId);
 
-    //load stories for the theme
-    const allStories = await dataLayer.listThemeStories(publicThemeId);
+//     //load stories for the theme
+//     const allStories = await dataLayer.listThemeStories(publicThemeId);
 
-    //console.log(allStories);
-    //1 - generate and save a theme page, containing links to all the stories
-    //2 - generate and save the story pages, with links to the theme, and next/back links anonymous
+//     //console.log(allStories);
+//     //1 - generate and save a theme page, containing links to all the stories
+//     //2 - generate and save the story pages, with links to the theme, and next/back links anonymous
     
-    await pageBuilder.buildThemeNavigation(theme,allStories);
+//     await pageBuilder.buildThemeNavigation(theme,allStories);
     
     
-    theme.status="review";
-    await dataLayer.saveTheme(theme);
+//     theme.status="review";
+//     await dataLayer.saveTheme(theme);
 
-}
+// }
 
 
 
 async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
 {    
     //load the theme json
-    const theme = await dataLayer.loadTheme(publicThemeId);
+    const theme = (await dataLayer.cache_listThemes()).find(t=>t.publicId==publicThemeId);
 
     //load stories for the theme
-    const allStories = await dataLayer.listThemeStories(publicThemeId);
+    const allStories = await dataLayer.cache_getThemeStories(publicThemeId);
+    
 
-    const users = await dataLayer.loadUsers();
+    const users = await dataLayer.cache_getUsers();
     //augment the stories with author info
     const unknownUser = {id:"oops", publicId:'mystery', name:"unknown...."};
     allStories.map((story)=>{
