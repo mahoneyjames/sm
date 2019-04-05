@@ -11,7 +11,7 @@ module.exports = function(accessToken, apiKey, apiSecret){
         try
             {            
             
-            log.json({dependency:"disqus", url});
+            //log.json({dependency:"disqus", url});
             const response = await axios.get(url)
             
             var comments = response.data.response.map((item)=>{                
@@ -30,10 +30,15 @@ module.exports = function(accessToken, apiKey, apiSecret){
             return comments;
         }
         catch(error)
-        {           
+        {      
+            //TODO - do something with this!     
+            // {
+            //     "code": 13,
+            //     "response": "You have exceeded your hourly limit of requests"
+            //   }
              
             //TODO - a more elegant approach for there being no comments for the story?
-            logFailures.json({dependency:"disqus", url, reason:"story not found? No comments for story?"});
+            //logFailures.json({dependency:"disqus", url, reason:"story not found? No comments for story?"});
             //TODO - wrap up an exception?
             return [];
         }    

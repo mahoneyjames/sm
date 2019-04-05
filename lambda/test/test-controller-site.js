@@ -1,19 +1,24 @@
 var expect = require('chai').expect;
 
-describe('site-local storage: site controller', ()=>{    
-    let storageData = null;
-    let storageHtml = null;
+describe('site-local storage: siteController', ()=>{    
+    let storage = null;
+    const setup = require('./setup')();
     
     let siteController = null;
 
     before(async function(){
-        storageData = require('../src/club/storage/storage-local.js')({path:"test/inputs/site-test-1/"});
-        storageHtml = require('../src/club/storage/storage-local.js')({path:"test/inputs/site-test-1/"});
-        siteController = require('../src/club/controllers/siteController.js')(require('../src/club/model/data')(storageData),require('../src/club/views/html')(storageHtml));
+        storage = await setup.initLocalStorage("site-test-1/");
+        
+        siteController = require('../src/club/controllers/siteController.js')(require('../src/club/model/data')(storage),require('../src/club/views/html')(storage));
     });
 
-    it("rebuild missing comments pages",async function(){
-        await siteController.rebuildAuthorMissingCommentsPages();
+    // it("rebuild missing comments pages",async function(){
+    //     await siteController.rebuildAuthorMissingCommentsPages();
+    // });
+
+    it("rebuild missing comments pages-specific users",async function(){
+        console.log("here");
+        await siteController.rebuildAuthorMissingCommentsPages(["james","jenny"]);
     });
 
     it("rebuild home page", async function(){

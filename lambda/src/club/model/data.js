@@ -13,6 +13,7 @@ module.exports =  function(storage){
 
     const CACHE_USERS = "users";
     const CACHE_THEMES_AND_STORIES = "all-themes-and-stories";
+    const CACHE_COMMENTS = "comments";
 
     module.getCacheItem = async (key, loader, reloadFromStorage=false)=>
     {
@@ -208,8 +209,13 @@ module.exports =  function(storage){
             commentsDoc.lastCommentDate = null;
         }
         await storage.writeFile(`data/comments.json`, JSON.stringify(commentsDoc),"application/json");
+
+        module.setCacheItem(CACHE_COMMENTS,commentsDoc);
     }
 
+    module.cache_getAllComments = async(reloadFromStorage=false)=>{
+        return await module.getCacheItem(CACHE_COMMENTS, module.listAllComments, reloadFromStorage);
+    }
 
     /*
         {

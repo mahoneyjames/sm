@@ -11,7 +11,8 @@ module.exports = async function(storageLoader){
     let storageForData = null;
     before(async function(){
         storageForData = await storageLoader();
-        controller = require('../../src/club/controllers/theme')(storageForData,storageForData);
+
+        controller = require('../../src/club/controllers/theme')(require('../../src/club/model/data')(storageForData),require('../../src/club/views/html')(storageForData));
 
     });
 

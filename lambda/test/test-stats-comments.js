@@ -2,12 +2,18 @@ const debug = require('debug')("test-stats-comments");
 var expect = require('chai').expect;
 const setup = require('./setup')();
 
-describe ("stats-comments-manual", async ()=>{
+describe.skip ("stats-comments-manual", function (){
 
-    const storage = await setup.initLocalStorage('stats-tests/1');
-    const data = require('../src/club/model/data')(storage);
-    const statsBuilder = require('../src/club/model/stats')();
+    let storage = null;
+    let data = null;
+    let statsBuilder =null;
 
+
+    before(async function(){
+        storage = await setup.initLocalStorage('stats-tests/1');
+        data = require('../src/club/model/data')(storage);
+        statsBuilder = require('../src/club/model/stats')();
+    });
 
     it("stats1",async ()=>{
         const users = await data.loadUsers();

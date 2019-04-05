@@ -26,4 +26,24 @@ module.exports = async function(storageLoader){
 
     });
 
+    it("get-comments-from-cache-reload-is-false", async function(){
+        
+        
+        const comments = await data.cache_getAllComments();
+        
+        expect(comments.comments.length).to.equal(2);
+        expect(comments.comments[0].text).to.equal("original comment");
+
+    });
+
+    it("save-comments-check-cache-updated", async function(){
+        const comments = await data.cache_getAllComments();
+        comments.comments.push({id:"three"});
+
+        await data.saveAllComments(comments);
+        const freshComments = await data.cache_getAllComments();
+        expect(comments.comments.length).to.equal(3);
+        expect(comments.comments[2].id).to.equal("three");
+    });
+
 }

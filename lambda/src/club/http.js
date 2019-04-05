@@ -20,13 +20,13 @@ const eventQueue = require('./eventQueue/htmlnow')(dataStorage,htmlStorage);
 const data = require('./model/data')(dataStorage);
 const html = require('./views/html')(htmlStorage);
 
-//TODO - refactor the controller to data data and html, instead of storage
-const themeController = require('./controllers/theme')(dataStorage,htmlStorage);
+const themeController = require('./controllers/theme')(data,html);
 
 var ApiBuilder = require('claudia-api-builder'),
   api = new ApiBuilder();
 
 module.exports = api;
+
 
 //Wrap up our gets and posts with a standard bit of logging
 //Right now this grabs everything incoming and outgoing!
@@ -59,13 +59,12 @@ get('/exception', function () {
 
 
 get('/api/themes/list', ()=>{    
-    var model = require('./model/data')(dataStorage);
-    return model.listThemes();
+
+    return data.cache_listThemes();
 });
 
-get('/api/themes/listEverything', ()=>{    
-    var model = require('./model/data')(dataStorage);
-    return model.listAllThemesAndStories();
+get('/api/themes/listEverything', ()=>{        
+    return data.cache_getThemesAndStories();
 });
 
 get('/api/site/refreshStaticPages', async ()=>{    

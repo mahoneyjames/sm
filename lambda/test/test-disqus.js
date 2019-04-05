@@ -10,7 +10,7 @@ const disqusApi = require('../src/club/disqusApi')(
     process.env.disqus_apiSecret, 
 );
 
-describe ('disqus-api-list-by-story',()=>{
+describe.skip ('disqus-api-list-by-story',()=>{
     it('list',async function  (){
         this.timeout(10000);
         const comments = await disqusApi.listStoryComments("storyclub","nd21jm0g26cw");
@@ -27,7 +27,7 @@ describe ('disqus-api-list-by-story',()=>{
     });
 });
 
-describe('disqus-sync-controller-local storage', function (){   
+describe.skip('disqus-sync-controller-local storage', function (){   
     
  
     

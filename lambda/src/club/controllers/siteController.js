@@ -9,7 +9,7 @@ module.exports = function(data, html){
     
     module.rebuildHomePage=async()=>{
         const latestTheme = await module.data.getLatestTheme();
-        const recentComments = (await module.data.listAllComments()).comments.map((comment)=>        
+        const recentComments = (await module.data.cache_getAllComments()).comments.map((comment)=>        
         {
             comment.story = {publicId: comment.storyPublicId,
                             title: comment.storyTitle};
@@ -35,13 +35,13 @@ module.exports = function(data, html){
     }
 
 
-    module.rebuildAuthorMissingCommentsPages = async()=>
+    module.rebuildAuthorMissingCommentsPages = async(usersIds)=>
     {
         //load the comments doc
         //load all stories
         
 
-        const recentComments = (await module.data.listAllComments());
+        const recentComments = (await module.data.cache_getAllComments());
         const allStories = module.data.sortThemesByDate((await module.data.cache_getThemesAndStories()));
         //console.log(allStories);
         const users = await module.data.cache_getUsers();
@@ -61,51 +61,50 @@ module.exports = function(data, html){
 
         for(const user of users)
         {
-            const allCommentsForThisUser = recentComments.comments.filter((c)=>c.userId===user.id);
-
-// console.log(allCommentsForThisUser);
-//             const missingStories = [];
-//             for(const story of flatStoryList)
-//             {
-//                 console.log(user.id,story.author);
-//                 if(story.author 
-//                     && story.author.toLowerCase()!=user.id.toLowerCase() 
-//                     && !allCommentsForThisUser.find(c=>c.storyId==story.id))
-//                 {
-//                     missingStories.push(story);
-//                 }
-//             }
-
-            const themes = [];
-
-            for(const theme of allStories)
+            if(usersIds==null || usersIds.indexOf(user.id)>=0)
             {
-                const innerTheme = {themeText:theme.themeText, stories:[]};
+                const allCommentsForThisUser = recentComments.comments.filter((c)=>c.userId===user.id);
 
-                for(const story of theme.stories)
+    // console.log(allCommentsForThisUser);
+    //             const missingStories = [];
+    //             for(const story of flatStoryList)
+    //             {
+    //                 console.log(user.id,story.author);
+    //                 if(story.author 
+    //                     && story.author.toLowerCase()!=user.id.toLowerCase() 
+    //                     && !allCommentsForThisUser.find(c=>c.storyId==story.id))
+    //                 {
+    //                     missingStories.push(story);
+    //                 }
+    //             }
+
+                const themes = [];
+
+                for(const theme of allStories)
                 {
-                    module.html.buildStoryPath(theme.publicId,story);
-                    
-                    if(story.author 
-                        && story.author.toLowerCase()!=user.id.toLowerCase() 
-                        && !allCommentsForThisUser.find(c=>c.storyId==story.id))
+                    const innerTheme = {themeText:theme.themeText, stories:[]};
+
+                    for(const story of theme.stories)
                     {
-                        innerTheme.stories.push(story);
+                        module.html.buildStoryPath(theme.publicId,story);
+                        
+                        if(story.author 
+                            && story.author.toLowerCase()!=user.id.toLowerCase() 
+                            && !allCommentsForThisUser.find(c=>c.storyId==story.id))
+                        {
+                            innerTheme.stories.push(story);
+                        }
+                    }
+
+                    if(innerTheme.stories.length>0)
+                    {
+                        themes.push(innerTheme);
                     }
                 }
-
-                if(innerTheme.stories.length>0)
-                {
-                    themes.push(innerTheme);
-                }
+                
+                await module.html.buildUserPrivatePage(user, themes);
             }
-
-            
-            await module.html.buildUserPrivatePage(user, themes);
         }
-
-
-
     }
     return module;
 }

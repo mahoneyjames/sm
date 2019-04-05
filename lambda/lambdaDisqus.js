@@ -10,14 +10,23 @@ const disqusController = require('./src/club/controllers/disqusController')
         html);
 
 const siteController = require('./src/club/controllers/siteController')(data,html);
-
+const {listsUsersForCommentIds} = require("./src/club/model/comment/commentHelpers");
+let counter = 0 ;
 exports.handler = async function (event, context) {
-	
+    
+    counter++;
+    console.log("Run count since this container was started is %s", counter);
 
-    const comments = await disqusController.syncAllComments();
+    const {newCommentIds, comments} = await disqusController.syncAllComments();
 
-    await siteController.rebuildHomePage();
-    await siteController.rebuildAuthorMissingCommentsPages();
+    if(newCommentIds.length>0)
+    {
+        //Alwasys update the home page if there is a new comment since we will put in there
+        await siteController.rebuildHomePage();
+
+        //Only update the user's page if this is a comment we haven't seen before
+        await siteController.rebuildAuthorMissingCommentsPages(listsUsersForCommentIds({comments}, newCommentIds));
+    }
 
     return comments;
 };

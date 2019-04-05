@@ -23,8 +23,14 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, hack){
             //console.log(forum);
             //this will sync comments for any stories it finds in the data folder
             //from the LIVE disqus site
-            await disqusController.syncAllComments();
+            const syncResults1 = await disqusController.syncAllComments();
+            
+            //this is a comment that was added to disqus *since* we built our comments.json file
+            expect(syncResults1.newCommentIds[0]).to.equal("4409187852");
 
+            //run the sync a second time, and our file should now have this comment in it...
+            const syncResults2= await disqusController.syncAllComments();
+            expect(syncResults2.newCommentIds.length).to.equal(0);
             
             
 

@@ -2,6 +2,7 @@ const debug = require('debug')("disqusController");
 const axios = require('axios');
 const moment = require('moment');
 const {Comment} = require('../model/comment');
+const {listNewCommentIds} = require("../model/comment/commentHelpers");
 
 
 module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
@@ -17,6 +18,7 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
     {
         const users = await module.data.cache_getUsers();
         const themes = await module.data.cache_getThemesAndStories();
+        
 
         const commentDoc = {comments:[], unknownUsers:[]};
 
@@ -74,8 +76,15 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
             }
         }
         debug("Found %s comment(s)", commentDoc.comments.length);
-        await module.data.saveAllComments(commentDoc);
-        return commentDoc;
+
+        const currentComments = await module.data.cache_getAllComments();
+        const newCommentIds = listNewCommentIds(currentComments, commentDoc);
+        if(newCommentIds.length>0)
+        {
+            await module.data.saveAllComments(commentDoc);
+        }
+
+        return {newCommentIds, comments: commentDoc.comments};
     }
 
 //generate a single doc containing ALL themes, stories and comments

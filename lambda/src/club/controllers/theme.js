@@ -3,12 +3,12 @@ const {sanitiseId} = require('../helpers');
 const validateStory = require('../model/story/validate');
 const generateStoryHtml = require('../model/story/buildContentHtml')
 
-module.exports =  function(storageForData, storageForHtml){   
+module.exports =  function(data, html){   
 
     var module = {};
     
-    this.htmlBuilder = require('../views/html')(storageForHtml);
-    this.data = require('../model/data')(storageForData);
+    this.htmlBuilder = html;
+    this.data = data;
 
     module.createThemeChallenge = async (theme)=>
         {
