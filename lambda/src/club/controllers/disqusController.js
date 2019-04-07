@@ -13,18 +13,79 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
     module.api =require('../disqusApi')(accessToken, apiKey, apiSecret);
     module.forum = forum
 
+    /*
+    We have ~250 stories, and with our current sync approach to make one disqus call per story, if we sync every
+    15 minutes we are hitting their 1000 requests per hour limit.
 
-    module.syncAllComments = async()=>
+    Quick work around is
+     - if we have never synced, or it's longer than X minutes since last full sync
+        run a full sync
+     - otherwise, only sync the last X weeks of stories
+
+    Options
+     runFullSyncNow - bool
+     fullSyncIntervalInMinutes - int
+     totalRecentThemesToSync - int
+
+
+
+    */
+    module.syncComments = async(options={})=>
     {
+        const {runFullSyncNow=false, fullSyncIntervalInMinutes=120, totalRecentThemesToSync=4} = options;
+        
+        const currentComments = await module.data.cache_getAllComments();
+        
+        let commentDoc = null;
+        let saveComments = false;
+
+        if(runFullSyncNow==true 
+            || currentComments.lastFullSyncDate==null 
+            || currentComments.lastFullSyncDate.isSameOrBefore(moment().add(fullSyncIntervalInMinutes, "minute")))
+        {
+            debug("Running full sync");            
+            commentDoc = await syncCommentsForTheseThemes(await module.data.cache_getThemesAndStories());
+            commentDoc.lastFullSyncDate = moment();
+            saveComments = true;
+        }
+        else
+        {
+            debug("Running a partial sync")
+            commentDoc = await syncCommentsForTheseThemes((await module.data.cache_getThemesAndStories()).slice(-totalRecentThemesToSync));
+            commentDoc.lastFullSyncDate = currentComments.lastFullSyncDate;
+
+            //since we only did a partial sync, need to merge the old comments with any we just got back
+            //they might not be new though...
+            const existingCommentsArray = currentComments.comments;
+            for(const newComment of commentDoc.comments)
+            {
+                if(!existingCommentsArray.find(c=>c.id==newComment.id))
+                {
+                    existingCommentsArray.push(newComment);
+                }                
+            }
+
+            commentDoc.comments = existingCommentsArray;
+        }
+
+        
+        const newCommentIds = listNewCommentIds(currentComments, commentDoc);
+
+        if(newCommentIds.length>0 || saveComments ==true )
+        {
+            await module.data.saveAllComments(commentDoc);
+        }
+
+        return {newCommentIds, comments: commentDoc.comments};
+
+
+    }
+
+    module.syncCommentsForTheseThemes = async (themes)=>
+    {
+
         const users = await module.data.cache_getUsers();
-        const themes = await module.data.cache_getThemesAndStories();
-        
-
         const commentDoc = {comments:[], unknownUsers:[]};
-
-        debug("generate comment doc");
-
-        
         for (const theme of themes)
         {        
             debug("Theme '%s'", theme.publicId);
@@ -76,6 +137,15 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
             }
         }
         debug("Found %s comment(s)", commentDoc.comments.length);
+
+        return commentDoc;
+    }
+
+    module.syncAllComments = async()=>
+    {
+        
+        debug("generate comment doc");
+        const commentDoc = module.syncCommentsForTheseThemes(await module.data.cache_getThemesAndStories());
 
         const currentComments = await module.data.cache_getAllComments();
         const newCommentIds = listNewCommentIds(currentComments, commentDoc);
