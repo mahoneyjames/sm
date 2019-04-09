@@ -26,6 +26,8 @@ module.exports = async function(storageLoader){
         storage = await storageLoader();
         data = require('../../src/club/model/data')(storage);
     });
+
+
     
     describe('data-save-comments', ()=>{
         it('clear the comments doc',async ()=>{

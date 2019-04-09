@@ -3,6 +3,8 @@ const {Comment} = require('../../src/club/model/comment');
 module.exports = function(accessToken, apiKey, apiSecret, forum, hack){
 
 
+
+
     describe("sync",function(){
 
         let storage = null;

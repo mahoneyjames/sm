@@ -5,12 +5,12 @@ const {Comment} = require('../model/comment');
 const {listNewCommentIds} = require("../model/comment/commentHelpers");
 
 
-module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
+module.exports = function(api, forum, data, html){
 
     var module = {};
     module.data = data;
     module.html = html;
-    module.api =require('../disqusApi')(accessToken, apiKey, apiSecret);
+    module.api =api;
     module.forum = forum
 
     /*
@@ -39,33 +39,35 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
         let commentDoc = null;
         let saveComments = false;
 
+        console.log(runFullSyncNow, currentComments);
         if(runFullSyncNow==true 
             || currentComments.lastFullSyncDate==null 
-            || currentComments.lastFullSyncDate.isSameOrBefore(moment().add(fullSyncIntervalInMinutes, "minute")))
+            || moment(currentComments.lastFullSyncDate).isSameOrBefore(moment().add(-fullSyncIntervalInMinutes, "minute")))
         {
             debug("Running full sync");            
-            commentDoc = await syncCommentsForTheseThemes(await module.data.cache_getThemesAndStories());
+            commentDoc = await module.syncCommentsForTheseThemes(await module.data.cache_getThemesAndStories());
             commentDoc.lastFullSyncDate = moment();
             saveComments = true;
         }
         else
         {
             debug("Running a partial sync")
-            commentDoc = await syncCommentsForTheseThemes((await module.data.cache_getThemesAndStories()).slice(-totalRecentThemesToSync));
+            const themes = module.data.sortThemesByDate(await module.data.cache_getThemesAndStories());
+            //console.log(themes);
+            commentDoc = await module.syncCommentsForTheseThemes(themes.slice(0,totalRecentThemesToSync));
             commentDoc.lastFullSyncDate = currentComments.lastFullSyncDate;
+            //console.log(commentDoc.comments);
 
             //since we only did a partial sync, need to merge the old comments with any we just got back
-            //they might not be new though...
-            const existingCommentsArray = currentComments.comments;
-            for(const newComment of commentDoc.comments)
+            //they might not be new though...            
+            for(const existingComment of currentComments.comments)
             {
-                if(!existingCommentsArray.find(c=>c.id==newComment.id))
+                if(!commentDoc.comments.find(c=>c.id==existingComment.id))
                 {
-                    existingCommentsArray.push(newComment);
+                    commentDoc.comments.push(existingComment);
                 }                
             }
-
-            commentDoc.comments = existingCommentsArray;
+            
         }
 
         
@@ -83,7 +85,7 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
 
     module.syncCommentsForTheseThemes = async (themes)=>
     {
-
+        //console.log(themes);
         const users = await module.data.cache_getUsers();
         const commentDoc = {comments:[], unknownUsers:[]};
         for (const theme of themes)
@@ -93,13 +95,14 @@ module.exports = function(accessToken, apiKey, apiSecret, forum, data, html){
             
             for(const story of theme.stories)
             {
-                debug("Story '%s'", story.publicId);
+                debug("Story '%s'-'%s'", story.publicId,story.id);
 
-                
-                for(const comment of await module.api.listStoryComments(module.forum, story.id))
+                const storyComments =await module.api.listStoryComments(module.forum, story.id); 
+               // console.log(storyComments);
+                for(const comment of storyComments)
                 {
 
-                    debug(JSON.stringify(comment));
+                    //debug(JSON.stringify(comment));
                     const ourUser = users.find((u)=>u.disqusIds.find((s)=>s==comment.userId)!=null);
 
                     if(ourUser!=null)

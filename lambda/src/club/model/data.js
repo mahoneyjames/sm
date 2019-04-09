@@ -224,19 +224,27 @@ module.exports =  function(storage){
         }
     */
     module.listAllComments = async()=>{
-        try{
-            const commentsDoc = await storage.readObjectFromJson(`data/comments.json`);
+        let commentsDoc = null;
 
-            commentsDoc.comments = commentsDoc.comments.map((comment)=>new Comment(comment));
-    
-            return commentsDoc;
+        try
+        {
+            commentsDoc = await storage.readObjectFromJson(`data/comments.json`);
         }
         catch(error)
         {
-            debug(error);
+            console.log("listAllComments:" + error);
             return {comments:[]};
         }
-        
+        if(commentsDoc.comments)
+        {
+            commentsDoc.comments = commentsDoc.comments.map((comment)=>new Comment(comment));
+        }
+        else
+        {
+            commentsDoc.comments=[];
+        }
+
+        return commentsDoc;             
     }
 
     module.sortThemesByDate = (themes)=>{

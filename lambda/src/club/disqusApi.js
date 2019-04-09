@@ -11,7 +11,7 @@ module.exports = function(accessToken, apiKey, apiSecret){
         try
             {            
             
-            //log.json({dependency:"disqus", url});
+            log.json({dependency:"disqus", url});
             const response = await axios.get(url)
             
             var comments = response.data.response.map((item)=>{                
