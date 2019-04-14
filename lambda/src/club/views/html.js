@@ -32,6 +32,10 @@ module.exports =  function(storage){
 
     }
 
+    module.writeAllCommentsPage = async(commentTree)=>{
+        await buildPageAndSave(storage, "all-comments", "sc-comments-all",{stories:commentTree});
+    }
+
     module.buildThemeNavigation = async(theme, stories, displayAuthor = false)=>{
         buildThemePath(theme);
         

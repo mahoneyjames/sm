@@ -1,0 +1,13 @@
+mixin writeComment(comment)
+    ul
+        -//.avatar 
+        -//    p #{comment.userId}
+        .comment-content
+            header
+                a #{comment.userId}
+        p #{comment.text}
+        if(comment.children)
+            each child in comment.children
+                li
+                    +writeComment(child)        
+
