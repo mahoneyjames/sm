@@ -1,14 +1,18 @@
 extends sc-layout
 include mixins/_storyCard
-include mixins/comments/_singleComment-1
+include mixins/comments/_singleComment
 include mixins/_themeInfo
-block content         
+block content      
+    
+
     
     //-pre= helpers.dump(leagueTable)
     h1 All comments
-    each story in stories
-        h2 #{story.title}
-        ul
-            each comment in story.comments
-                li
-                    +writeComment(comment)
+    .commentContainer
+        each story in stories
+            .story
+                h2 #{story.title}
+                ul.comments
+                    each comment in story.comments
+                        li.comment
+                            +writeComment(comment)

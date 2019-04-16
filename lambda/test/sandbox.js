@@ -4,7 +4,7 @@ const setup = require('./setup')();
 
 describe("sandbox-comment-tree", function(){
 
-    const storage = require("../src/club/storage/storage-local")({path:"test/inputs/live-data/"});
+    const storage = require("../src/club/storage/storage-local")({path:"_site/club/"});
     // before(async function(){
     //     storage = await setup.initLocalStorage("sandbox-comment-tree");        
     // });
@@ -49,31 +49,33 @@ describe("sandbox-comment-tree", function(){
             }
         }
 
-        console.log(commentsDoc.comments.length,rootComments.length);
+    //     console.log(commentsDoc.comments.length,rootComments.length);
 
-        const printComment = (comment, depth)=> {
-            console.log("".padStart(depth*2, "-") +":" + depth + ":"+ comment.id + ":"  + comment.parentId + ":" + comment.userId + ":" +  comment.text.slice(0,50));
-            if(comment.children)
-            {
-                comment.children.forEach(c=>printComment(c,depth+1));
-            }
-        }
-        for(const i in rootComments)
-        {
-            const story = rootComments[i];
-            console.log(story.title);
-        story.comments.forEach(c=>{
+    //     const printComment = (comment, depth)=> {
+    //         console.log("".padStart(depth*2, "-") +":" + depth + ":"+ comment.id + ":"  + comment.parentId + ":" + comment.userId + ":" +  comment.text.slice(0,50));
+    //         if(comment.children)
+    //         {
+    //             comment.children.forEach(c=>printComment(c,depth+1));
+    //         }
+    //     }
+    //     for(const i in rootComments)
+    //     {
+    //         const story = rootComments[i];
+    //         console.log(story.title);
+    //     story.comments.forEach(c=>{
             
-            printComment(c,0);
+    //         printComment(c,0);
             
 
-        });
-        console.log();
-        //https://www.webdesignerdepot.com/2013/01/how-to-build-a-threaded-comment-block-with-html5-and-css3/
-        //https://www.webdesignerdepot.com/cdn-origin/uploads7/building-a-threaded-comment-block-with-html5-and-css3/demo/
-        const html = require('../src/club/views/html')(storage);
-        await html.writeAllCommentsPage(rootComments);
-    }
+    //     });
+    //     console.log();
+    //     //https://www.webdesignerdepot.com/2013/01/how-to-build-a-threaded-comment-block-with-html5-and-css3/
+    //     //https://www.webdesignerdepot.com/cdn-origin/uploads7/building-a-threaded-comment-block-with-html5-and-css3/demo/
+
+    // }
+
+    const html = require('../src/club/views/html')(storage);
+    await html.writeAllCommentsPage(rootComments);
             
 
 

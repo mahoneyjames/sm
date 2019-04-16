@@ -2,6 +2,7 @@ const validateTheme = require('../model/theme/validate');
 const {sanitiseId} = require('../helpers');
 const validateStory = require('../model/story/validate');
 const generateStoryHtml = require('../model/story/buildContentHtml')
+const {addCommentsToStories} = require("../model/comment/commentHelpers");
 
 module.exports =  function(data, html){   
 
@@ -35,12 +36,17 @@ module.exports =  function(data, html){
     module.publishThemeForReview = async(publicThemeId)=>
     {
         //await publishThemeForReview(this.htmlBuilder, this.data, publicThemeId);
-        await publishTheme(this.htmlBuilder,this.data, publicThemeId,"review");
+       return await publishTheme(this.htmlBuilder,this.data, publicThemeId,"review");
+    };
+
+    module.rebuildThemePage = async(publicThemeId)=>
+    {
+        await publishTheme(this.htmlBuilder,this.data, publicThemeId,null);
     }
 
     module.closeTheme = async(publicThemeId)=>
     {
-        await publishTheme(this.htmlBuilder,this.data, publicThemeId,"complete");
+        return await publishTheme(this.htmlBuilder,this.data, publicThemeId,"complete");
     }
 
     module.buildThemesPage = async()=>
@@ -112,7 +118,7 @@ async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
 
     //load stories for the theme
     const allStories = await dataLayer.cache_getThemeStories(publicThemeId);
-    
+    console.log(allStories.length);
 
     const users = await dataLayer.cache_getUsers();
     //augment the stories with author info
@@ -131,15 +137,23 @@ async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
     //console.log(allStories);
     //1 - generate and save a theme page, containing links to all the stories
     //2 - generate and save the story pages, with links to the theme, and next/back links anonymous
-    
+    if(themeStatus==null)
+    {
+        themeStatus = theme.status;
+    }
+    else
+    {
+        theme.status=themeStatus;
+    }
+    const commentsForTheme = await dataLayer.cache_getCommentsForTheme(publicThemeId);
+    addCommentsToStories(allStories, commentsForTheme);
+
     const displayAuthor = themeStatus==="complete"? true: false;
 
-    await pageBuilder.buildThemeNavigation(theme,allStories, displayAuthor);
+    await pageBuilder.buildThemeNavigation(theme,allStories, displayAuthor,commentsForTheme);
     
-    
-    theme.status=themeStatus;
-
- 
     await dataLayer.saveTheme(theme);
+
+    return theme;
 
 }

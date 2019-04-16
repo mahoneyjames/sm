@@ -14,6 +14,7 @@ describe("local-api: brand new site", function(){
     //TODO option to run this by itself via package.json?
 
         var storage = require('../src/club/storage/storage-local.js')({path:"test/inputs/api-test-1/"});
+        var storageForSite = require("../src/club/storage/storage-local")({path:"_site/club/data/"});
         
         it("check target", async function(){
             expect(await get('/hello')).to.equal("hello world:localstorage");
@@ -101,7 +102,8 @@ describe("local-api: brand new site", function(){
             expect(result.path).to.equal('h/theme-1/boots');
 
         });
-
+        
+        
         it("theme1-story2-no-content", async function(){
             const result = await post("/api/stories/save", {publicThemeId:"theme-1", story:{title:"st#ory 3?"}});
             debug(result);
@@ -150,21 +152,24 @@ describe("local-api: brand new site", function(){
         it("publish theme 1", async function(){
             const result = await post("/api/site/publishThemeForReview",{publicThemeId:"theme-1"});
             //debug(result);
-            expect(result).to.equal("done");
+            expect(result.status).to.equal("success");
+            expect(result.theme.stories.length).to.equal(2);
         });
-
 
         it("publish theme 2", async function(){
             const result = await post("/api/site/publishThemeForReview",{publicThemeId:"theme-2"});
             //debug(result);
-            expect(result).to.equal("done");
+            expect(result.status).to.equal("success");
+            expect(result.theme.stories.length).to.equal(3);
         });
+
 
 
         it("reveal theme 1 authors", async function(){
             const result = await post("/api/site/closeTheme",{publicThemeId:"theme-1"});
-            //debug(result);
-            expect(result).to.equal("done");
+            debug(result);
+            expect(result.status).to.equal("success");
+            expect(result.theme.stories.length).to.equal(2);
 
         });
 
@@ -183,6 +188,62 @@ describe("local-api: brand new site", function(){
             expect(userResult.errors.length).to.equal(0);
         });
         
+        it("test comments",async function(){
+            await storageForSite.writeFile("comments.json",JSON.stringify(            
+                {
+                    "comments": [{
+                        "themeId": "theme-1",
+                        "storyId": "1c9lz1jr8uqla5",
+                        "storyPublicId": "steps-in-the-darkness",
+                        "storyTitle": "A warm welcome",
+                        "id": "4348071872",
+                        "userId": "lewis",
+                        "text": "<p>In-laws hey! I was expecting a bit more of a twist for this one. But it was well written and characters were quite honest. I was jus hoping for something extra at the end.</p>",
+                        "when": "2019-02-21T16:48:53",
+                        "parentId": null
+                    },
+                    {
+                        "themeId": "theme-1",
+                        "storyId": "1c9lz1jr8uqla5",
+                        "storyPublicId": "steps-in-the-darkness",
+                        "storyTitle": "A warm welcome",
+                        "id": "4309947690",
+                        "userId": "hannah",
+                        "text": "<p>Love the dynamic here it feels very real. The characters are well developed given the brevity. James’ Mum particularly from the first twitch of the curtain up to the victorious smirk!</p>",
+                        "when": "2019-01-27T20:50:28",
+                        "parentId": null
+                    },
+                    {
+                        "themeId": "theme-1",
+                        "storyId": "1ki2m1jqi7k9w6",
+                        "storyPublicId": "boots",
+                        "storyTitle": "Best before",
+                        "id": "4290295795",
+                        "userId": "hannah",
+                        "text": "<p>Oh I loved this! They remind me of the couple who ran the post office on Crwys road (now an artisan micro-beer pub). The guardian of the curly ended sandwich line was inspired. Liz?</p>",
+                        "when": "2019-01-17T12:58:54",
+                        "parentId": null
+                    },
+                    {
+                        "themeId": "theme-1",
+                        "storyId": "1ki2m1jqi7k9w6",
+                        "storyPublicId": "boots",
+                        "storyTitle": "Best before",
+                        "id": "2988234343",
+                        "userId": "james",
+                        "text": "<p>Nested comment!</p>",
+                        "when": "2019-01-17T12:58:54",
+                        "parentId": 4290295795
+                    }
+                ]
+            }));
+
+            await get("/api/cache/reset");
+            const result = await post("/api/site/rebuildTheme", {publicThemeId:"theme-1"});
+            const result2 = await post("/api/site/rebuildTheme", {publicThemeId:"theme-2"});
+
+            
+        });
 
     
 

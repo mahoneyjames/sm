@@ -36,7 +36,7 @@ module.exports =  function(storage){
         await buildPageAndSave(storage, "all-comments", "sc-comments-all",{stories:commentTree});
     }
 
-    module.buildThemeNavigation = async(theme, stories, displayAuthor = false)=>{
+    module.buildThemeNavigation = async(theme, stories, displayAuthor = false, commentsForTheme)=>{
         buildThemePath(theme);
         
         await Promise.all(stories.map(async(story)=>{
@@ -46,19 +46,22 @@ module.exports =  function(storage){
                                                                     displayAuthor: displayAuthor,
                                                                     title:story.title,
                                                                     theme,
-                                                                    hack_backLink: getThemeLinkDetails(theme)}); 
+                                                                    hack_backLink: getThemeLinkDetails(theme)
+                                                                    }); 
         }));
         
         await buildPageAndSave(storage, theme.path, "sc-storyList", {theme,
             stories, 
             displayAuthor: displayAuthor,
-            title: "storyclub - " + theme.themeText});
+            title: "storyclub - " + theme.themeText,
+            commentsForTheme});
 
         await buildPageAndSave(storage, `${theme.path}/all`, "sc-storyAll", {theme,
                                                                     stories, 
                                                                     title: "storyclub - " + theme.themeText, 
                                                                     displayAuthor: displayAuthor,
-                                                                    hack_backLink: getThemeLinkDetails(theme)});
+                                                                    hack_backLink: getThemeLinkDetails(theme)
+                                                                    });
       
 
     };

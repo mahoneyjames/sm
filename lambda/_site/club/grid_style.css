@@ -65,3 +65,43 @@ justify-content: center;
 }*/
 
 /*body > * {border: 1px solid red;}*/
+
+
+
+/*
+Comment styling
+*/
+
+/*.commentContainer{border: solid red 1px;}*/
+
+.commentContainerc .story{border: solid red 5px;}
+.commentContainerc .comments{border: solid yellow 2px;}
+.commentContainerc .comment{border: dashed green 3px;}
+
+
+.commentContainer { display: block; }
+
+.commentContainer .comment, ul .comment, ul ul .comment { display: block; position: relative; padding-left: 35px; border-top: 1px solid #ddd; }
+
+.commentContainer .comment .avatar  { position: absolute; top: 8px; left: 0; }
+.commentContainer .comment .avatar img { 
+  -webkit-border-radius: 3px; 
+  -moz-border-radius: 3px; 
+  border-radius: 3px; 
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.44);
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.44);
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.44);
+  -webkit-transition: all 0.4s linear;
+  -moz-transition: all 0.4s linear;
+  -ms-transition: all 0.4s linear;
+  -o-transition: all 0.4s linear;
+  transition: all 0.4s linear;
+}
+
+.commentContainer .comment .avatar a:hover img { opacity: 0.77; }
+
+.commentContainer .comment .comment-content { padding: 0px 3px; padding-bottom: 2px; padding-top: 8px; }
+.commentContainer .comment .comment-content header { font-size: 1.3em; display: block; margin-bottom: 8px; }
+.commentContainer .comment .comment-content header .pubdate { color: #777; }
+.commentContainer .comment .comment-content header .userlink { font-weight: bold; } 
+.commentContainer .comment .replies { margin-bottom: 7px; }

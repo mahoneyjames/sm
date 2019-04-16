@@ -18,7 +18,7 @@ module.exports = async function(storageLoader){
     });
 
     it("save-comments", async function(){
-        await data.saveAllComments({"comments":[{"id":"1","text":"original comment"},{"id":"2","text":"original comment 2"}],"lastCommentDate":null});
+        await data.saveAllComments({"comments":[{"id":"1","text":"original comment","themeId":"theme-1"},{"id":"2","text":"original comment 2", "themeId":"theme-2"}],"lastCommentDate":null});
         const comments = await data.listAllComments();
 
         expect(comments.comments.length).to.equal(2);
@@ -44,6 +44,22 @@ module.exports = async function(storageLoader){
         const freshComments = await data.cache_getAllComments();
         expect(comments.comments.length).to.equal(3);
         expect(comments.comments[2].id).to.equal("three");
+    });
+
+    it("get-comments-for-theme-none-found", async function(){
+        const comments = await data.cache_getCommentsForTheme("blah");
+        expect(comments.length).to.equal(0);
+    });
+
+    it("get-comments-for-theme-comments-found", async function(){
+        
+        const comments = await data.cache_getAllComments();
+        comments.comments.push({id:"four", themeId:"theme-1"});
+        await data.saveAllComments(comments);
+        expect(comments.comments.length).to.equal(4);
+
+        const commentsForTheme = await data.cache_getCommentsForTheme("theme-1");
+        expect(commentsForTheme.length).to.equal(2);
     });
 
 }

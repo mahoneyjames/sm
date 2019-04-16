@@ -127,6 +127,19 @@ module.exports = async function(storageLoader){
 
     });
 
+        
+    it("save-new-theme-and-story", async function(){
+        //add yet another new theme. because this *is* cached, we don't see it
+        await saveTheme({themeText:"theme7", publicId:"theme7"});
+        const themes = await data.cache_listThemes();
+        expect(themes.length).to.equal(7);
+
+        await data.saveThemeStory("theme7", {title:"story 3-updated",id:"3"});
+        const stories= await data.cache_getThemeStories("theme7",false);
+        expect(stories.length).to.equal(1);
+
+    });
+
     //methods to save new data, bypassing any caching logic
     async function saveTheme(theme)
     {

@@ -72,6 +72,10 @@ get('/api/site/refreshStaticPages', async ()=>{
     return "done";
 });
 
+get('/api/cache/reset', ()=>{
+    data.resetCache();
+});
+
 
 get('/api/site/refreshThemeList', async ()=>{    
     
@@ -81,14 +85,24 @@ get('/api/site/refreshThemeList', async ()=>{
 
 
 post('/api/site/publishThemeForReview', async (request)=>{    
-    
-    await themeController.publishThemeForReview(request.body.publicThemeId);
-    return "done";
+    return {        
+        theme:  await themeController.publishThemeForReview(request.body.publicThemeId),
+        action:"publishThemeForReview", 
+        status:"success"
+    };
 });
 
 post('/api/site/closeTheme', async (request)=>{        
-    await themeController.closeTheme(request.body.publicThemeId);
-    return "done";
+    return {
+        theme: await themeController.closeTheme(request.body.publicThemeId),
+        action:"closeTheme",
+        status:"success"};
+    
+});
+
+post('/api/site/rebuildTheme', async (request)=>{        
+    await themeController.rebuildThemePage(request.body.publicThemeId);
+    return {action:"rebuildTheme", publicThemeId:request.body.publicThemeId, result:"success"};
 });
 
 get('/api/site/home', async (request)=>{    

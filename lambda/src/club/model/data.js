@@ -15,6 +15,8 @@ module.exports =  function(storage){
     const CACHE_THEMES_AND_STORIES = "all-themes-and-stories";
     const CACHE_COMMENTS = "comments";
 
+    module.resetCache = ()=>{module.cache={}};
+    
     module.getCacheItem = async (key, loader, reloadFromStorage=false)=>
     {
         debug("getCacheItem %s", key);
@@ -117,7 +119,7 @@ module.exports =  function(storage){
                 }
                 else
                 {
-                    theme.stories = [];
+                    theme.stories = [story];
                 }
             }
             //debug(theme);
@@ -211,6 +213,11 @@ module.exports =  function(storage){
         await storage.writeFile(`data/comments.json`, JSON.stringify(commentsDoc),"application/json");
 
         module.setCacheItem(CACHE_COMMENTS,commentsDoc);
+    }
+
+    module.cache_getCommentsForTheme = async(publicThemeId, reloadFromStorage=false)=>
+    {
+        return (await module.cache_getAllComments(reloadFromStorage)).comments.filter(c=>c.themeId==publicThemeId);
     }
 
     module.cache_getAllComments = async(reloadFromStorage=false)=>{
