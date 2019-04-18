@@ -1,0 +1,53 @@
+extends sc-layout
+include mixins/_themeInfo
+include mixins/comments/_singleComment
+include mixins/_comments
+block content      
+
+    h1 Entries    
+    each story in stories
+        p(data-disqus-identifier=story.id)
+            a(href=`${siteRoot}/${story.path}`) #{story.title}
+            if displayAuthor 
+                span  - #{story.authorUser.name}
+            span.comment-count(data-disqus-identifier=story.id)  - #{story.comments.length} comment(s)
+        if story.comments.length>0
+            .commentContainer
+                .story                    
+                    ul.comments
+                        each comment in story.comments
+                            li.comment
+                                +writeComment(comment)  
+        .disqus-container("data-disqus-url"="http://www.storyclub.co.uk/" + story.path, "data-disqus-id"=story.id, "data-disqus-title"=story.title)   click!
+            
+
+          
+    div(id="disqussions_wrapper")
+
+    h2 All stories in one handy page!
+    a(href=`${siteRoot}/${theme.path}/all`) Single page view
+
+    if commentsForTheme.length>0
+        h2 Comments! There be comments!
+        .commentContainer
+            each story in stories
+                if story.comments.length>0
+                    .story
+                        h3 #{story.title}
+                        ul.comments
+                            each comment in story.comments
+                                li.comment
+                                    +writeComment(comment)        
+
+    
+    -//h2 comments
+    -//    +comments("http://www.storyclub.co.uk/" + "h/theme-manual/manual-story-id-1","test-story-1-uyeiwruoweru","storyclub")
+
+    script.
+        jQuery(document).ready(function() {
+            //jQuery(".comment-count").inlineDisqussions();
+            jQuery(".disqus-container").on("click", function(){jQuery(this).trigger("loadDisqus")});//.on("click", function(){alert("here");loadDisqus();});
+
+        });
+block aside
+    +themeInfo(theme,true)

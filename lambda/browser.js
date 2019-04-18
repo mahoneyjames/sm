@@ -25,6 +25,10 @@ app.get("*",(req, res, next)=>{
     {
         url = req.url.slice(0,req.url.length-1) + ".htm";
     }
+    else if(req.url.slice(-2)=="js")
+    {
+        url = req.url;
+    }
     else
     {
         url = req.url + ".htm";
