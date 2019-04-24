@@ -27,14 +27,17 @@ module.exports = function(storage)
         
         for (const theme of all)
         {
-            for(const story of theme.stories)
+            if(theme.stories)
             {
-                debug(story.author);
-                if(story.author.toLowerCase()==authorId)
+                for(const story of theme.stories)
                 {
-                    story.themeId = theme.publicId;
-                    story.deadline = theme.deadline;
-                    storiesForUser.push(story);
+                    //debug(story.author);
+                    if(story.author.toLowerCase()==authorId)
+                    {
+                        story.themeId = theme.publicId;
+                        story.deadline = theme.deadline;
+                        storiesForUser.push(story);
+                    }
                 }
             }
         }
