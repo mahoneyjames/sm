@@ -1,12 +1,11 @@
-extends sc-layout
+extends sc-layout-bulma
 include mixins/_storyCard
 include mixins/_comments
 include mixins/_themeInfo
 block content
-    section        
-        h1 All stories
-        each story in stories         
-            +storyCard(story,rule,displayAuthor)
+    section.section
+        .container      
+            h1.title.has-text-centered All stories
+            each story in stories         
+                +storyCard(story,rule,displayAuthor)
 
-block aside
-    +themeInfo(theme,true)

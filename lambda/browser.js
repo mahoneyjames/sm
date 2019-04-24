@@ -29,6 +29,11 @@ app.get("*",(req, res, next)=>{
     {
         url = req.url;
     }
+    else if(req.url.slice(-3)=="png")
+    {
+        url = req.url;
+    }
+    
     else
     {
         url = req.url + ".htm";

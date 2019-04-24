@@ -1,4 +1,4 @@
-extends sc-layout
+extends sc-layout-bulma
 include mixins/_themeInfo
 block content
     
@@ -14,18 +14,19 @@ block content
     //-                         each thing in theme.things
     //-                             li #{thing}
 
-    
-    ul.innerNav
-        each navYear in years
-            li(class=(year===navYear?'selected':''))
-                a(href=`themes-${navYear}`) #{navYear}
-    section.themes
-        each theme in themes
-            .theme
-                h1 
-                    a(href=`${theme.path}`) #{theme.themeText}
-                ul
-                    each thing in theme.things
-                        li #{thing}
+    .tabs.is-centered
+        ul
+            each navYear in years
+                li(class=(year===navYear?'is-active':''))
+                    a(href=`themes-${navYear}`) #{navYear}
+    section.section.themes
+        .container
+            each theme in themes
+                .theme.box                    
+                    a(href=`${theme.path}`)
+                        h1.title  #{theme.themeText}
+                    ul
+                        each thing in theme.things
+                            li #{thing}
 
                         

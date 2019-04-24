@@ -1,38 +1,56 @@
-extends sc-layout
+extends sc-layout-bulma
 include mixins/_themeInfo
 
 
 block content
-
-    p Ever wanted to write a story about a man who loses his head and meets a giant seagull?  Or maybe the one where the man who fits sails to his car is more up your street.
-    p Got a tale to tell? Is there a story inside you just bursting to get out? Welcome to Story Club - you have found your people.
-    p Make creative writing a regular habit. The Story Club community writes and shares bite sized reads every week.
-
-    h1 How it works
-    ul
-        li Check out the latest challenge on the Story Club website
-        li Write your 500 word story and submit it within the week
-        li Read everyone else’s work and FEEDBACK - it’s all about helping each other improve.
-        li Write, rinse repeat
-
-    p.hero Be part of a growing and completely non-influential community.
-
-
+    section.hero(style="background-color: #fafafa;")
+        .hero-body
+            .container.has-text-centered
+                h1.title.is-spaced Just what the heck is storyclub?
+                h2.subtitle Make creative writing a regular habit. The Story Club community writes and shares bite sized reads every week
     if theme
-        h1 Latest theme!
-        //-p get it done by #{theme.deadline}
-        +themeInfo(theme,true)
+        section.section
+            .container
+                .has-text-centered
+                    p
+                        span.tag.is-primary latest challenge
+                    p
+                        strong #{theme.themeText}
+                    p.has-text-centered Must include
+                        ul
+                            each thing in theme.things
+                                li #{thing}
+                    p Get 'er done by #{theme.deadline}
+
+    section.section(style="background-color: #fafafa;")
+        .container.has-text-centered
+            h1.title How It Works
+            .level  
+                span.level-item Write it
+                span.level-item Read it
+                span.level-item 
+                    strong And feedback!
+    
+            p Be part of a growing and completely non-influential community.
+
+
+
     if comments
-        h1 Recent feedback
-        each comment in comments        
-            .comment
-                .header
-                    span.author #{comment.userId}
-                    span •
-                    span.when #{comment.when}                    
-                    span.story on 
-                        a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
-                .body !{comment.text}                        
+        section.section
+            .container
+                .has-text-centered  
+                    h1.title(style="padding:20px") Recent feedback
+                
+        
+                each comment in comments        
+                    .box
+                        .header
+                            span.author #{comment.userId}
+                            span •
+                            span.when #{comment.when}                    
+                            span.story  on 
+                                a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
+                        .body !{comment.text}                        
                     
 block code
     script.

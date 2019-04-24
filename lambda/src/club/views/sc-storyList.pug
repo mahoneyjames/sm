@@ -1,36 +1,38 @@
-extends sc-layout
+extends sc-layout-bulma
 include mixins/_themeInfo
 include mixins/comments/_singleComment
 block content      
+    section.section
+        .container
+            h1.title All stories    
 
-    h1 Entries    
-    each story in stories
-        p
-            a(href=`${siteRoot}/${story.path}`) #{story.title}
-            if displayAuthor 
-                span  - #{story.authorUser.name}
-        if story.comments.length>0
-            .commentContainer
-                .story                    
-                    ul.comments
-                        each comment in story.comments
-                            li.comment
-                                +writeComment(comment)                
-
-    h2 All stories in one handy page!
-    a(href=`${siteRoot}/${theme.path}/all`) Single page view
-
-    if commentsForTheme.length>0
-        h2 Comments! There be comments!
-        .commentContainer
             each story in stories
-                if story.comments.length>0
-                    .story
-                        h3 #{story.title}
-                        ul.comments
-                            each comment in story.comments
-                                li.comment
-                                    +writeComment(comment)        
+                p
+                    a(href=`${siteRoot}/${story.path}`) #{story.title}
+                    if displayAuthor 
+                        span  - #{story.authorUser.name}
+                //- if story.comments.length>0
+                //-     .commentContainer
+                //-         .story                    
+                //-             ul.comments
+                //-                 each comment in story.comments
+                //-                     li.comment
+                //-                         +writeComment(comment)                
+
+            h2.title All stories in one handy page!
+            a(href=`${siteRoot}/${theme.path}/all`) Single page view
+
+    //- if commentsForTheme.length>0
+    //-     h2 Comments! There be comments!
+    //-     .commentContainer
+    //-         each story in stories
+    //-             if story.comments.length>0
+    //-                 .story
+    //-                     h3 #{story.title}
+    //-                     ul.comments
+    //-                         each comment in story.comments
+    //-                             li.comment
+    //-                                 +writeComment(comment)        
 
     
 block aside

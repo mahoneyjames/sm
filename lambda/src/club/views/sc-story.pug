@@ -1,14 +1,17 @@
-extends sc-layout
+extends sc-layout-bulma
 include mixins/_storyCard
 include mixins/_comments
 include mixins/_themeInfo
 block content         
-        
-    +storyCard(story,rule,displayAuthor)    
-    section
-        h2 Feedback please!
-        +comments("http://www.storyclub.co.uk/" + story.path,story.id,"storyclub")
+    section.section 
+        .container
+            +storyCard(story,rule,displayAuthor)    
 
-block aside
-    if theme
-        +themeInfo(theme,true)
+    section.section
+        .container
+            h2.title Feedback please!
+            +comments("http://www.storyclub.co.uk/" + story.path,story.id,"storyclub")
+
+//- block aside
+//-     if theme
+//-         +themeInfo(theme,true)

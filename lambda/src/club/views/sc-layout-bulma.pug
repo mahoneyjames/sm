@@ -1,0 +1,80 @@
+html
+    head
+        if title
+            title= `${title}`
+        else
+            title= `${helpers.siteName}`
+        link(rel='stylesheet', href=`${siteRoot}/bulma.css`)
+        link(rel='stylesheet', href=`${siteRoot}/bulma-custom.css`)
+        
+        //-link(rel="shortcut icon" type="image/png" href="/images/icons/doughnut.png")
+        meta(name="viewport" content="width=device-width, initial-scale=1")        
+        meta(charset="UTF-8")
+        //- script(src="https://unpkg.com/axios/dist/axios.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
+        //- script(src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js")
+        //- script(src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/sorts/tablesort.number.min.js")
+        script(defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js")
+        script( src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    body
+        header
+            nav.navbar.has-shadow.is-spaced
+                .container
+                    .navbar-brand
+                        a.navbar-item(href="/")
+                            img(src=`${siteRoot}/logo.png` alt="storyclub!" widht="112" height="28")
+                        a.navbar-burger(role="button" aria-label="menu" aria-expanded="false")
+                            span(aria-hidden="true")
+                            span(aria-hidden="true")
+                            span(aria-hidden="true")
+                    .navbar-menu
+                        .navbar-start
+                        .navbar-end 
+                            a.navbar-item(href=`${siteRoot}/themes-2019`)
+                                span.icon.has-text-primary  
+                                    i.fas.fa-book-reader
+                                span.is-hidden-touch.is-hidden-widescreen read
+                                span.is-hidden-desktop-only stories
+                            a.navbar-item.is-hidden-touch.is-hidden-desktop-only(href="https://twitter.com/@storyclub500" target="_blank")
+                                span.icon(style="color: #55acee;")    
+                                    i.fab.fa-lg.fa-twitter
+                            .navbar-item
+                                .field.is-grouped.is-grouped-multiline
+                                    p.control
+                                        a.button.is-primary(href=`${siteRoot}/about`)
+                                            strong about
+                            
+        
+        main
+            block content
+        aside
+            block aside            
+
+
+        block footer
+            footer.footer.level
+                .level-item.has-text-centered              
+                    a(href="mailto:storyclub500@gmail.com") 
+                        span.icon(style="color:#333;")
+                            i.fa.fa-lg.fa-envelope
+                        span storyclub500@gmail.com       
+                .level-item.has-text-centered                                                       
+                    a(href="https://twitter.com/storyclub500")
+                        span.icon(style="color:#55acee")
+                            i.fab.fa-lg.fa-twitter
+                        span storymarmalade
+        block code-site
+            script.
+                $(document).ready(function() {
+
+                // Check for click events on the navbar burger icon
+                $(".navbar-burger").click(function() {
+              
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    $(".navbar-burger").toggleClass("is-active");
+                    $(".navbar-menu").toggleClass("is-active");
+              
+                });
+              });
+        block code
+            
