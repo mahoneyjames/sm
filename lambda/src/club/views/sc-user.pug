@@ -1,24 +1,24 @@
-extends sc-layout
+extends sc-layout-bulma
 include mixins/_storyCard
 include mixins/_comments
 include mixins/_themeInfo
-block content         
-        
-    h1 #{user.publicId}
+block content 
+    section.section.user(style="background-color: #fafafa;")
+        .container
+            h1.title.has-text-centered #{user.publicId}
 
-    if user.about && user.about.html
-        p !{user.about.html}
+            if user.about && user.about.html
+                p !{user.about.html}
 
     if storiesByYear && storiesByYear.length > 0
-        h1 All stories
-        
-
-        each year in storiesByYear
-            .year
-                p #{year.year}
-                ul
-                    each story in year.stories
-                        li
-                            a(href=`${siteRoot}/${story.path}`) #{story.title}
+        section.section.stories
+            .container.has-text-centered                
+                each year in storiesByYear
+                    .year(style="padding-bottom:20px;")
+                        h5.title #{year.year}
+                        ul
+                            each story in year.stories
+                                li
+                                    a(href=`${siteRoot}/${story.path}`) #{story.title}
 
 block aside

@@ -1,20 +1,18 @@
-extends sc-layout
+extends sc-layout-bulma
 include mixins/_storySubmit
 include mixins/_themeInfo
 block content
-    section
-        h1 Theme
-        p #{theme.themeText}
-        h1 Must include
-        ul
-            each thing in theme.things
-                li #{thing}
-        h1 Deadline
-        p #{theme.deadline}
+    section.section.theme
+        .container.has-text-centered
+            h1.title Theme
+            p #{theme.themeText}
+            h1.subtitle Must include
+            ul
+                each thing in theme.things
+                    li #{thing}
+            h4 Deadline
+            p #{theme.deadline}
         //- h1 Ready already?
         //- p Well then, get submitting here
         //- +storySubmit(theme, authors)
         
-
-block aside
-    +themeInfo(theme,true)

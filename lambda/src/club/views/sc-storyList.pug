@@ -2,10 +2,9 @@ extends sc-layout-bulma
 include mixins/_themeInfo
 include mixins/comments/_singleComment
 block content      
-    section.section
-        .container
-            h1.title All stories    
-
+    section.section.stories(style="background-color: #fafafa;")
+        .container.has-text-centered
+            h1.title #{theme.themeText}
             each story in stories
                 p
                     a(href=`${siteRoot}/${story.path}`) #{story.title}
@@ -19,8 +18,19 @@ block content
                 //-                     li.comment
                 //-                         +writeComment(comment)                
 
-            h2.title All stories in one handy page!
-            a(href=`${siteRoot}/${theme.path}/all`) Single page view
+            
+            p.control.has-text-centered(style="padding-top:20px;")
+                a.button.is-primary(href=`${siteRoot}/${theme.path}/all`) read all stories
+                    
+    
+    section.section.theme
+        .container.has-text-centered
+            if theme.deadline
+                p Original deadline: #{theme.deadline}
+            p Things
+            ul
+                each thing in theme.things
+                    li #{thing}
 
     //- if commentsForTheme.length>0
     //-     h2 Comments! There be comments!
@@ -35,5 +45,4 @@ block content
     //-                                 +writeComment(comment)        
 
     
-block aside
-    +themeInfo(theme,true)
+

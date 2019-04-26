@@ -62,6 +62,7 @@ module.exports = function(storageForData,eventQueue)
         {
 
             await module.data.saveUsers(users);
+            await module.queue.add("users-update", users);
 
             //TODO - work out which users have changed
             //notify each user updated

@@ -20,9 +20,9 @@ block content
                 li(class=(year===navYear?'is-active':''))
                     a(href=`themes-${navYear}`) #{navYear}
     section.section.themes
-        .container
+        .container.has-text-centered    
             each theme in themes
-                .theme.box                    
+                .theme.box           
                     a(href=`${theme.path}`)
                         h1.title  #{theme.themeText}
                     ul

@@ -18,6 +18,12 @@ module.exports =  function(storageForData, storageForHtml){
             await module.controller.buildAuthorPage(data.id);
                 
         }
+
+        if(type==="users-update")
+        {
+            await module.controller.buildAuthorsPage(data);
+        }
+
     };
 
     return module;

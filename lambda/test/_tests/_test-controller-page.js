@@ -25,5 +25,12 @@ module.exports = async function(storageLoader){
 
         });
     });
+
+    describe("build-authors-page", function(){
+        it("all authors",async function()
+        {
+            await controller.buildAuthorsPage();
+        });
+    });
     
 }

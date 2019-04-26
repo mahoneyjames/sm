@@ -35,6 +35,11 @@ html
                                     i.fas.fa-book-reader
                                 span.is-hidden-touch.is-hidden-widescreen read
                                 span.is-hidden-desktop-only stories
+                            a.navbar-item(href=`${siteRoot}/authors`)
+                                span.icon.has-text-primary  
+                                    i.fas.fa-pen-fancy
+                                span.is-hidden-touch.is-hidden-widescreen authors
+                                span.is-hidden-desktop-only authors                                
                             a.navbar-item.is-hidden-touch.is-hidden-desktop-only(href="https://twitter.com/@storyclub500" target="_blank")
                                 span.icon(style="color: #55acee;")    
                                     i.fab.fa-lg.fa-twitter
@@ -62,7 +67,7 @@ html
                     a(href="https://twitter.com/storyclub500")
                         span.icon(style="color:#55acee")
                             i.fab.fa-lg.fa-twitter
-                        span storymarmalade
+                        span @storyclub500
         block code-site
             script.
                 $(document).ready(function() {

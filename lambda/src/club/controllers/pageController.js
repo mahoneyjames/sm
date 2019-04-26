@@ -6,6 +6,10 @@ module.exports = function(storage)
     this.htmlBuilder = require('../views/html')(storage);
     this.data = require('../model/data')(storage);
     
+    this.buildAuthorsPage = async()=>{
+        const users = await this.data.cache_getUsers();
+        await this.htmlBuilder.buildAuthorsPage(users);
+    }
 
     this.buildAuthorPage = async (authorId)=>{
         authorId = authorId.toLowerCase();

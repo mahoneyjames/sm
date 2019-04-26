@@ -6,6 +6,9 @@ module.exports =  function(storage){
 
     module.storage = storage;
 
+    module.buildAuthorsPage = async(users)=>{
+        await buildPageAndSave(storage,"authors","sc-authors", {authors:users, title:"authors"});
+    }
     module.buildUserPage = async(user,stories, storiesByYear)=>{
         
         if(stories)

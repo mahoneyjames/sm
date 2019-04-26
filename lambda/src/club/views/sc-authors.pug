@@ -1,0 +1,9 @@
+extends sc-layout-bulma
+block content 
+    section.section(style="background-color: #fafafa;")
+        .container.has-text-centered
+            h1.title Our brave and attractive authors
+
+            each author in authors
+                p
+                    a(href=`${siteRoot}/a/${author.publicId}`) #{author.name}  
