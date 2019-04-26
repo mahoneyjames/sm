@@ -1,0 +1,24 @@
+.story p{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+.themesc{
+    display:flex;
+    
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+
+    
+    
+}
+
+
+.themesx .theme{
+    width:300px;
+}
