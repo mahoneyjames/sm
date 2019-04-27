@@ -57,17 +57,21 @@ block content
             .container
                 .has-text-centered  
                     h1.title(style="padding:20px") Recent feedback
-                
-        
-                each comment in comments        
-                    .box
-                        .header
-                            span.author #{comment.userId}
-                            span •
-                            span.when #{comment.when}                    
-                            span.story  on 
-                                a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
-                        .body !{comment.text}                        
+                .columns.is-centered.is-vcentered.is-multiline.is-3   
+                    each comment in comments        
+                        .box.column.is-3(style="margin:20px;")
+                            article.media                                   
+                                .media-content
+                                    .content
+                                        p 
+                                            strong #{comment.userId}
+                                            small 
+                                                span.when #{comment.when}     
+                                            br
+                                            p !{comment.text}
+                                        div 
+                                            a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
+                            
                     
 block code
     script.
