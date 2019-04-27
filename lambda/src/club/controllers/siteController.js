@@ -31,7 +31,10 @@ module.exports = function(data, html){
         }).slice(0,15);
         //TODO sort descending and take 10
         //TODO work out the story path?
-        await module.html.buildHomePage(latestTheme,recentComments);
+
+        const recentThemes = await module.data.sortThemesByDate((await module.data.cache_getThemesAndStories())).slice(0,3);
+        console.log(recentThemes);
+        await module.html.buildHomePage(latestTheme,recentComments,recentThemes);
     }
 
 

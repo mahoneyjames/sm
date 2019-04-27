@@ -1,5 +1,6 @@
 extends sc-layout-bulma
 include mixins/_themeInfo
+
 include mixins/comments/_singleComment
 block content      
     section.section.stories(style="background-color: #fafafa;")
@@ -26,7 +27,7 @@ block content
     section.section.theme
         .container.has-text-centered
             if theme.deadline
-                p Original deadline: #{theme.deadline}
+                p Original deadline: #{helpers.dateFriendly(theme.deadline)}
             p Things
             ul
                 each thing in theme.things

@@ -1,5 +1,6 @@
 extends sc-layout-bulma
 include mixins/_themeInfo
+include mixins/_themeCard-bulma
 block content
     
     //-pre= helpers.dump(themes)
@@ -20,13 +21,10 @@ block content
                 li(class=(year===navYear?'is-active':''))
                     a(href=`themes-${navYear}`) #{navYear}
     section.section.themes
-        .container.has-text-centered    
-            each theme in themes
-                .theme.box           
-                    a(href=`${theme.path}`)
-                        h1.title  #{theme.themeText}
-                    ul
-                        each thing in theme.things
-                            li #{thing}
+        .container.has-text-centered   
+            .columns.is-multiline.is-gapless.is-centered
+                each theme in themes
+                    +themeCard(theme)
+
 
                         

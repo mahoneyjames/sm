@@ -1,0 +1,21 @@
+mixin themeCard(theme)
+    .theme.column.is-3
+        .card(style="margin:10px;padding:10px;")                        
+            a(href=`${theme.path}`)
+                .card-headerd
+                    .level.is-mobile
+                        .level-left 
+                            .level-item #{theme.themeText}
+                        .level-right 
+                            .level-item #{helpers.dateWithoutYear(theme.deadline)}
+                
+            .card-body
+                if theme.things
+                    ul
+                        each thing in theme.things
+                            li #{thing}
+            .card-footer
+                if theme.stories
+                    p Stories: #{theme.stories.length}
+                else   
+                    p Stories: 0

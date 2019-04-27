@@ -11,7 +11,7 @@ block content
                 each thing in theme.things
                     li #{thing}
             h4 Deadline
-            p #{theme.deadline}
+            p #{helpers.dateFriendly(theme.deadline)}
         //- h1 Ready already?
         //- p Well then, get submitting here
         //- +storySubmit(theme, authors)

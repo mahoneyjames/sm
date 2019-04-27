@@ -1,4 +1,5 @@
 const pug = require('pug');
+const moment = require('moment');
 
 module.exports =  function(storage){   
 
@@ -122,9 +123,9 @@ module.exports =  function(storage){
 
     }
 
-    module.buildHomePage = async(theme, comments)=>
+    module.buildHomePage = async(theme, comments, recentThemes)=>
     {
-        await buildPageAndSave(storage,"index","sc-home",{title:"storyclub",theme,comments});
+        await buildPageAndSave(storage,"index","sc-home",{title:"storyclub",theme,comments,recentThemes});
     }
 
     module.stats_buildCommentPage = async(leagueTable)=>{
@@ -145,7 +146,9 @@ module.exports =  function(storage){
 async function buildPageAndSave (storage, path, view, options){
     options.siteRoot="";
     options.helpers = {siteName:'storyclub',
-                     dump: function(thing){return JSON.stringify(thing);}};
+                     dump: function(thing){return JSON.stringify(thing);},
+                     dateWithoutYear: function(value){return new moment.utc(value).format("MMM Do");},
+                     dateFriendly: function(value){return new moment.utc(value).format("Do MMM YYYY");}};
 
     //console.log(options);
 

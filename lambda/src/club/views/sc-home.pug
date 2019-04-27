@@ -1,6 +1,6 @@
 extends sc-layout-bulma
 include mixins/_themeInfo
-
+include mixins/_themeCard-bulma
 
 block content
     section.hero(style="background-color: #fafafa;")
@@ -8,8 +8,24 @@ block content
             .container.has-text-centered
                 h1.title.is-spaced Just what the heck is storyclub?
                 h2.subtitle Make creative writing a regular habit. The Story Club community writes and shares bite sized reads every week
-    if theme
+
+
+    if recentThemes
         section.section
+            .container
+                .has-text-centered
+                    h1.title Recent challenges           
+                .columns.is-centered
+                    each theme in recentThemes
+                        +themeCard(theme)
+
+                                                  
+                p.control.has-text-centered(style="padding-top:20px;")
+                    a.button.is-primary(href=`${siteRoot}/themes-2019`) see all challenges
+                
+            
+    if theme
+        section.section(style="background-color: #fafafa;")
             .container
                 .has-text-centered
                     p
@@ -20,9 +36,10 @@ block content
                         ul
                             each thing in theme.things
                                 li #{thing}
-                    p Get 'er done by #{theme.deadline}
+                    p Get 'er done by #{helpers.dateFriendly(theme.deadline)}
 
-    section.section(style="background-color: #fafafa;")
+
+    section.section
         .container.has-text-centered
             h1.title How It Works
             .level  
@@ -36,7 +53,7 @@ block content
 
 
     if comments
-        section.section
+        section.section(style="background-color: #fafafa;")
             .container
                 .has-text-centered  
                     h1.title(style="padding:20px") Recent feedback
