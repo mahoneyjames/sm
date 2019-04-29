@@ -1,6 +1,6 @@
 extends sc-layout-bulma
 include mixins/_themeInfo
-include mixins/_themeCard-bulma
+include mixins/_themeCard-bulma-2
 
 block content
     section.hero(style="background-color: #fafafa;")
@@ -8,8 +8,10 @@ block content
             .container.has-text-centered
                 h1.title.is-spaced Just what the heck is storyclub?
                 h2.subtitle Make creative writing a regular habit. The Story Club community writes and shares bite sized reads every week
-
-
+                //- columns
+                //-     .column.is-3
+                //-         figure.image.is-4by3
+                //-             img(src="/typewriter.jpg" alt="Typewriter keyboard skillfully edited so that the keys spell out 'storyclub'")
     if recentThemes
         section.section
             .container
@@ -27,28 +29,81 @@ block content
     if theme
         section.section(style="background-color: #fafafa;")
             .container
-                .has-text-centered
-                    p
-                        span.tag.is-primary latest challenge
-                    p
-                        strong #{theme.themeText}
-                    p.has-text-centered Must include
-                        ul
-                            each thing in theme.things
-                                li #{thing}
-                    p Get 'er done by #{helpers.dateFriendly(theme.deadline)}
+                .columns.is-multiline.is-centered.is-vcentered
+                    .column.is-3
+                        .card(style="border-radius:10px")
+                            .card-content.has-text-centered
+                                p
+                                    span.tag.is-primary latest challenge
+                                p
+                                    strong #{theme.themeText}
+                                p.has-text-centered Must include
+                                    ul
+                                        each thing in theme.things
+                                            li #{thing}
+                                p 
+                                    strong Get 'er done by #{helpers.dateFriendly(theme.deadline)}
 
+
+    //- section.section
+    //-     .columns.is-multiline.is-centered.is-vcentered
+    //-         .column.is-2
+    //-             .card
+    //-                 .card-content
+    //-                     .content    
+    //-                         .has-text-centered
+    //-                             i.fas.fa-5x.fa-w-20.fa-pencil-alt(style="color:#f4bf42")
+    //-                             h3.subtitle.is-3 Write it
+    //-                             p Knock out five hundred words and submit it by Wednesday
+    //-         .column.is-2
+    //-             .card
+    //-                 .card-content
+    //-                     .content    
+    //-                         .has-text-centered
+    //-                             i.fas.fa-5x.fa-w-20.fa-book-reader(style="color:#f4bf42")
+    //-                             h3.subtitle.is-3 Read it  
+    //-                             p Read everyone else's work                              
+    //-         .column.is-2
+    //-             .card
+    //-                 .card-content
+    //-                     .content    
+    //-                         .has-text-centered
+    //-                             i.far.fa-5x.fa-w-20.fa-comments(style="color:#f4bf42")
+    //-                             h3.subtitle.is-3 Feedback it
+    //-                             p What did you think? Liked it? Loathed it? 
+                                                                
 
     section.section
-        .container.has-text-centered
-            h1.title How It Works
-            .level  
-                span.level-item Write it
-                span.level-item Read it
-                span.level-item 
-                    strong And feedback!
+        .container
+            .tile.is-ancestor
+                .tile.is-parent
+                    .tile.is-child.card                       
+                        .card-content
+                            .content    
+                                .has-text-centered
+                                    i.fas.fa-5x.fa-w-20.fa-pencil-alt(style="color:#f4bf42")
+                                    h3.subtitle.is-3 Write it
+                                    p Knock out five hundred words and submit it by Wednesday
+                .tile.is-parent
+                    .tile.is-child.card                        
+                        .card-content
+                            .content    
+                                .has-text-centered
+                                    i.fas.fa-5x.fa-w-20.fa-book-reader(style="color:#f4bf42")
+                                    h3.subtitle.is-3 Read it  
+                                    p Read everyone else's work                              
+                .tile.is-parent
+                    .tile.is-child.card
+                        .card-content
+                            .content    
+                                .has-text-centered
+                                    i.far.fa-5x.fa-w-20.fa-comments(style="color:#f4bf42")
+                                    h3.subtitle.is-3 Feedback it
+                                    p What did you think? Liked it? Loathed it? 
+                                                                    
+                       
     
-            p Be part of a growing and completely non-influential community.
+            //-p Be part of a growing and completely non-influential community.
 
 
 

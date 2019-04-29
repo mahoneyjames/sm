@@ -32,7 +32,7 @@ module.exports = function(data, html){
         //TODO sort descending and take 10
         //TODO work out the story path?
 
-        const recentThemes = await module.data.sortThemesByDate((await module.data.cache_getThemesAndStories())).slice(0,3);
+        const recentThemes = await module.data.sortThemesByDate((await module.data.cache_getThemesAndStories())).slice(1,4); //get the 3 most recent...
         console.log(recentThemes);
         await module.html.buildHomePage(latestTheme,recentComments,recentThemes);
     }

@@ -1827,7 +1827,7 @@ describe("html-home", function (){
         
         const stories = [story, getStory("theme-manual","manual-story-id-2", "test-story-2-opuoewiruoiweuroie","Title for story 2", getUser("jenny")),
                             getStory("theme-manual","manual-story-id-3", "test-story-3-adsfkajdfja","Title for story 3",getUser("lewis"),[],"There's no business like showbusiness...<br/><br/>or is there?")];
-        await builder.buildHomePage(theme, comments);
+        await builder.buildHomePage(theme, comments,[theme]);
     });
     it.skip("about", async function(){
         const builder = getHtmlBuilder(getHtmlStorage());
@@ -1841,7 +1841,7 @@ function getUser(id)
 }
 function getTheme(publicId,text)
 {
-    return {publicId,text, things:["thing 1", "thing 2", "thing 3"], deadline: '2019-06-01'};
+    return {publicId,themeText:text, things:["thing 1", "thing 2", "thing 3"], deadline: '2019-06-01'};
 }
 
 function getStory(publicThemeId, storyPublicId, storyId, title, user,comments=[],tagLine)

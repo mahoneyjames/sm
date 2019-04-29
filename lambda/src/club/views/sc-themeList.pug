@@ -1,6 +1,6 @@
 extends sc-layout-bulma
 include mixins/_themeInfo
-include mixins/_themeCard-bulma
+include mixins/_themeCard-bulma-2
 block content
     
     //-pre= helpers.dump(themes)
@@ -14,12 +14,21 @@ block content
     //-                     ul
     //-                         each thing in theme.things
     //-                             li #{thing}
-
-    .tabs.is-centered
+    
+    //-.is-hidden-mobile
+    .tabs.is-centered 
         ul
             each navYear in years
                 li(class=(year===navYear?'is-active':''))
                     a(href=`themes-${navYear}`) #{navYear}
+
+    //- aside.container.menu.is-hidden-tablet.box(style="margin:10px;")
+    //-     ul.menu-list
+    //-         each navYear in years
+    //-             li
+    //-                 a(href=`themes-${navYear}` class=(year===navYear?'is-active':'')) #{navYear}
+
+
     section.section.themes
         .container.has-text-centered   
             .columns.is-multiline.is-gapless.is-centered
