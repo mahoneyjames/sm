@@ -31,9 +31,9 @@ describe("html-theme", function(){
         const builder = getHtmlBuilder(getHtmlStorage());
 
         const stories = [
-            getStory("theme-manual","manual-story-id-1", "test-story-1-uyeiwruoweru","Title for story 1",getUser("james")),
-            getStory("theme-manual","manual-story-id-2", "test-story-2-opuoewiruoiweuroie","Title for story 2", getUser("jenny")),
-            getStory("theme-manual","manual-story-id-3", "test-story-3-adsfkajdfja","Title for story 3",getUser("lewis"))
+            getStory("theme-manual","manual-story-id-1", "test-story-1-uyeiwruoweru","Another one that is too complicated for Jennyifer",getUser("james")),
+            getStory("theme-manual","manual-story-id-2", "test-story-2-opuoewiruoiweuroie","Lewis is my uncle monkey", getUser("jenny")),
+            getStory("theme-manual","manual-story-id-3", "test-story-3-adsfkajdfja","A deep inferirorroity complex (because I is bad spleler)",getUser("lewis"))
             ];
 
         stories[0].comments = [getComment("theme-manual", stories[0], "dan", "nice story!"),
@@ -1815,7 +1815,7 @@ describe("html-home", function (){
         const builder = getHtmlBuilder(getHtmlStorage());
 
         const theme = getTheme("theme-latest", "a new theme");
-        const story = getStory("theme-manual","manual-story-id-1", "test-story-1-uyeiwruoweru","Title for story 1",getUser("james"));
+        const story = getStory("theme-manual","manual-story-id-1", "test-story-1-uyeiwruoweru","Another one that is too complicated for Jenny to understand",getUser("james"));
         const comments =    [getComment("theme-manual", story, "dan", "nice story!"),
                             getComment("theme-manual", story, "hannah", "yes, it's fabulous"),
                             getComment("theme-manual", story, "dan", "ace"),
@@ -1825,13 +1825,20 @@ describe("html-home", function (){
                             getComment("theme-manual", story, "beth", "I really like that this wanders from a set structure, it feels rhythmic and comforting then suddenly it changes, and you settle into another rhythm or you're interrupted by the fitbit. A bit like trying to fall asleep! This is my fave rhyme: What all the old friends know of course is, you can’t hit back with “Four Divorces!”"),
                             getComment("theme-manual", story, "hannah", "This is my favourite this week. Great lyrics. Could have been cheesy and twee but totally wasn't. worked really well. I'd like to have seen McCloud's reaction - I'd like for him to have realised what was happening to him and what an idiot he'd been, but that's a lot to fit into 500 words!")];
         
-        const stories = [story, getStory("theme-manual","manual-story-id-2", "test-story-2-opuoewiruoiweuroie","Title for story 2", getUser("jenny")),
-                            getStory("theme-manual","manual-story-id-3", "test-story-3-adsfkajdfja","Title for story 3",getUser("lewis"),[],"There's no business like showbusiness...<br/><br/>or is there?")];
+        const stories = [story, getStory("theme-manual","manual-story-id-2", "test-story-2-opuoewiruoiweuroie","Visions of Gideon", getUser("jenny")),
+                            getStory("theme-manual","manual-story-id-3", "test-story-3-adsfkajdfja","The truth is darkest before the dawn banana",getUser("lewis"),[],"There's no business like showbusiness...<br/><br/>or is there?")];
         await builder.buildHomePage(theme, comments,[theme]);
     });
     it.skip("about", async function(){
         const builder = getHtmlBuilder(getHtmlStorage());
         await builder.buildStaticPages();
+    });
+});
+
+describe("html-users",function(){
+    it("all", async function(){
+        const builder = getHtmlBuilder(getHtmlStorage());
+        builder.buildAuthorsPage();
     });
 });
 

@@ -3,22 +3,55 @@ include mixins/_themeInfo
 
 include mixins/comments/_singleComment
 block content      
-    section.section.stories(style="background-color: #fafafa;")
-        .container.has-text-centered
-            h1.title #{theme.themeText}
-            each story in stories
-                p
-                    a(href=`${siteRoot}/${story.path}`) #{story.title}
-                    if displayAuthor 
-                        span  - #{story.authorUser.name}
-                //- if story.comments.length>0
-                //-     .commentContainer
-                //-         .story                    
-                //-             ul.comments
-                //-                 each comment in story.comments
-                //-                     li.comment
-                //-                         +writeComment(comment)                
-
+    //- section.section.stories(style="background-color: #fafafa;")
+    //-     .container.has-text-centered
+    //-         h1.title #{theme.themeText}
+    //-         each story in stories
+    //-             .columns.is-centered
+    //-                 .column.is-2
+    //-                     .level.is-marginless
+    //-                         .level-left
+    //-                             p.level-item
+    //-                                 span.fa-stack
+    //-                                     i.fas.fa-comment-alt.fa-stack-2x(style="color:#f4bf42")
+    //-                                     strong.fa-stack-2x(style="color:white;") #{story.comments.length}                                                                                                                                         
+    //-                             .level-item
+    //-                                 p.title.is-4
+    //-                                     a(href=`${siteRoot}/${story.path}`) #{story.title}
+    //-                                 if displayAuthor 
+    //-                                     span  by                                     
+    //-                                     p.title.is-6
+    //-                                         a(href=`${siteRoot}/a/${story.authorUser.publicId}`) #{story.authorUser.name}
+                                
+                                
+    //-                     if displayAuthor 
+    //-                         div
+    //-                             span
+    //-                                 a.heading(href=`${siteRoot}/a/${story.authorUser.publicId}`) #{story.authorUser.name}
+    //-                     hr
+                
+    section.section.stories
+        .container
+            .tile.is-ancester.is-vertical
+                 each story in stories
+                    .tile.is-child.cardd
+                        .card-content
+                            .content    
+                                .has-text-centered
+                                    span.fa-stack
+                                        i.fas.fa-comment-alt.fa-stack-2x(style="color:#f4bf42")
+                                        strong.fa-stack-2x(style="color:white;") #{story.comments.length}           
+                                    p
+                                        a(href=`${siteRoot}/${story.path}`) #{story.title}
+                                    if displayAuthor 
+                                        span  by                                     
+                                        p.title.is-6
+                                            a(href=`${siteRoot}/a/${story.authorUser.publicId}`) #{story.authorUser.name}
+                                    hr
+                                
+                                    
+                                    
+               
             
             p.control.has-text-centered(style="padding-top:20px;")
                 a.button.is-primary(href=`${siteRoot}/${theme.path}/all`) read all stories

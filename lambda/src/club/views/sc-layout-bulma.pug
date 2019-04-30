@@ -38,17 +38,16 @@ html
                             a.navbar-item(href=`${siteRoot}/authors`)
                                 span.icon.has-text-primary  
                                     i.fas.fa-pen-fancy
-                                span.is-hidden-touch.is-hidden-widescreen authors
+                                span.is-hidden-touch.is-hidden-widescreen authors                                
                                 span.is-hidden-desktop-only authors                                
+                            a.navbar-item(href=`${siteRoot}/about`)
+                                span.icon.has-text-primary  
+                                    i.fas.fa-question-circle
+                                span about                                                            
                             a.navbar-item.is-hidden-touch.is-hidden-desktop-only(href="https://twitter.com/@storyclub500" target="_blank")
                                 span.icon(style="color: #55acee;")    
                                     i.fab.fa-lg.fa-twitter
-                            .navbar-item
-                                .field.is-grouped.is-grouped-multiline
-                                    p.control
-                                        a.button.is-primary(href=`${siteRoot}/about`)
-                                            strong about
-                            
+
         
         main
             block content
