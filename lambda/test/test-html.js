@@ -1806,6 +1806,11 @@ it("html-theme-list", async function(){
         "status": "review",
         "stories": []
     }];
+
+    for(const theme of themes)
+    {
+        theme.commentCount=33;
+    }
     await builder.buildThemesPage(themes);
 });
 

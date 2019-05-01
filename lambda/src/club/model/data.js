@@ -76,7 +76,7 @@ module.exports =  function(storage){
     {
         const all = await module.cache_getThemesAndStories(reloadFromStorage); 
         const theme = all.find((t)=>t.publicId==publicThemeId);
-        if(theme!=null)
+        if(theme!=null && theme.stories!=null)
         {
             return theme.stories;
         }

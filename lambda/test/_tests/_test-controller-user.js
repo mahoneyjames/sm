@@ -61,10 +61,12 @@ module.exports = async function(storageLoader){
 		}
 	}]
 });
+//console.log(eventQueue.events);
                 expect(results.errors.length).to.equal(0);
-                expect(eventQueue.events.length).to.equal(2);
-                expect(eventQueue.events[0].data.id).to.equal("one");
-                expect(eventQueue.events[1].data.id).to.equal("james");
+                expect(eventQueue.events.length).to.equal(3);
+                expect(eventQueue.events[0].type).to.equal("users-update");
+                expect(eventQueue.events[1].data.id).to.equal("one");
+                expect(eventQueue.events[2].data.id).to.equal("james");
 
             var savedUsers = await storageForData.readObjectFromJson(`/data/users.json`);
             expect(savedUsers.users.length).to.equal(2);

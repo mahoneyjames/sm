@@ -55,6 +55,28 @@ describe("comments-getUserIdsForCommentIds", function(){
 });
 
 
+describe("comments-getThemeIdsForCommentIds", function(){
+    const {listThemeIdsForCommentIds} = require("../src/club/model/comment/commentHelpers");
+
+    it("test-1", function(){
+        const users = listThemeIdsForCommentIds(
+            {
+                comments: [{id:"1",themeId:"u1"},
+                            {id:"2",themeId:"u2"},
+                            {id:"3",themeId:"u3"},
+                            {id:"4",themeId:"u4"}]
+            },
+            ["1","4"]);
+
+            //console.log(users);
+            expect(users.length).to.equal(2);
+            expect(users[0]).to.equal("u1");
+            expect(users[1]).to.equal("u4");
+        });
+});
+
+
+
 const bunchOComments = [
     {
         "themeId": "the-suburbs",
@@ -500,12 +522,28 @@ describe("data-helpers-comments-add-to-stories", function()
         const stories =[{publicId:"suburban-flight"}, {publicId: "a-warm-welcome"}, {publicId:"story-with-no-comments"}];
         
         addCommentsToStories(stories, bunchOComments);
-        console.log(stories);
+        //console.log(stories);
 
         expect(stories[0].comments.length).to.equal(6);
         expect(stories[1].comments.length).to.equal(2);
         expect(stories[2].comments.length).to.equal(0);
 
+
+    });
+});
+
+describe("data-helpers-comments-add-counts-themes", function(){
+    it("themes", async function(){
+        const {addCommentCountsToThemes}  = require("../src/club/model/comment/commentHelpers");
+        const themes = [{publicId: "admonishing"},{publicId:"bah"},{publicId: "jane-austen"}, {publicId:"uninhibited"}, {publicId:"the-suburbs"}];
+        addCommentCountsToThemes(themes, bunchOComments);
+        //console.log(themes);
+
+        expect(themes[0].commentCount).to.equal(2);
+        expect(themes[1].commentCount).to.equal(0);
+        expect(themes[2].commentCount).to.equal(10);
+        expect(themes[3].commentCount).to.equal(7);
+        expect(themes[4].commentCount).to.equal(15);
 
     });
 });

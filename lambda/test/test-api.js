@@ -234,6 +234,17 @@ describe("local-api: brand new site", function(){
                         "text": "<p>Nested comment!</p>",
                         "when": "2019-01-17T12:58:54",
                         "parentId": 4290295795
+                    },
+                    {
+                        "themeId": "theme-2",
+                        "storyId": "1ki2m1jqi7sdfk9w6",
+                        "storyPublicId": "boots",
+                        "storyTitle": "Best before",
+                        "id": "2988234343",
+                        "userId": "james",
+                        "text": "<p>OOh, yeah!</p>",
+                        "when": "2019-01-17T12:58:54",
+                        "parentId": null
                     }
                 ]
             }));
@@ -242,7 +253,9 @@ describe("local-api: brand new site", function(){
             const result = await post("/api/site/rebuildTheme", {publicThemeId:"theme-1"});
             const result2 = await post("/api/site/rebuildTheme", {publicThemeId:"theme-2"});
 
-            
+
+            expect(await get("/api/site/refreshThemeList")).to.equal("done");
+
         });
 
     
@@ -250,16 +263,18 @@ describe("local-api: brand new site", function(){
 });
 
 describe.skip("local-api-real-data", async function(){
-    await loadDataToSiteViaApi(require('../src/club/storage/storage-local.js')({path:"test/inputs/api-test-2/"}));    
+    await loadDataToSiteViaApi(require('../src/club/storage/storage-local.js')({path:"test/inputs/api-test-3/"}));    
+    
 });
 
-describe.skip("local-api-build-site", function(){
+describe.only("local-api-build-site", function(){
 
     it("do it all", async function()
     {
         debug(await get ("/api/site/refreshStaticPages"));
         //TODO - something to rebuild the user pages without updating the users?
         expect(await get("/api/site/refreshThemeList")).to.equal("done");
+        expect(await get("/api/site/no-comments")).to.equal("doned");
     })
 });
 
@@ -319,20 +334,27 @@ async function loadDataToSiteViaApi(storage)
                 }
                 if(theme!=undefined && theme.constructor!=String)
                 {
-                    debug(theme);
+                    //debug(theme);
                     //TODO - bug in our lister, so it's returning something duff?
                     //The string "a-fresh-start" is appearing from somewhere - are we returning the path by mistake as well?
-                    debug("load theme: " + theme.themeText);                    
+                    debug("load theme: " + theme.publicId);                    
                     const importedTheme = await post('/api/themes/save', {theme},false);
                     allThemes.push(importedTheme.publicId);
 
-                    const storiesForThemes = await storage.listObjectsFromJson(`stories/${theme.publicId}/stories`);
+                    const storiesForThemes = await storage.listObjectsFromJson(`${theme.publicId}/stories`);
                     for(const story of storiesForThemes)
                     {
                         if(story!=undefined)
                         {
-                            debug("load story '%s'", story.title);
-                            await post("/api/stories/save", {publicThemeId: importedTheme.publicId, story});
+                            if(story.publicId.indexOf("*")<0)
+                            {
+                                debug("load story '%s'", story.title);
+                                await post("/api/stories/save", {publicThemeId: importedTheme.publicId, story});
+                            }
+                            else
+                            {
+                                debug("Skipping story '%s' because its id contains unsupported characters", story.title);
+                            }
                         }
                     }
 

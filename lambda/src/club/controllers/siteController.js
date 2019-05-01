@@ -1,5 +1,5 @@
 const debug = require('debug')("siteController");
-
+const {getRecentComments,addCommentCountsToThemes,listsUsersForCommentIds, listThemeIdsForCommentIds} = require("../model/comment/commentHelpers");
 
 module.exports = function(data, html){
 
@@ -7,33 +7,45 @@ module.exports = function(data, html){
     module.data = data;
     module.html = html;
     
+    module.refreshBasedOnNewComments = async (comments, newCommentIds)=>{
+        if(newCommentIds.length>0)
+        {
+            //Alwasys update the home page if there is a new comment since we will put in there
+            await module.rebuildHomePage();
+    
+            //Only update the user's page if this is a comment we haven't seen before
+            await module.rebuildAuthorMissingCommentsPages(listsUsersForCommentIds({comments}, newCommentIds));
+    
+            const themeIdsWithNewComments = listThemeIdsForCommentIds({comments}, newCommentIds);
+            const themeController = require('./theme')(data,html);
+
+            for(const themeId of themeIdsWithNewComments)
+            {
+                await themeController.rebuildThemePage(themeId);
+            }
+
+            await themeController.buildThemesPage();
+        }
+    }
+
     module.rebuildHomePage=async()=>{
         const latestTheme = await module.data.getLatestTheme();
-        const recentComments = (await module.data.cache_getAllComments()).comments.map((comment)=>        
-        {
-            comment.story = {publicId: comment.storyPublicId,
-                            title: comment.storyTitle};
-            module.html.buildStoryPath(comment.themeId, comment.story);
-            return comment;
-        }).sort((a,b)=>{
-                if(!a.when || !b.when)
-                {
-                    return 0;
-                }
-                else if(a.when > b.when)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return 1;
-                }
-        }).slice(0,15);
-        //TODO sort descending and take 10
-        //TODO work out the story path?
+        const allComments = await module.data.cache_getAllComments();
+        const recentComments = getRecentComments(allComments.comments,15)
+                                .map(comment=>{
+                                        comment.story = {publicId: comment.storyPublicId,
+                                                        title: comment.storyTitle};
+                                        module.html.buildStoryPath(comment.themeId, comment.story);
+                                        return comment;
+                                    });
 
         const recentThemes = await module.data.sortThemesByDate((await module.data.cache_getThemesAndStories())).slice(1,4); //get the 3 most recent...
+        
+        
+        addCommentCountsToThemes(recentThemes,allComments.comments);
+
         console.log(recentThemes);
+
         await module.html.buildHomePage(latestTheme,recentComments,recentThemes);
     }
 
@@ -54,10 +66,13 @@ module.exports = function(data, html){
 
         for(const theme of allStories)
         {
-            for(const story of theme.stories)
+            if(theme.stories)
             {
-                module.html.buildStoryPath(theme.publicId,story);
-                flatStoryList.push(story);
+                for(const story of theme.stories)
+                {
+                    module.html.buildStoryPath(theme.publicId,story);
+                    flatStoryList.push(story);
+                }
             }
         }
        // console.log(flatStoryList);

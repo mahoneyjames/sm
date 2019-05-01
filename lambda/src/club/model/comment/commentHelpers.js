@@ -1,3 +1,7 @@
+const {groupBy} = require("../../helpers")
+/*
+    Returns a list of the ids of any comment that is in newComments, but not originalComments
+*/
 module.exports.listNewCommentIds = (originalComments, newComments)=>{
 
     const originalCommentsIds = originalComments.comments.map(c=>c.id);
@@ -6,6 +10,9 @@ module.exports.listNewCommentIds = (originalComments, newComments)=>{
     return newCommentIds.filter(id=> originalCommentsIds.indexOf(id)<0);
 }
 
+/*
+    Returns the user ids for the specified comment ids
+*/
 module.exports.listsUsersForCommentIds = (comments, commentIds)=>{
     
     
@@ -21,6 +28,21 @@ module.exports.listsUsersForCommentIds = (comments, commentIds)=>{
     );
 }
 
+module.exports.listThemeIdsForCommentIds = (comments, commentIds)=>{
+    return commentIds.map(id=>
+        {
+            const comment = comments.comments.filter(c=>c.id==id);
+            if(comment.length>0)
+            {
+    
+                return comment[0].themeId;
+            }
+        }
+    );
+}
+/*
+    Returns only comments for the specified theme
+*/
 module.exports.listCommentsForTheme = (publicThemeId, commentsDoc)=>{
     return commentsDoc.comments.filter(c=>c.themeId==publicThemeId);
 }
@@ -81,6 +103,9 @@ module.exports.convertCommentArrayToTree = function(comments){
     return{storyList: stories, storiesById: rootComments };
 }
 
+/*
+    Copies any comments for a specific story to that story
+*/
 module.exports.addCommentsToStories = function (stories,comments)
 {
     const commentTree = module.exports.convertCommentArrayToTree(comments);
@@ -96,4 +121,39 @@ module.exports.addCommentsToStories = function (stories,comments)
         }
     }
     
+}
+
+module.exports.addCommentCountsToThemes = function(themes, comments)
+{
+    const themeCounts = groupBy(comments,c=>c.themeId);
+    //console.log(themeCounts);
+    for(const theme of themes)
+    {
+        if(themeCounts.has(theme.publicId))
+        {
+            theme.commentCount = themeCounts.get(theme.publicId).size;
+        }
+        else
+        {
+            theme.commentCount = 0;
+        }
+    }
+}
+
+module.exports.getRecentComments = function(comments, count)
+{
+    return comments.sort((a,b)=>{
+            if(!a.when || !b.when)
+            {
+                return 0;
+            }
+            else if(a.when > b.when)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+    }).slice(0,count);
 }

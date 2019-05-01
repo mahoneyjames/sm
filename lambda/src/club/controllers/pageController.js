@@ -21,7 +21,7 @@ module.exports = function(storage)
         }
 
         //get all the stories
-        const all = this.data.sortThemesByDateOldestFirst(await this.data.cache_getThemesAndStories());
+        const all = this.data.sortThemesByDate(await this.data.cache_getThemesAndStories());
 
 
         //work out only the stories for this user

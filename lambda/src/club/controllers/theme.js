@@ -2,7 +2,7 @@ const validateTheme = require('../model/theme/validate');
 const {sanitiseId} = require('../helpers');
 const validateStory = require('../model/story/validate');
 const generateStoryHtml = require('../model/story/buildContentHtml')
-const {addCommentsToStories} = require("../model/comment/commentHelpers");
+const {addCommentsToStories,addCommentCountsToThemes} = require("../model/comment/commentHelpers");
 
 module.exports =  function(data, html){   
 
@@ -52,7 +52,11 @@ module.exports =  function(data, html){
     module.buildThemesPage = async()=>
     {
         var themes = await this.data.cache_getThemesAndStories();
+        const commentsDoc = await this.data.cache_getAllComments();
+
+        addCommentCountsToThemes(themes,commentsDoc.comments);
         themes = this.data.sortThemesByDate(themes);
+        
         await this.htmlBuilder.buildThemesPage(themes);
     }
     return module;
@@ -118,7 +122,8 @@ async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
 
     //load stories for the theme
     const allStories = await dataLayer.cache_getThemeStories(publicThemeId);
-    console.log(allStories.length);
+    
+    //console.log(allStories.length);
 
     const users = await dataLayer.cache_getUsers();
     //augment the stories with author info
