@@ -28,7 +28,8 @@ module.exports = async function(storageLoader){
         var theme = {
             themeText:themeText, 
             things:['thing 1', 'thing 2', 'thing 3'],
-            deadline: '2019-01-01'
+            deadline: '2019-01-01',
+            path:themeText
         };
 
         it('create theme',async ()=>{

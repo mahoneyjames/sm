@@ -267,7 +267,7 @@ describe.skip("local-api-real-data", async function(){
     
 });
 
-describe.only("local-api-build-site", function(){
+describe.skip("local-api-build-site", function(){
 
     it("do it all", async function()
     {

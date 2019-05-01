@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-describe('local storage: theme controller', async ()=>{    
+describe('local storage: controller-theme', async ()=>{    
     const setup = require('./setup')();
     const debug = require('debug')("test-data-methods");
     

@@ -2,7 +2,12 @@ extends sc-layout-bulma
 include mixins/_themeInfo
 
 include mixins/comments/_singleComment
-block content      
+block content   
+
+    section.section(style="background-color: #fafafa;")
+        container.has-text-centered
+            h1.title #{theme.themeText}
+            
     //- section.section.stories(style="background-color: #fafafa;")
     //-     .container.has-text-centered
     //-         h1.title #{theme.themeText}
@@ -40,7 +45,7 @@ block content
                                 .has-text-centered
                                     span.fa-stack
                                         i.fas.fa-comment-alt.fa-stack-2x(style="color:#f4bf42")
-                                        strong.fa-stack-2x(style="color:white;") #{story.comments.length}           
+                                        strong.fa-stack-2x(style="color:white;") #{story.commentCount}           
                                     p
                                         a(href=`${siteRoot}/${story.path}`) #{story.title}
                                     if displayAuthor 

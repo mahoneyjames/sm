@@ -134,6 +134,17 @@ module.exports =  function(storage){
         {
             theme.id = uniqid();
         }
+        //Oops. Because of caching, turns out we are now saving story data with our themes!
+        //And if our story data has a nav property, this is a circular reference to another story which cannot be stringified...
+        
+        if(theme.stories)
+        {
+            for(const story of theme.stories)
+            {
+                story.nav=null;
+            }
+        }
+
         await storage.writeFile(`data/themes/${theme.publicId}.json`, JSON.stringify(theme), "application/json");
         
         //update the cache

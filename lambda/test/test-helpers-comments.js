@@ -547,3 +547,20 @@ describe("data-helpers-comments-add-counts-themes", function(){
 
     });
 });
+
+
+describe("data-helpers-comments-add-counts-stories", function(){
+    it("stories", async function(){
+        const {addCommentCountsToStories}  = require("../src/club/model/comment/commentHelpers");
+        const themes = [{publicId: "jake"},{publicId:"bah"},{publicId: "bride-unprejudiced"}, {publicId:"beebland"}, {publicId:"the-suburbs"}];
+        addCommentCountsToStories(themes, bunchOComments);
+        //console.log(themes);
+
+        expect(themes[0].commentCount).to.equal(7);
+        expect(themes[1].commentCount).to.equal(0);
+        expect(themes[2].commentCount).to.equal(3);
+        expect(themes[3].commentCount).to.equal(3);
+        expect(themes[4].commentCount).to.equal(0);
+
+    });
+});

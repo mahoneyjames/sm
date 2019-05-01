@@ -65,7 +65,8 @@ module.exports.convertCommentArrayToTree = function(comments){
     {
         //console.log(comment.id,comment.parentId);
         commentTree[comment.id] = comment;
-        comment.comments=[];
+        comment.comments=[];        
+
         if(comment.parentId==null)
         {
             let story = rootComments[comment.storyPublicId];
@@ -96,6 +97,7 @@ module.exports.convertCommentArrayToTree = function(comments){
             {
                 //console.log(parent.id);
                 parent.comments.push(comment);
+                
             }
         }
     }
@@ -108,12 +110,13 @@ module.exports.convertCommentArrayToTree = function(comments){
 */
 module.exports.addCommentsToStories = function (stories,comments)
 {
+    
     const commentTree = module.exports.convertCommentArrayToTree(comments);
     for(const story of stories)
     {
         if(commentTree.storiesById[story.publicId])
         {
-            story.comments = commentTree.storiesById[story.publicId].comments;
+            story.comments = commentTree.storiesById[story.publicId].comments;                        
         }
         else
         {
@@ -121,6 +124,23 @@ module.exports.addCommentsToStories = function (stories,comments)
         }
     }
     
+}
+
+module.exports.addCommentCountsToStories = function(stories, comments)
+{
+    const storyCounts = groupBy(comments,c=>c.storyPublicId);
+    //console.log(themeCounts);
+    for(const story of stories)
+    {
+        if(storyCounts.has(story.publicId))
+        {
+            story.commentCount = storyCounts.get(story.publicId).size;
+        }
+        else
+        {
+            story.commentCount = 0;
+        }
+    }
 }
 
 module.exports.addCommentCountsToThemes = function(themes, comments)

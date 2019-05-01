@@ -2,7 +2,7 @@ const validateTheme = require('../model/theme/validate');
 const {sanitiseId} = require('../helpers');
 const validateStory = require('../model/story/validate');
 const generateStoryHtml = require('../model/story/buildContentHtml')
-const {addCommentsToStories,addCommentCountsToThemes} = require("../model/comment/commentHelpers");
+const {addCommentCountsToStories,addCommentCountsToThemes} = require("../model/comment/commentHelpers");
 
 module.exports =  function(data, html){   
 
@@ -139,6 +139,22 @@ async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
         story.authorUser = storyUser!=null ? storyUser : unknownUser;
     });
 
+    //Work out the previous and next stories
+    for(const [index, story] of allStories.entries())
+    {
+        story.nav = {previous:null, next:null};
+        if(index>0)
+        {
+            story.nav.previous = allStories[index-1];
+        }
+
+        if(index<allStories.length-1)
+        {
+            story.nav.next = allStories[index+1];
+        }
+
+    }
+
     //console.log(allStories);
     //1 - generate and save a theme page, containing links to all the stories
     //2 - generate and save the story pages, with links to the theme, and next/back links anonymous
@@ -151,7 +167,7 @@ async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
         theme.status=themeStatus;
     }
     const commentsForTheme = await dataLayer.cache_getCommentsForTheme(publicThemeId);
-    addCommentsToStories(allStories, commentsForTheme);
+    addCommentCountsToStories(allStories, commentsForTheme);
 
     const displayAuthor = themeStatus==="complete"? true: false;
 

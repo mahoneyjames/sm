@@ -43,8 +43,13 @@ module.exports =  function(storage){
     module.buildThemeNavigation = async(theme, stories, displayAuthor = false, commentsForTheme)=>{
         buildThemePath(theme);
         
-        await Promise.all(stories.map(async(story)=>{
+        for(const story of stories)
+        {
             buildStoryPath(theme.publicId, story);
+        }
+        
+        await Promise.all(stories.map(async(story)=>{
+            
             //TODO - deal with navigation links
             await buildPageAndSave(storage, story.path, "sc-story",{story, 
                                                                     displayAuthor: displayAuthor,

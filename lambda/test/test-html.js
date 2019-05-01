@@ -38,9 +38,17 @@ describe("html-theme", function(){
 
         stories[0].comments = [getComment("theme-manual", stories[0], "dan", "nice story!"),
                             getComment("theme-manual", stories[0], "hannah", "yes, it's fabulous")]
+        
 
         stories[2].comments = [getComment("theme-manual", stories[2], "jenny", "I don't understand"),
                                 getComment("theme-manual", stories[2], "lewis", "I smell")]                            
+
+        stories[0].nav = {previous:null, next:stories[1]};
+        stories[0].path="story1";
+        stories[1].nav = {previous:stories[1], next:stories[2]};
+        stories[1].path="story2";
+        stories[2].nav = {previous:stories[1], next:null};
+        stories[2].path="story3";
 
         await builder.buildThemeNavigation(getTheme("theme-manual","manual theme"),stories,true,[])
 
