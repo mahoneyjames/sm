@@ -236,6 +236,17 @@ describe("local-api: brand new site", function(){
                         "parentId": 4290295795
                     },
                     {
+                        "themeId": "theme-1",
+                        "storyId": "1ki2m1jqi7k9w6",
+                        "storyPublicId": "boots",
+                        "storyTitle": "Best before",
+                        "id": "29882343443",
+                        "userId": "james",
+                        "text": "<p>aNOTHER COMMENT</p>",
+                        "when": "2019-01-17T12:58:54",
+                        "parentId": null
+                    },                    
+                    {
                         "themeId": "theme-2",
                         "storyId": "1ki2m1jqi7sdfk9w6",
                         "storyPublicId": "boots",
@@ -258,7 +269,27 @@ describe("local-api: brand new site", function(){
 
         });
 
+        it("comment-counts-theme", async function()
+        {
+            console.log(await post("/ajax/comments/counts/forThemesByThemes", {publicThemeIds:[ "theme-1","theme-2","theme-3"]}));
+        })
+
     
+        it("comment-counts-for-stories", async function()
+        {
+            const results = await get("/ajax/comments/counts/forStoriesByTheme/theme-1");
+            console.log(results.themes['theme-1'].stories);
+            expect(results.themes['theme-1'].stories.boots.total).to.equal(3);
+        })
+
+        it("comment-recent", async function(){
+            const results = await get ("/ajax/comments/recent");
+            console.log(results);
+        })
+
+        it("comments-reset", async function(){
+            await get("/api/kldjfklasdjfkladfjkldjfdasf/comments/notifyUpdates");
+        })
 
 });
 

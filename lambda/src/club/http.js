@@ -144,3 +144,26 @@ post('/api/users/save', async (request)=>{
     return await userController.saveUserData(request.body);
         
 });
+
+const commentController = require("./controllers/commentsController")(data);
+
+post("/ajax/comments/counts/forThemesByThemes", async(request)=>{
+    return commentController.getCommentCountsForThemes(request.body.publicThemeIds);
+});
+
+get("/ajax/comments/counts/forStoriesByTheme/{publicThemeId}", async(request)=>{
+    return commentController.getCommentCountsForStoriesByTheme(request.pathParams.publicThemeId);
+});
+
+get("/ajax/comments/recent", async(request)=>{
+    return commentController.listRecentComments(15);
+});
+
+
+
+
+//Server to server stuff
+get("/api/kldjfklasdjfkladfjkldjfdasf/comments/notifyUpdates", async (request)=>{
+    //TODO - Guess we could do things with the new comments here
+    commentController.resetCommentCache();
+});

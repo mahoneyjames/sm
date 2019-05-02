@@ -16,6 +16,7 @@ module.exports =  function(storage){
     const CACHE_COMMENTS = "comments";
 
     module.resetCache = ()=>{module.cache={}};
+    module.resetCacheForComments = ()=>{module.cache[CACHE_COMMENTS] = null;};
     
     module.getCacheItem = async (key, loader, reloadFromStorage=false)=>
     {
@@ -26,7 +27,7 @@ module.exports =  function(storage){
             debug("getCacheItem %s: reloadFromStorage=true", key);
             module.cache[key] = (await loader());
         }
-        else if(!module.cache[key])
+        else if(!module.cache[key] || module.cache[key]==null)
         {
             debug("getCacheItem %s: cache miss", key);
             const results = await loader();
@@ -76,6 +77,7 @@ module.exports =  function(storage){
     {
         const all = await module.cache_getThemesAndStories(reloadFromStorage); 
         const theme = all.find((t)=>t.publicId==publicThemeId);
+        
         if(theme!=null && theme.stories!=null)
         {
             return theme.stories;
