@@ -31,3 +31,15 @@ npm run browse
 # Syncing comments
 A dedicated lambda function for comment syncing, since the API gateway is 30 seconds
 This is triggered by a CloudWatch rule every hour
+
+# Website setup
+A manual build process at the moment
+
+_site/club
+  bulma.css
+  bulma-custom.css
+  scripts/setup.js
+    This needs to be edited to point to the correct web service end point i.e. localhost/preview/prod
+
+Copy these up to the bucket using the S3 browser tool
+

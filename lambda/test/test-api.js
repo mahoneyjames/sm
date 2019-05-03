@@ -300,14 +300,20 @@ describe.skip("local-api-real-data", async function(){
 
 describe.skip("local-api-build-site", function(){
 
-    it("do it all", async function()
+    it.skip("do it all", async function()
     {
         debug(await get ("/api/site/refreshStaticPages"));
         //TODO - something to rebuild the user pages without updating the users?
         expect(await get("/api/site/refreshThemeList")).to.equal("done");
         expect(await get("/api/site/no-comments")).to.equal("doned");
-    })
+    });
+
+    it("adhoc", async function()
+    {
+        const result = await post("/api/site/rebuildTheme", {publicThemeId:"the-attic"});
+    });
 });
+
 
 async function get(url)
 {

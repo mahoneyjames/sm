@@ -1,0 +1,44 @@
+mixin jsStoryComments()
+    script.
+        $(document).ready(function(){
+
+            
+            var themeElement = $(".theme")
+            
+            if(themeElement.length==0)
+            {
+                return;
+            }
+            
+            var themeId = themeElement.attr("data-themeId");
+            var commentIcons = $(".story.commentCount");
+
+            console.log(themeId);
+            $.ajax(window.apiUrl + "/ajax/comments/counts/forStoriesByTheme/" + themeId, {
+
+                type: "GET",
+                success: function(data){
+                            //console.log(data);
+                            //alert(data);
+                            //alert("here");
+                            console.log("forStoriesByTheme:success");
+                            var themeDetails = data.themes[themeId];
+                            //console.log(themeDetails);
+                            commentIcons.each(function()
+                            {
+                                var storyId = $(this).attr("data-storyid");
+                                var storyDetails = themeDetails.stories[storyId];
+                                //console.log(storyId);
+                                //console.log(storyDetails);
+                                if(storyDetails!=null && storyDetails!=undefined)
+                                {
+                                    $(this).text(storyDetails.total);
+                                }
+                            });
+
+                            },
+                error: function(error){console.log("forStoriesByTheme:failed");console.log(error);}});
+
+
+                
+        });

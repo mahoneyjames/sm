@@ -147,11 +147,20 @@ post('/api/users/save', async (request)=>{
 
 const commentController = require("./controllers/commentsController")(data);
 
-post("/ajax/comments/counts/forThemesByThemes", async(request)=>{
-    return commentController.getCommentCountsForThemes(request.body.publicThemeIds);
+// post("/ajax/comments/counts/forThemesByThemes", async(request)=>{
+//     console.log(request.body.publicThemeIds);
+//     console.log(request);
+//     return commentController.getCommentCountsForThemes(request.body.publicThemeIds);
+// });
+get("/ajax/comments/counts/forThemesByThemes", async(request)=>{
+    // console.log(request.body);
+    // console.log(request.pathParams.themeId);
+    // console.log(request);
+    const themeIds = JSON.parse(request.queryString.jsonThemeIdArray);
+    return commentController.getCommentCountsForThemes(themeIds);
 });
-
 get("/ajax/comments/counts/forStoriesByTheme/{publicThemeId}", async(request)=>{
+    
     return commentController.getCommentCountsForStoriesByTheme(request.pathParams.publicThemeId);
 });
 
@@ -163,7 +172,13 @@ get("/ajax/comments/recent", async(request)=>{
 
 
 //Server to server stuff
-get("/api/kldjfklasdjfkladfjkldjfdasf/comments/notifyUpdates", async (request)=>{
-    //TODO - Guess we could do things with the new comments here
+post("/api/kldjfklasdjfkladfjkldjfdasf/comments/notifyUpdates", async (request)=>{
+    
+
     commentController.resetCommentCache();
+
+    var controller = require('./controllers/siteController')(data,html);
+
+    controller.refreshBasedOnNewComments(request.body.comments, request.body.newCommentIds);
+
 });

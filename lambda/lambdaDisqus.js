@@ -21,7 +21,7 @@ exports.handler = async function (event, context) {
     console.log("Run count since this container was started is %s", counter);
 
     const {newCommentIds, comments} = await disqusController.syncComments();
-    await siteController.refreshBasedOnNewComments(comments, newCommentIds);    
+    await siteController.notifyOtherLambdaAboutNewComments(comments, newCommentIds);    
     return comments;
 };
 

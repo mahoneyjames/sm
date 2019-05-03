@@ -1,5 +1,6 @@
 extends sc-layout-bulma
 include mixins/_themeInfo
+include mixins/js/_jsStoryComments
 
 include mixins/comments/_singleComment
 block content   
@@ -35,9 +36,9 @@ block content
     //-                                 a.heading(href=`${siteRoot}/a/${story.authorUser.publicId}`) #{story.authorUser.name}
     //-                     hr
                 
-    section.section.stories
+    section.section.stories.theme(data-themeId=theme.publicId)
         .container
-            .tile.is-ancester.is-vertical
+            .tilex.is-ancester.is-vertical
                  each story in stories
                     .tile.is-child.cardd
                         .card-content
@@ -45,7 +46,7 @@ block content
                                 .has-text-centered
                                     span.fa-stack
                                         i.fas.fa-comment-alt.fa-stack-2x(style="color:#f4bf42")
-                                        strong.fa-stack-2x(style="color:white;") #{story.commentCount}           
+                                        strong.fa-stack-2x.story.commentCount(style="color:white;" data-storyId=story.publicId) #{story.commentCount}           
                                     p
                                         a(href=`${siteRoot}/${story.path}`) #{story.title}
                                     if displayAuthor 
@@ -85,3 +86,6 @@ block content
 
     
 
+
+block code
+    +jsStoryComments()

@@ -1,30 +1,31 @@
 const debug = require('debug')("siteController");
 const {getRecentComments,addCommentCountsToThemes,listsUsersForCommentIds, listThemeIdsForCommentIds} = require("../model/comment/commentHelpers");
-
+const axios = require('axios');
 module.exports = function(data, html){
 
     var module = {};
     module.data = data;
     module.html = html;
     
+    module.notifyOtherLambdaAboutNewComments = async(comments, newCommentIds)=>{
+        //do a http post against the other instance, passing over the daa
+        //That version happens to be running this siteController too, and it calls refreshBasedOnNewComments(comments, newCommentIds)
+        const remoteUrl = process.env.URL_NOTIFY_NEW_COMMENTS;
+        if(remoteUrl!=null && remoteUrl.trim)
+        {
+            debug("Notifying '%s' about new comments", remoteUrl);
+            return await axios.post(remoteUrl, {comments, newCommentIds});
+        }
+        else
+        {
+            debug("No remote site configured using environment variable 'URL_NOTIFY_NEW_COMMENTS' to notify about new comments");
+        }
+    }
     module.refreshBasedOnNewComments = async (comments, newCommentIds)=>{
         if(newCommentIds.length>0)
-        {
-            //Alwasys update the home page if there is a new comment since we will put in there
-            await module.rebuildHomePage();
-    
+        {    
             //Only update the user's page if this is a comment we haven't seen before
-            await module.rebuildAuthorMissingCommentsPages(listsUsersForCommentIds({comments}, newCommentIds));
-    
-            const themeIdsWithNewComments = listThemeIdsForCommentIds({comments}, newCommentIds);
-            const themeController = require('./theme')(data,html);
-
-            for(const themeId of themeIdsWithNewComments)
-            {
-                await themeController.rebuildThemePage(themeId);
-            }
-
-            await themeController.buildThemesPage();
+            await module.rebuildAuthorMissingCommentsPages(listsUsersForCommentIds({comments}, newCommentIds));    
         }
     }
 

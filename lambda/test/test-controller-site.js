@@ -45,20 +45,7 @@ describe("site-local storage: siteController.refreshBasedOnNewComments", functio
         //TODO - assert no HTML is updated
     });
 
-    it("has new comments", async function()
-    {        
-        /*
-            Pretend that we have synced and have new comments from Liz, James and Jenny
-            These are for themes heart-warming and new-beginnings
-
-            The following should get updated
-             - home page
-             - missing comments page for Liz, James and Jenny
-             - two theme pages
-             - the themes list pages
-        */
-
-        const comments = [
+    const newComments = [
         {
             "themeId": "heart-warming",
             "storyId": "140gux1jt7a6qdm",
@@ -104,8 +91,46 @@ describe("site-local storage: siteController.refreshBasedOnNewComments", functio
             "when": "2019-03-15T08:03:46",
             "parentId": null
         }];
-        await siteController.refreshBasedOnNewComments(comments, ["4384825025","4384824485","4379232859"]);
+    it("has new comments", async function()
+    {        
+        /*
+            Pretend that we have synced and have new comments from Liz, James and Jenny
+            These are for themes heart-warming and new-beginnings
+
+            The following should get updated
+             - missing comments page for Liz, James and Jenny
+
+            These should not get updated
+             - home page
+             - two theme pages
+             - the themes list pages
+        */
+
+        
+        await siteController.refreshBasedOnNewComments(newComments, ["4384825025","4384824485","4379232859"]);
         //TODO - assert HTML is updated
+    });
+
+    it.only("notifyOtherLambdaAboutNewComments", async function()
+    {
+        //this test requires our lambda endpoint to be up and running
+
+        /*
+            No assertions, because this is a bit of hodge podge, and won't be needed once we start putting comments
+            into dynamodb. 
+
+            But...in the meantime...
+            Go to the _site/club/u directory and delete any user missing comments pages
+            npm run host-test-api-black
+            Run this test
+            Go to the _site/club/u directory
+            A user page should have been created for Liz, James and Jenny
+
+
+        */
+       process.env.URL_NOTIFY_NEW_COMMENTS = "http://localhost:34333/api/kldjfklasdjfkladfjkldjfdasf/comments/notifyUpdates";
+        siteController.notifyOtherLambdaAboutNewComments(newComments, ["4384825025","4384824485","4379232859"])
+
     });
 
 });

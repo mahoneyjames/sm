@@ -1,6 +1,7 @@
 extends sc-layout-bulma
 include mixins/_themeInfo
 include mixins/_themeCard-bulma-2
+include mixins/js/_jsThemeComments
 block content
     
     //-pre= helpers.dump(themes)
@@ -37,4 +38,6 @@ block content
                     +themeCard(theme)
 
 
-                        
+block code
+    +jsThemeComments()
+    

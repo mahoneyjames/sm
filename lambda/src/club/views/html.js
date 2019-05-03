@@ -150,7 +150,9 @@ module.exports =  function(storage){
 
 async function buildPageAndSave (storage, path, view, options){
     options.siteRoot="";
-    options.helpers = {siteName:'storyclub',
+    const apiUrl = process.env.APIURL;
+
+    options.helpers = {siteName:'storyclub',                        
                      dump: function(thing){return JSON.stringify(thing);},
                      dateWithoutYear: function(value){return new moment.utc(value).format("MMM Do");},
                      dateFriendly: function(value){return new moment.utc(value).format("Do MMM YYYY");}};

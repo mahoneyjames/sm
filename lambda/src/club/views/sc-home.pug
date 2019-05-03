@@ -1,6 +1,8 @@
 extends sc-layout-bulma
 include mixins/_themeInfo
 include mixins/_themeCard-bulma-2
+include mixins/js/_jsThemeComments
+include mixins/js/_jsRecentComments
 
 block content
     section.hero(style="background-color: #fafafa;")
@@ -107,32 +109,32 @@ block content
 
 
 
-    if comments
-        section.section(style="background-color: #fafafa;")
-            .container
-                .has-text-centered  
-                    h1.title(style="padding:20px") Recent feedback
-                .columns.is-centered.is-vcentered.is-multiline.is-3   
-                    each comment in comments        
-                        .box.column.is-3(style="margin:20px;")
-                            article.media                                   
-                                .media-content
-                                    .content
-                                        p 
-                                            strong #{comment.userId}
-                                            small 
-                                                span.when #{comment.when}     
-                                            br
-                                            p !{comment.text}
-                                        div 
-                                            a(href=`${siteRoot}/${comment.story.path}`) #{comment.story.title}
+    
+    section.section(style="background-color: #fafafa;")
+        .container
+            .has-text-centered  
+                h1.title(style="padding:20px") Recent feedback                
+                .columns.is-centered.is-vcentered.is-multiline.is-3.recentComments
+                    .box.column.is-3.loading
+                        h2.subtitle.is-4 Loading feedback...
+            .template(style="display:none;")
+                .box.column.is-3(style="margin:20px;")
+                    article.media                                   
+                        .media-content
+                            .content
+                                p 
+                                    strong $userId
+                                    small 
+                                        span.when $when    
+                                    br
+                                    p $comment
+                                div 
+                                    a(href=`$storyPath`) $storyTitle           
                             
                     
 block code
-    script.
-        for(const span of document.querySelectorAll("span.when"))
-        {
-            
-            console.log("#" + span.innerText.trim() + "#");
-            span.innerText = moment(span.innerText.trim()).fromNow();
-        }
+    //-script(src="https://unpkg.com/axios/dist/axios.min.js")
+    
+    +jsRecentComments()
+    +jsThemeComments()
+    
