@@ -241,6 +241,28 @@ describe("disqus-sync", function(){
         expect(partialSyncComments2.comments.length).to.equal(7);        
         expect(partialSyncComments2.newCommentIds.length).to.equal(0);
     });  
+
+
+    it("sync-unknown-user", async function(){
+        
+        const storage = await setup.initLocalStorage("disqus-sync/initial-storage-data", "disqus-sync/sync-unknown-user");
+        const disqusController = require('../src/club/controllers/disqusController')(mockDisqusApi,
+            "storyclub",
+            require('../src/club/model/data')(storage),
+            require('../src/club/views/html')(storage) );
+
+        await storage.writeFile("data/comments.json","{}");
+        mockDisqusApi.setTestStep("unknown-user");
+       
+        const initalSyncComments = await disqusController.syncComments();    
+        console.log(initalSyncComments);    
+
+        //No comments come back for the unknown user. They get added into an unknown users array
+        expect(initalSyncComments.comments.length).to.equal(0);
+        
+        
+        
+    });  
     
     
 });

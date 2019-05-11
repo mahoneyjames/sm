@@ -98,7 +98,7 @@ module.exports = function(api, forum, data, html){
                 debug("Story '%s'-'%s'", story.publicId,story.id);
 
                 const storyComments =await module.api.listStoryComments(module.forum, story.id); 
-               // console.log(storyComments);
+                console.log(storyComments);
                 for(const comment of storyComments)
                 {
 
@@ -128,7 +128,7 @@ module.exports = function(api, forum, data, html){
                                 storyId: story.id, 
                                 storyPublicId: story.publicId,
                                 id: comment.id,
-                                userId: ourcomment.userId,
+                                userId: comment.userId,
                                 text: comment.message,
                                 when: comment.createdAt,
                                 parentId: comment.parent,

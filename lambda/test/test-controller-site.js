@@ -111,7 +111,7 @@ describe("site-local storage: siteController.refreshBasedOnNewComments", functio
         //TODO - assert HTML is updated
     });
 
-    it.only("notifyOtherLambdaAboutNewComments", async function()
+    it("notifyOtherLambdaAboutNewComments", async function()
     {
         //this test requires our lambda endpoint to be up and running
 
