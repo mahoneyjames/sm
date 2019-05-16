@@ -1,3 +1,44 @@
+# Structure (May 2019)
+
+
+ - docs
+	holds the original storymarmalade.co.uk site that hasn't really gone anywhere. Will probably dump this
+	
+ - sites
+	put static websites here? 
+	as we add more JS though I'll want to add in some way of testing
+	Though isn't that fine? Create a build/deployment script that pulls together whatever is needed
+	Ideally what I want is a npm run browse-sc which will launch a local web server, picking up static files, but also picking up the generated content from a *different* place, and immediately picking up changes to css or static content
+	
+ - libs
+	Folder per shared project e.g. a comments api
+	
+	- comments
+		Methods for interacting with comments stored in dynamnodb?
+		This could be used for storymarmalade as well, so long as we share users with that site. 
+		
+		Dynamodb table per disqus site? 
+	 - comments-sync
+		Uses comments, and talks to disqus? 
+		
+
+ - lambda
+	Dynamic portions of the the story club website
+	Api
+	Comment sync
+	
+ - lambdas
+	Folder per lambda function?
+	 - comment-sync
+		Lambda that uses libs/comments and libs/comments-sync to sync the comment data store with disqus
+		
+	
+ - test
+	Put all test code here?
+	Or test code that spans multiple things?
+	Would be more natural to look for test code in the libs/comments folder
+ 
+
 # Init a new function app
 npm run http-install
 
