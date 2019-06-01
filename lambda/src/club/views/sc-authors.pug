@@ -3,13 +3,23 @@ block content
     section.section(style="background-color: #fafafa;")
         .container.has-text-centered
             h1.title Our brave and attractive authors
-            if authors && authors.length > 0
-                each author in authors
+            if stars && stars.length > 0
+                each author in stars
                     p
                         a(href=`${siteRoot}/a/${author.publicId}`) #{author.name}  
             else
                 p sad-face. No one here
-    section.section
+    
+    if oneHitWonders && oneHitWonders.length > 0
+        section.section
+            .container.has-text-centered
+                h1.title One hit wonders                
+                each author in oneHitWonders
+                    p
+                        a(href=`${siteRoot}/a/${author.publicId}`) #{author.name}  
+            
+    
+    section.section(style="background-color: #fafafa;")
         .container.has-text-centered
             p Want in?
             p Write a story. 500 words. Mail it. 

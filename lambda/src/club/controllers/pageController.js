@@ -1,4 +1,5 @@
 const debug = require('debug')("pageController");
+const {groupStoriesByAuthor} = require("../model/data-helpers");
 module.exports = function(storage)
 {
     var module = {};
@@ -8,7 +9,26 @@ module.exports = function(storage)
     
     this.buildAuthorsPage = async()=>{
         const users = await this.data.cache_getUsers();
-        await this.htmlBuilder.buildAuthorsPage(users);
+        const all = await this.data.cache_getThemesAndStories();
+        const storiesByUser = groupStoriesByAuthor(all);
+        const oneHitWonders = [];
+        const stars = [];
+        for(const user of users)
+        {
+            const userId = user.id.toLowerCase();
+            
+            if(storiesByUser[userId]==undefined || storiesByUser[userId].stories.length<2)
+            {
+                oneHitWonders.push(user);
+            }
+            else
+            {
+                stars.push(user);
+            }
+            
+        }
+
+        await this.htmlBuilder.buildAuthorsPage(users, stars, oneHitWonders);
     }
 
     this.buildAuthorPage = async (authorId)=>{

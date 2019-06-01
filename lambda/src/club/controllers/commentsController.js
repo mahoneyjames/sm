@@ -32,6 +32,7 @@ module.exports = function(data){
 
     module.getCommentCountsForStoriesByTheme = async function(publicThemeId)
     {
+        
         const commentsDoc = await module.data.cache_getAllComments();
         const comments = listCommentsForTheme(publicThemeId,commentsDoc);
         

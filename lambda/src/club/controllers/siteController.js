@@ -22,7 +22,7 @@ module.exports = function(data, html){
         }
     }
     module.refreshBasedOnNewComments = async (comments, newCommentIds)=>{
-        if(newCommentIds.length>0)
+        if(newCommentIds!=null && newCommentIds.length>0)
         {    
             //Only update the user's page if this is a comment we haven't seen before
             await module.rebuildAuthorMissingCommentsPages(listsUsersForCommentIds({comments}, newCommentIds));    

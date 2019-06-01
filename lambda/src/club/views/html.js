@@ -7,8 +7,8 @@ module.exports =  function(storage){
 
     module.storage = storage;
 
-    module.buildAuthorsPage = async(users)=>{
-        await buildPageAndSave(storage,"authors","sc-authors", {authors:users, title:"authors"});
+    module.buildAuthorsPage = async(users,stars, oneHitWonders)=>{
+        await buildPageAndSave(storage,"authors","sc-authors", {authors:users, oneHitWonders, stars, title:"authors"});
     }
     module.buildUserPage = async(user,stories, storiesByYear)=>{
         

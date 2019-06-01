@@ -51,7 +51,7 @@ module.exports = function(name)
     module.run =  async (request, code)=>
     {
         
-        
+        console.log("here");
         var requestLog = {
             requestId: request.lambdaContext.awsRequestId,
             method: request.context.method,
@@ -62,6 +62,7 @@ module.exports = function(name)
         }
         try
         {
+            console.log("before");
             var result = await code(request);
             //console.log(result);
             requestLog.result = result;

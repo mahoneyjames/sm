@@ -34,6 +34,7 @@ module.exports = api;
 async function get(path, code)
 {
     api.get(path, async function (request) {
+        
         return await codeRunner.run(request, async (request)=> await code(request));
     }); 
 }
@@ -156,6 +157,7 @@ get("/ajax/comments/counts/forThemesByThemes", async(request)=>{
     // console.log(request.body);
     // console.log(request.pathParams.themeId);
     // console.log(request);
+    console.log("here");
     const themeIds = JSON.parse(request.queryString.jsonThemeIdArray);
     return commentController.getCommentCountsForThemes(themeIds);
 });

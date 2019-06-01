@@ -26,6 +26,24 @@ exports.groupBy = (items, keyGetter)=>{
     return groupedMap;
 }
 
+// module.sortByDate = (items, dateGetter)=>{
+//     return items.sort((a,b)=>{
+//             const aDate = dateGetter(a);
+//             const bDate = dateGetter(b);
+//             if(!aDate || !bDate)
+//             {
+//                 return 0;
+//             }
+//             else if(aDate > bDate)
+//             {
+//                 return -1;
+//             }
+//             else
+//             {
+//                 return 1;
+//             }
+//     });
+// }
 
 
 exports.groupByIsoDate = (items, dateFieldName)=>{
@@ -51,4 +69,17 @@ exports.mapToArray = (groupedMap, keyFieldName, valuesFieldName)=>{
         
         return result;
     });
+}
+
+exports.groupByResultToObjectWithArrays = (groupedMap, valuesFieldName)=>{
+    const result = {};
+    
+    for(const entry of groupedMap.entries())
+    {
+        const child = {};
+        result[entry[0]] = child;
+        child[valuesFieldName] = Array.from(entry[1]);
+    }
+
+    return result;
 }

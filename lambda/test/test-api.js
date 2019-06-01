@@ -271,7 +271,8 @@ describe("local-api: brand new site", function(){
 
         it("comment-counts-theme", async function()
         {
-            console.log(await post("/ajax/comments/counts/forThemesByThemes", {publicThemeIds:[ "theme-1","theme-2","theme-3"]}));
+            
+            console.log(await get("/ajax/comments/counts/forThemesByThemes?jsonThemeIdArray=%5B%22theme-1%22%2C%22theme-2%22%2C%22theme-3%22%5D"));
         })
 
     
@@ -288,7 +289,7 @@ describe("local-api: brand new site", function(){
         })
 
         it("comments-reset", async function(){
-            await get("/api/kldjfklasdjfkladfjkldjfdasf/comments/notifyUpdates");
+            await post("/api/kldjfklasdjfkladfjkldjfdasf/comments/notifyUpdates");
         })
 
 });
