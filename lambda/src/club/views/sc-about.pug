@@ -1,5 +1,6 @@
 extends sc-layout-bulma
-
+block more-styles
+    link(rel='stylesheet', href=`${siteRoot}/bulma-timeline.min.css`)
 block content
     section.section(style="background-color: #fafafa;")
         .container.story
@@ -62,7 +63,46 @@ block content
                             li April, 2019: Switch to 
                                 a(href="https://bulma.io" target="_blank") Bulma 
                                 | for layout and styling
+    section.section
+        .container
+            h1.title.has-text-centered History
+            .columns.is-multilidne.is-centered
+                .column.is-half 
+                    .content
+                        .timeline
+                            .timeline-header
+                                span.tag.is-medium.is-primary 2016
 
+                            .timeline-item
+                                .timeline-marker.is-primary
+                                .timeline-content
+                                    p.heading November
+                                    p The (in)glorious birth!
+                                    p 
+                                        a(href="/h/whimsical-or-mysterious") Check out story #1 and #2
 
+                            .timeline-item
+                                .timeline-marker.is-primary
+                                .timeline-content
+                                    p.heading Christmas
+                                    p Nadolig llawen pawb!
+                                    p Happy new year, and well done on 7 themes in just 8 short weeks. Also - welcome 
+                                        a(href="/a/liz") Liz 
+                                        | to the storyclub bosom. Everybody needs a bosom for a pillow
+                            .timeline-header
+                                span.tag.is-medium.is-primary 2017
+                            .timeline-item
+                                .timeline-marker.is-primary
+                                .timeline-content
+                                    p.heading Christmas
+                                    p End of the year! Woah, 41 themes issued and completed!
+                            .timeline-header
+                                span.tag.is-medium.is-primary 2018   
+                            .timeline-item
+                                .timeline-marker.is-primary
+                                .timeline-content
+                                    p.heading September
+                                    p The great restart. Lax times in StoryClub land. Many joined, and could not be arsed. They were culled. This is the bright new dawn. Oh, and we got a website. 
 
-
+                            .timeline-header
+                                span.tag.is-medium.is-primary End of the universe
