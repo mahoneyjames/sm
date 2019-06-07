@@ -3,6 +3,7 @@ block content
     section.section(style="background-color: #fafafa;")
         .container.has-text-centered
             h1.title Our brave and attractive authors
+            h3.subtitle Want your name here? All it takes is two stories...
             if stars && stars.length > 0
                 each author in stars
                     p
@@ -13,10 +14,14 @@ block content
     if oneHitWonders && oneHitWonders.length > 0
         section.section
             .container.has-text-centered
-                h1.title One hit wonders                
+                h1.title Testing the waters
+                h3.subtitle Stories from authors we've only seen once. 
+                                            
                 each author in oneHitWonders
                     p
                         a(href=`${siteRoot}/a/${author.publicId}`) #{author.name}  
+
+                p Like what you read? Leave a comment and maybe we'll see them again...   
             
     
     section.section(style="background-color: #fafafa;")
