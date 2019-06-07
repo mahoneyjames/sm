@@ -2,17 +2,24 @@ extends sc-layout-bulma
 include mixins/_storySubmit
 include mixins/_themeInfo
 block content
-    section.section.theme
-        .container.has-text-centered
-            h1.title Theme
-            p #{theme.themeText}
-            h1.subtitle Must include
-            ul
-                each thing in theme.things
-                    li #{thing}
-            h4 Deadline
-            p #{helpers.dateFriendly(theme.deadline)}
-        //- h1 Ready already?
-        //- p Well then, get submitting here
-        //- +storySubmit(theme, authors)
-        
+    section.hero(style="background-color: #fafafa;")
+        .hero-body
+            .container.has-text-centered
+                h1.title.is-spaced Hey, here's the latest challenge!
+                h2.subtitle What a wonderful day to write a story...
+                .columns.is-multiline.is-centered.is-vcentered
+                    .column.is-3
+                        .card(style="border-radius:10px")
+                            .card-content.has-text-centered
+
+                                p
+                                    strong #{theme.themeText}
+                                p.has-text-centered Must include
+                                    ul
+                                        each thing in theme.things
+                                            li #{thing}
+                                p 
+                                    strong Get 'er done by #{helpers.dateFriendly(theme.deadline)}
+
+
+                

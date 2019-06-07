@@ -23,6 +23,10 @@ module.exports =  function(storage){
         await buildPageAndSave(storage, `a/${user.publicId}`, 'sc-user',{user,title: `about ${user.name}`, stories, storiesByYear});
     };
     
+    module.generateLatestThemePage = async (theme)=>{
+        
+        await buildPageAndSave(storage,'latest', "sc-theme", {theme});
+    };
     module.generateInitialThemePage = async (theme)=>{
         buildThemePath(theme);
         await buildPageAndSave(storage, theme.path, "sc-theme", {theme});

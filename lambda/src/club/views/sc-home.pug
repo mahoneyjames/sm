@@ -14,6 +14,9 @@ block content
                 //-     .column.is-3
                 //-         figure.image.is-4by3
                 //-             img(src="/typewriter.jpg" alt="Typewriter keyboard skillfully edited so that the keys spell out 'storyclub'")
+                p.control.has-text-centered(style="padding-top:20px;")
+                    a.button.is-primary.has-text-weight-bold(href=`${siteRoot}/latest`) check out the latest challenge
+                
     if recentThemes
         section.section
             .container
@@ -28,7 +31,7 @@ block content
                     a.button.is-primary(href=`${siteRoot}/themes-2019`) see all challenges
                 
             
-    if theme
+    if theme && disableLatestThemeOnHomePage
         section.section(style="background-color: #fafafa;")
             .container
                 .columns.is-multiline.is-centered.is-vcentered

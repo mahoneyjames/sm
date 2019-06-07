@@ -26,6 +26,7 @@ module.exports =  function(data, html){
     {
         const theme = await this.data.loadTheme(publicThemeId);
         await data.saveLatestTheme(theme);
+        await this.htmlBuilder.generateLatestThemePage(theme);
     }
     
     module.previewStory = async (publicThemeId, story)=>
