@@ -6,6 +6,11 @@ html
             title= `${helpers.siteName}`
         link(rel='stylesheet', href=`${siteRoot}/bulma.css`)
         link(rel='stylesheet', href=`${siteRoot}/bulma-custom.css`)
+        link(rel='apple-touch-icon', sizes="180x180", href="/apple-touch-icon.png")
+        link(rel='icon', type="image/png" sizes="32x32", href="/favicon-32x32.png")
+        link(rel='icon', type="image/png" sizes="16x16", href="/favicon-16x16.png")
+        link(rel='manifest', href="/site.webmanifest")
+        
         block more-styles
         //-link(rel="shortcut icon" type="image/png" href="/images/icons/doughnut.png")
         meta(name="viewport" content="width=device-width, initial-scale=1")        
@@ -59,11 +64,11 @@ html
         block footer
             footer.footer.level
                 .level-item.has-text-centered              
-                    a(href="mailto:storyclub500@gmail.com") 
+                    a(href="mailto:info@storyclub.co.uk") 
                         div                            
                             i.fa.fa-lg.fa-envelope(style="color:#333;")
                         div 
-                            span storyclub500@gmail.com       
+                            span info@storyclub.co.uk       
                 .level-item.has-text-centered                                                       
                     a(href="https://twitter.com/storyclub500")
                         div
