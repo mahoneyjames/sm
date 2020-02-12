@@ -5,7 +5,7 @@ html
         else
             title= `${helpers.siteName}`
         link(rel='stylesheet', href=`${siteRoot}/bulma.css`)
-        link(rel='stylesheet', href=`${siteRoot}/bulma-custom.css`)
+        //link(rel='stylesheet', href=`${siteRoot}/bulma-custom.css`)
         link(rel='apple-touch-icon', sizes="180x180", href="/apple-touch-icon.png")
         link(rel='icon', type="image/png" sizes="32x32", href="/favicon-32x32.png")
         link(rel='icon', type="image/png" sizes="16x16", href="/favicon-16x16.png")
@@ -28,7 +28,7 @@ html
                 .container
                     .navbar-brand
                         a.navbar-item(href="/")
-                            img(src=`${siteRoot}/logo.png` alt="storyclub!" widht="112" height="28")
+                            img(src=`${siteRoot}/images/logo.png` alt="storyclub!")
                         a.navbar-burger(role="button" aria-label="menu" aria-expanded="false")
                             span(aria-hidden="true")
                             span(aria-hidden="true")
@@ -41,6 +41,11 @@ html
                                     i.fas.fa-book-reader
                                 span.is-hidden-touch.is-hidden-widescreen read
                                 span.is-hidden-desktop-only stories
+                            a.navbar-item(href=`${siteRoot}/h/news`)
+                                span.icon.has-text-primary  
+                                    i.fas.fa-newspaper
+                                span.is-hidden-touch.is-hidden-widescreen news                                
+                                span.is-hidden-desktop-only news                                            
                             a.navbar-item(href=`${siteRoot}/authors`)
                                 span.icon.has-text-primary  
                                     i.fas.fa-pen-fancy

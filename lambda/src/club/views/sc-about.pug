@@ -2,7 +2,81 @@ extends sc-layout-bulma
 block more-styles
     link(rel='stylesheet', href=`${siteRoot}/bulma-timeline.min.css`)
 block content
-    
+
+    //- section.section(style="background-color: #fafafa;")
+    //-     .container
+    //-         .columns
+    //-             .column
+    //-                 .box
+    //-                     a(name="write")  
+    //-                     .has-text-centered             
+    //-                         span.has-text-primary
+    //-                             i.fas.fa-3x.fa-w-20.fa-pencil-alt
+    //-                         h3.subtitle.is-3.has-text-centered Write                        
+    //-                     p.has-text-primary "You only grow by coming to the end of something and beginning something else" - John Irving
+    //-                     p Books, scripts, stories and the great American novel don’t write themselves, you know. Start out by writing a little, but often and build writing into your regular routine.
+    //-                     p 500 words is just one side of A4 paper and our writing community is on hand to share their thoughts on your work, so you can grow and develop your style week by week and our prompts give you the perfect springboard to begin.
+    //-                     br
+    //-                     p Whatever your project, it’s good to be writing.           
+    //-             .column
+    //-                 a(name="read")          
+    //-                 .box
+    //-                     span.has-text-primary
+    //-                         i.fas.fa-3x.fa-w-20.fa-pencil-alt
+    //-                     h3.subtitle.is-3.has-text-centered Read                        
+    //-                     p.has-text-primary "If you don’t have the time to read you don’t have the time (or tools) to write..." Stephen King
+    //-                     p One theme can take a hundred different directions in Story Club. Plunge into someone else’s brain for a moment, join them for their bite-sized adventure. It’s a fun way to kill time on your commute, it’s entertainment while having a poo, waiting for the bus, or watching SportsBall                     
+                                                        
+    //-             .column
+    //-                 .box
+    //-                     a(name="reply")                                                                            
+    //-                     span.has-text-primary
+    //-                         i.fas.fa-3x.fa-w-20.fa-comments
+    //-                     h3.subtitle.is-3.has-text-centered Reply                        
+    //-                     p Opening your work up to other people can be totally terrifying, we get it, but we promise it will help you grow and develop as a writer. Everyone’s in the same boat here, so there’s no need to worry - we’ll be honest, but we’ll never be brutal. That’s not cool.
+    //-                     p Join the story Club community and share your stories, thoughts and ideas with other, like-minded folks. Your suggestions help us grow too.     
+
+    section.section(style="background-color: #fafafa;")
+        .container.story   
+            a(name="write")                        
+            .columns.is-multilidne.is-centered            
+                .column.is-half                                      
+                    .box
+                        .has-text-centered             
+                            span.has-text-primary
+                                i.fas.fa-3x.fa-w-20.fa-pencil-alt
+                            h3.subtitle.is-3.has-text-centered Write                        
+                        p.has-text-primary "You only grow by coming to the end of something and beginning something else" - John Irving
+                        p Books, scripts, stories and the great American novel don’t write themselves, you know. Start out by writing a little, but often and build writing into your regular routine.
+                        p 500 words is just one side of A4 paper and our writing community is on hand to share their thoughts on your work, so you can grow and develop your style week by week and our prompts give you the perfect springboard to begin.
+                        br
+                        p Whatever your project, it’s good to be writing. 
+                    
+    section.section(style="background-color: #fafafa;")
+        .container.story
+            a(name="read")
+            .columns.is-multilidne.is-centered            
+                .column.is-half                                      
+                    .box
+                        .has-text-centered             
+                            span.has-text-primary
+                                i.fas.fa-3x.fa-w-20.fa-pencil-alt
+                            h3.subtitle.is-3.has-text-centered Read                        
+                            p.has-text-primary "If you don’t have the time to read you don’t have the time (or tools) to write..." Stephen King
+                            p One theme can take a hundred different directions in Story Club. Plunge into someone else’s brain for a moment, join them for their bite-sized adventure. It’s a fun way to kill time on your commute, it’s entertainment while having a poo, waiting for the bus, or watching SportsBall                     
+                                       
+    section.section(style="background-color: #fafafa;")
+        .container.story
+            a(name="reply")
+            .columns.is-multilidne.is-centered            
+                .column.is-half                                      
+                    .box
+                        .has-text-centered             
+                            span.has-text-primary
+                                i.fas.fa-3x.fa-w-20.fa-comments
+                            h3.subtitle.is-3.has-text-centered Reply                        
+                            p Opening your work up to other people can be totally terrifying, we get it, but we promise it will help you grow and develop as a writer. Everyone’s in the same boat here, so there’s no need to worry - we’ll be honest, but we’ll never be brutal. That’s not cool.
+                            p Join the story Club community and share your stories, thoughts and ideas with other, like-minded folks. Your suggestions help us grow too.     
 
     section.section(style="background-color: #fafafa;")
         .container.story
@@ -159,20 +233,38 @@ block content
                                         a(href="/a/jonathan") Jon                                    
                                         
                             .timeline-header
-                                span.tag.is-medium.is-primary End of the universe
+                                span.tag.is-medium.is-primary now
+
     section.section
-        .container.story
-            h1.title.has-text-centered About Le Storyclub
+        .container
+            h1.title.has-text-centered Techy bits
             .columns.is-multilidne.is-centered
-                .column.is-half       
-                    p Story Club came about in 2016 when 
-                        a(href="/a/jenny") Jenny Allan 
-                        | and 
-                        a(href="/a/james") James Mahoney 
-                        | decided they needed an impetus to make creative writing a regular part of life.
-                    p Imposing a strict set of largely ignored rules made approaching the task of creating a weekly story less intimidating and often helped inspiration to flow. Story Club was born.
-                    p Lately, we have welcomed 
-                        a(href="/a/lewis") Lewis Gwyther 
-                        | to the executive committee despite his many failings (thank you, positive discrimination).
-                    p We now have regular contributors and an active, supportive online community of people providing feedback and helping to improve each other’s writing.
+                .column.is-half 
+                    .content                                                
+                        h3 Design                            
+                        p
+                            a(href="https://bulma.io")
+                                img(src="/images/made-with-bulma.png" alt="Made with Bulma" width="128" height="24")
+                        p Orangey stylings by Lewis, hacked in with much Googling by James
+                    .content
+                        h3 James' spiffing backend
+                        p A Google sheet for data. 
+                        p Site runs on Amazon S3, generated with Node.js, Amazon Lambda, and much, much head banging. Maybe he'll write about it on his 
+                            a(href="http://www.jamesmahoney.co.uk/" target="_blank") sexy, sexy website.  
+
+    //- section.section
+    //-     .container.story
+    //-         h1.title.has-text-centered About Le Storyclub
+    //-         .columns.is-multilidne.is-centered
+    //-             .column.is-half       
+    //-                 p Story Club came about in 2016 when 
+    //-                     a(href="/a/jenny") Jenny Allan 
+    //-                     | and 
+    //-                     a(href="/a/james") James Mahoney 
+    //-                     | decided they needed an impetus to make creative writing a regular part of life.
+    //-                 p Imposing a strict set of largely ignored rules made approaching the task of creating a weekly story less intimidating and often helped inspiration to flow. Story Club was born.
+    //-                 p Lately, we have welcomed 
+    //-                     a(href="/a/lewis") Lewis Gwyther 
+    //-                     | to the executive committee despite his many failings (thank you, positive discrimination).
+    //-                 p We now have regular contributors and an active, supportive online community of people providing feedback and helping to improve each other’s writing.
             
