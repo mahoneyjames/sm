@@ -7,6 +7,7 @@ Tried using the Pino library for outputting JSON, but this omits the awsRequestI
 (I think Pino is writing output via a mechanism that lambda doesn't pick up)
 
 */
+const LogFactory = require("log2/log-factory");
 
 module.exports = function(name)
 {
@@ -50,29 +51,41 @@ module.exports = function(name)
     */
     module.run =  async (request, code)=>
     {
+        LogFactory.setLogRecordDecoratorToLambdaContext(request.lambdaContext);
+        const logger = require("log2")("app");
+        logger.batch("http").setDetailsData("path",request.context.path);
+        logger.batch("http").setDetailsData("method",request.context.method);
+        logger.batch("http").setDetailsData("queryString",request.queryString);
+        logger.batch("http").setDetailsData("body",request.rawBody);
         
-        console.log("here");
-        var requestLog = {
-            requestId: request.lambdaContext.awsRequestId,
-            method: request.context.method,
-            path: request.context.path,
-            queryString: request.queryString,
-            body: request.rawBody
+        
+        // var requestLog = {
+        //     requestId: request.lambdaContext.awsRequestId,
+        //     method: request.context.method,
+        //     path: request.context.path,
+        //     queryString: request.queryString,
+        //     body: request.rawBody
 
-        }
+        // }
         try
         {
-            console.log("before");
+            
             var result = await code(request);
             //console.log(result);
-            requestLog.result = result;
-            module.json(requestLog);            
+            //requestLog.result = result;
+            logger.batch("http").setDetailsData("result","ok");
+            //module.json(requestLog);  
+            
+            LogFactory.writeUnsavedRecords();
             return result;
         }
         catch (error)
         {
-            requestLog.error = error;
-            module.json(requestLog, "run failed!");
+            // requestLog.error = error;
+            // module.json(requestLog, "run failed!");
+            logger.batch("http").setDetailsData("result","failed");
+            logger.batch("http").setDetailsData("error",error);
+            LogFactory.writeUnsavedRecords();
             throw error;
         }
     }

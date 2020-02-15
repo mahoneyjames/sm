@@ -33,6 +33,7 @@
     "es6-promisify": "5.0.0",
     "fs-extra": "^7.0.1",
     "glob": "^7.1.3",
+    "log2": "file:../../storyclub/shared/log2",
     "meta-marked": "^0.4.2",
     "mime": ">=1.4.1",
     "moment": "^2.24.0",
