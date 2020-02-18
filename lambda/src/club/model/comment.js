@@ -1,4 +1,4 @@
-const debug = require('debug')("entity-Comment");
+
 class Comment{
     constructor(comment)
     {
@@ -15,7 +15,7 @@ class Comment{
     }
 
     print(){
-        debug("comment: %", this.text);
+
     }
 
 }

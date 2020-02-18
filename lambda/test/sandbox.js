@@ -1,6 +1,3 @@
-const debug = require('debug')("test-stats-comments");
-const expect = require('chai').expect;
-const setup = require('./setup')();
 
 describe("sandbox-comment-tree", function(){
 

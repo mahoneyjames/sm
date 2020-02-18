@@ -8,55 +8,27 @@ Tried using the Pino library for outputting JSON, but this omits the awsRequestI
 
 */
 const LogFactory = require("log2/log-factory");
+const LogHelpers = require("log2/log-helpers")();
 
 module.exports = function(name)
 {
-    const debug =loadDebug(name);
-
     var module = {};
 
-    //write a simple type
-    module.message = (msg, ...params)=>{
-        if(debug)
-        {
-            debug(msg,...params);
-        }
-        else
-        {
-            module.json({msg,params});
-        }
-    }
-
-    //log whatever is supplied as JSON
-    module.json = (thing,msg)=>{
-        if(msg && thing)
-        {
-            thing.msg = msg;
-        }
-
-        if(debug)
-        {
-            debug(JSON.stringify(thing));
-        }
-        else
-        {
-            thing.from = name;
-            console.log(JSON.stringify(thing));
-        }
-    }
-    
+   
     /*
         Wraps up a block of code inside of a simple log that grabs
         the incoming http request, and logs the output
     */
     module.run =  async (request, code)=>
     {
-        LogFactory.setLogRecordDecoratorToLambdaContext(request.lambdaContext);
-        const logger = require("log2")("app");
-        logger.batch("http").setDetailsData("path",request.context.path);
-        logger.batch("http").setDetailsData("method",request.context.method);
-        logger.batch("http").setDetailsData("queryString",request.queryString);
-        logger.batch("http").setDetailsData("body",request.rawBody);
+        LogHelpers.decorateLogWithLambdaContext(request.lambdaContext, {path:request.context.path});        
+        const logger = require("log2")(name);
+
+        logger.batch("http")
+                .merge({path:request.context.path, 
+                        method:request.context.method, 
+                        queryString: request.queryString, 
+                        body:request.rawBody});
         
         
         // var requestLog = {
@@ -73,7 +45,7 @@ module.exports = function(name)
             var result = await code(request);
             //console.log(result);
             //requestLog.result = result;
-            logger.batch("http").setDetailsData("result","ok");
+            logger.batch("http").setData("result","ok");
             //module.json(requestLog);  
             
             LogFactory.writeUnsavedRecords();
@@ -83,10 +55,10 @@ module.exports = function(name)
         {
             // requestLog.error = error;
             // module.json(requestLog, "run failed!");
-            logger.batch("http").setDetailsData("result","failed");
-            logger.batch("http").setDetailsData("error",error);
+            logger.batch("http").merge({result: "failed", errorMessage:error.message, errorStack: error.stack});
             LogFactory.writeUnsavedRecords();
-            throw error;
+            
+            return {result: "failed", error: error.message};
         }
     }
 
@@ -95,14 +67,3 @@ module.exports = function(name)
 }
 
 
-function loadDebug(name)
-{
-    if(process.env.DEBUG)
-    {
-        return require('debug')(name);
-    }
-    else
-    {
-        return null;
-    }
-}

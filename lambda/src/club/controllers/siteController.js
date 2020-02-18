@@ -1,4 +1,4 @@
-const debug = require('debug')("siteController");
+const logger = require("log2")("siteController");
 const {getRecentComments,addCommentCountsToThemes,listsUsersForCommentIds, listThemeIdsForCommentIds} = require("../model/comment/commentHelpers");
 const axios = require('axios');
 module.exports = function(data, html){
@@ -13,12 +13,12 @@ module.exports = function(data, html){
         const remoteUrl = process.env.URL_NOTIFY_NEW_COMMENTS;
         if(remoteUrl!=null && remoteUrl.trim)
         {
-            debug("Notifying '%s' about new comments", remoteUrl);
+            logger.info("Notifying '%s' about new comments", remoteUrl);
             return await axios.post(remoteUrl, {comments, newCommentIds});
         }
         else
         {
-            debug("No remote site configured using environment variable 'URL_NOTIFY_NEW_COMMENTS' to notify about new comments");
+            logger.warn("No remote site configured using environment variable 'URL_NOTIFY_NEW_COMMENTS' to notify about new comments");
         }
     }
     module.refreshBasedOnNewComments = async (comments, newCommentIds)=>{
@@ -45,7 +45,7 @@ module.exports = function(data, html){
         
         addCommentCountsToThemes(recentThemes,allComments.comments);
 
-        console.log(recentThemes);
+        logger.track("themes").logThing(recentThemes);
 
         await module.html.buildHomePage(latestTheme,recentComments,recentThemes);
     }

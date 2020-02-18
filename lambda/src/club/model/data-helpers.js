@@ -1,4 +1,3 @@
-const debug = require('debug')("data");
 const {groupBy,groupByResultToObjectWithArrays} = require("../helpers")
 
 module.exports.groupStoriesByAuthor = (themesAndStories)=>{

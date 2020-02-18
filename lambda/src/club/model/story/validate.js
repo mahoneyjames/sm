@@ -1,10 +1,9 @@
-const debug = require('debug')("model-story-validate");
 const {sanitiseId} = require('../../helpers');
 
 module.exports = function(story)
 {
     
-    debug(story);
+    
     if(!story.errors)
     {
         story.errors = [];
@@ -25,6 +24,6 @@ module.exports = function(story)
         story.publicId = sanitiseId(story.title);
     }
    
-    debug(story);
+    
     return story.errors.length==0;
 }

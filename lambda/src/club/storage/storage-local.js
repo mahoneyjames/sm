@@ -1,4 +1,5 @@
-const debug = require('debug')("storage-local");
+const logger = require("log2")("storage-local");
+const debug =(method, path)=>logger.track("filesystem").logThing({method, path});
 /*
     Implemenation of our tiny "data layer" that reads/writes stuff to the local file system
 */
@@ -31,11 +32,11 @@ module.exports =  function(options){
 
 async function loadSingleFileIntoJson(path)
 {
-    debug("Load single: '%'", path);
+    debug("Load single", path);
     return await readJson(`${this.path}${path}`);
 }
 async function writeSingleFile (path, content, mimeType){
-    debug("Write single '%'", path);
+    debug("Write single", path);
     const extension = path.slice(-4)=="json"? "" : ".htm";
     const fullPath =`${this.path}${path}${extension}`;
 
@@ -50,7 +51,7 @@ async function writeSingleFile (path, content, mimeType){
 async function listJsonFromFiles(prefix)
 {
     const filter =`${this.path}${prefix}/*.json`; 
-    debug("Listing '%'", filter);
+    debug("Listing", filter);
     const files = await new Promise((resolve, reject)=>{
         glob(filter,null,(err, files)=>{
             if(err)
@@ -66,7 +67,7 @@ async function listJsonFromFiles(prefix)
 
     //load all the json and return it
     const storyJsonList = await Promise.all(files.map(async (x)=>{
-        debug(x);
+        
         if(x.slice(-4)=="json")
         {
             return await readJson(x);

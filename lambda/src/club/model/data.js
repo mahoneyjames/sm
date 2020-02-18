@@ -1,4 +1,5 @@
-const debug = require('debug')("data");
+const logger = require("log2")("data");
+const trackCache =(thing)=> logger.track("cache").logThing(thing);
 const uniqid = require('uniqid');
 const moment = require('moment');
 const {Comment} = require('./comment');
@@ -20,16 +21,16 @@ module.exports =  function(storage){
     
     module.getCacheItem = async (key, loader, reloadFromStorage=false)=>
     {
-        debug("getCacheItem %s", key);
+        
         
         if(reloadFromStorage==true)
-        {
-            debug("getCacheItem %s: reloadFromStorage=true", key);
+        {            
+            trackCache({method:"getCacheItem",reloadFromStorage:true, key});
             module.cache[key] = (await loader());
         }
         else if(!module.cache[key] || module.cache[key]==null)
-        {
-            debug("getCacheItem %s: cache miss", key);
+        {            
+            trackCache({method:"getCacheItem",cacheMiss:true, key});
             const results = await loader();
             //debug(results);
             module.cache[key] = results;
@@ -51,8 +52,8 @@ module.exports =  function(storage){
            module.cache[key] =  updatorFunction(module.cache[key]);
         }
         else
-        {
-            debug("updateCacheItem %s: cache miss", key);
+        {            
+            trackCache({method:"updateCacheItem",cacheMiss:true, key});
         }
     }
 
@@ -192,8 +193,7 @@ module.exports =  function(storage){
     }
 
     module.cache_getUser = async (userId)=>{
-        var users=await module.cache_getUsers();
-        debug(userId);
+        var users=await module.cache_getUsers();        
         //debug(users);
         return users.find(u=>u.id===userId);
     }
@@ -251,8 +251,8 @@ module.exports =  function(storage){
             commentsDoc = await storage.readObjectFromJson(`data/comments.json`);
         }
         catch(error)
-        {
-            console.log("listAllComments:" + error);
+        {            
+            logger.error("listAllComments:" + error);
             return {comments:[]};
         }
         if(commentsDoc.comments)

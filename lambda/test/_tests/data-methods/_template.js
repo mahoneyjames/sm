@@ -1,4 +1,3 @@
-const debug = require('debug')("test-data-methods");
 var expect = require('chai').expect;
 module.exports = async function(storageLoader){   
 

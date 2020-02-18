@@ -1,6 +1,3 @@
-const log = require('debug')("mock-disqusApi");
-
-
 module.exports = function(sourceDataStorage){
 
     var module = {};

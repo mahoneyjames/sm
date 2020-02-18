@@ -1,4 +1,3 @@
-const debug = require('debug')("userController");
 const generateStoryHtml = require('../model/story/buildContentHtml')
 
 module.exports = function(storageForData,eventQueue)

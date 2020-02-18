@@ -1,4 +1,3 @@
-const debug = require('debug')("data-cache");
 
 /*
     Wrap up our data layer with a simple cache
@@ -15,7 +14,6 @@ module.exports = function(data){
     
     module.getUser = async (userId)=>{
         var users=await module.getCacheItem("users", module.data.loadUsers);
-        debug(userId);
         return users.find(u=>u.id===userId);
     }
 
@@ -26,11 +24,9 @@ module.exports = function(data){
 
     module.getCacheItem = async (key, loader)=>
     {
-        debug("getCacheItem %s", key);
         
         if(!module.cache[key])
         {
-            debug("getCacheItem %s: cache miss", key);
             module.cache[key] = await loader();
         }
         //debug(module.cache);

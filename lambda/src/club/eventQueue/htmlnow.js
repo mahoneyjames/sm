@@ -1,4 +1,3 @@
-const debug = require('debug')("event-html");
 module.exports =  function(storageForData, storageForHtml){   
 
     var module = {};
@@ -9,7 +8,6 @@ module.exports =  function(storageForData, storageForHtml){
 
     module.controller = require('../controllers/pageController')(storageForHtml);                
     module.add = async (type, data)=>{
-        debug("add", type, data);
         module.events.push({type, data});
 
         if(type==="user-update")

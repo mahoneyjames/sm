@@ -1,4 +1,3 @@
-const debug = require('debug')("pageController");
 const {groupStoriesByAuthor} = require("../model/data-helpers");
 module.exports = function(storage)
 {
