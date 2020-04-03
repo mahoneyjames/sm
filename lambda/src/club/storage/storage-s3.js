@@ -5,7 +5,6 @@ const aws = require("aws-sdk");
 const S3 = aws.S3;
 const s3 = new S3();
 const log2 = require("log2")("storage-s3");
-//const debug = loggingHelper.json;
 
 const debug = function(thing)
 {
