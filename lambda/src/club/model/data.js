@@ -14,6 +14,7 @@ module.exports =  function(storage){
 
     const CACHE_USERS = "users";
     const CACHE_THEMES_AND_STORIES = "all-themes-and-stories";
+    const CACHE_THEMES_AND_STORIES_RECENT = "recent-themes-and-stories";
     const CACHE_COMMENTS = "comments";
 
     module.resetCache = ()=>{module.cache={}};
@@ -62,8 +63,27 @@ module.exports =  function(storage){
         return await module.getCacheItem(CACHE_THEMES_AND_STORIES, module.listAllThemesAndStories, reloadFromStorage);
     }
 
+    //Quick hacky method to get only a partial set of data to allow theme sync over to dynamodb to work again!
+    module.cache_getThemesAndStoriesRecentEverything = async(reloadFromStorage=false, saveDocToStorage=false)=>{    
+        return await module.getCacheItem(CACHE_THEMES_AND_STORIES_RECENT, module.listRecentThemesAndStories, reloadFromStorage);
+    }
+
     module.listAllThemesAndStories = async () =>{    
         const themes = await module.listThemes();
+        return await Promise.all(themes.map (async (theme)=>
+        
+        {theme.stories = await module.listThemeStories(theme.publicId);
+            //console.log(theme.stories);
+            return theme;
+            }
+        ));
+
+    }
+
+    module.listRecentThemesAndStories = async () =>{    
+        let themes = await module.listThemes();
+        themes = module.sortThemesByDate(themes);
+        themes = themes.slice(0,10);
         return await Promise.all(themes.map (async (theme)=>
         
         {theme.stories = await module.listThemeStories(theme.publicId);
