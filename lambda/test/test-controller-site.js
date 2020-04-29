@@ -9,7 +9,7 @@ describe('site-local storage: siteController', ()=>{
     before(async function(){
         storage = await setup.initLocalStorage("site-test-1/");
         
-        siteController = require('../src/club/controllers/siteController.js')(require('../src/club/model/data')(storage),require('../src/club/views/html')(storage));
+        siteController = require('../src/club/controllers/siteController.js')(require('../src/club/model/data')(storage),require('../src/club/views/html')(storage,"./src/club/views"));
     });
 
     // it("rebuild missing comments pages",async function(){
@@ -36,7 +36,7 @@ describe("site-local storage: siteController.refreshBasedOnNewComments", functio
 
         storage = await setup.initLocalStorage("site-test-1/","site-test-2-refresh-based-on-comments");
         
-        siteController = require('../src/club/controllers/siteController.js')(require('../src/club/model/data')(storage),require('../src/club/views/html')(storage));
+        siteController = require('../src/club/controllers/siteController.js')(require('../src/club/model/data')(storage),require('../src/club/views/html')(storage,"./src/club/views"));
     })
 
     it("no new comments", async function()

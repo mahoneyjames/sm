@@ -1,0 +1,55 @@
+extends ../sc-layout
+include ../mixins/_storyCard
+include ../mixins/_comments
+include ../mixins/_themeInfo
+block content         
+    
+    //-pre= helpers.dump(leagueTable)
+    h1 Stats
+    table
+        tbody
+            tr
+                th Total themes
+                td #{leagueTable.totalThemes}
+            tr
+                th Total stories
+                td #{leagueTable.totalStories}
+    h1 Top commenters
+    table(id="comments")
+        thhead
+            tr
+                th rank
+                th user
+                //-th total comments
+                //-th total stories commented against
+                th overall comment strike rate - %
+                th strike rate since joined or disqus started - %   
+                th strike rate, last month - % 
+                th Missed stories          
+        tbody
+            each entry, index in leagueTable.users
+                tr
+                    td #{index+1}
+                    td #{entry.user.id}
+                    //-td #{entry.totalComments}
+                    //-td #{entry.totalStoriesCommentedOn}
+                    td #{entry.totalStoryCoveragePercentage}
+                    td #{entry.effectiveCoverage}
+                    td #{entry.coverageLastTwoMonths}
+                    td                        
+                        - var n = 0;
+                            ul(class="list-csv")
+                                while n < 4 && n < entry.missedStories.length
+                                    - story = entry.missedStories[n]
+                                    li
+                                        a(href=`${siteRoot}/${story.path}`) #{story.title}
+                                    - n++
+                                if n==4
+                                    li + #{entry.missedStories.length-n-1} more
+
+
+                                  
+                        
+block code
+    script.
+        new Tablesort(document.getElementById('comments'));

@@ -1,0 +1,12 @@
+mixin storyCard(story={"title":"Test"}, rule={},displayAuthor=true)
+    article    
+        .heading
+            
+            h2.title.has-text-centered #{story.title}
+            if displayAuthor==true
+                h2.sub-title.author.has-text-centered
+                    | by                     
+                    a(href=`${siteRoot}/a/${story.authorUser.publicId}`) #{story.authorUser.name}                    
+
+        .story 
+            p !{story.html}

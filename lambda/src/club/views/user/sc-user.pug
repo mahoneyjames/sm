@@ -1,0 +1,25 @@
+extends ../sc-layout-bulma
+include ../mixins/_storyCard
+include ../mixins/_comments
+include ../mixins/_themeInfo
+block content 
+    section.section.user(style="background-color: #fafafa;")
+        .container
+            h1.title.has-text-centered #{user.publicId}
+
+            if user.about && user.about.html
+                p !{user.about.html}
+
+    if storiesByYear && storiesByYear.length > 0
+        section.section.stories
+            .container.has-text-centered                
+                each year in storiesByYear
+                    .year(style="padding-bottom:20px;")
+                        h5.title #{year.year}
+                        h5.subtitle Stories: #{year.stories.length}
+                        ul
+                            each story in year.stories
+                                li
+                                    a(href=`${siteRoot}/${story.path}`) #{story.title}
+
+block aside

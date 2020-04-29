@@ -1,0 +1,51 @@
+extends ../sc-layout-bulma
+include ../mixins/_storyCard
+include ../mixins/_comments
+include ../mixins/_themeInfo
+include ../mixins/_themeBreadcrumb
+block content         
+    
+
+    section.section 
+        .container
+            +themeBreadcrumb(theme)
+            +storyCard(story,rule,displayAuthor)    
+
+    section.section( style="background-color: #fafafa;")
+        .container
+            h2.is-3.title.has-text-centered Feedback
+            +comments("http://www.storyclub.co.uk/" + story.path,story.id,"storyclub")
+    
+    if story.nav
+        section.section
+            .container
+                nav.breadcrumb.is-centered(aria-label="breadcrumbs")
+                    ul
+                        if story.nav.previous
+                            li
+                                a(href=`${siteRoot}/${story.nav.previous.path}`) 
+                                    .icon.is-small
+                                        i.fas.fa-caret-left
+                                    span Previous story
+                        else
+                            li.is-active
+                                a(href="#") 
+                                    .icon.is-small
+                                        i.fas.fa-caret-left
+                                    span Previous story
+                        if story.nav.next
+                            li 
+                                a(href=`${siteRoot}/${story.nav.next.path}`) 
+                                    span Next story
+                                    .icon.is-small
+                                        i.fas.fa-caret-right
+                        else
+                            li.is-active
+                                a(href="#") 
+                                    span Next story
+                                    .icon.is-small
+                                        i.fas.fa-caret-right                                    
+
+//- block aside
+//-     if theme
+//-         +themeInfo(theme,true)

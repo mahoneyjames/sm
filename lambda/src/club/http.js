@@ -1,6 +1,8 @@
 'use strict';
 let dataStorage = null;
 let htmlStorage = null;
+
+console.log(`pwd:${process.cwd()}`);
 const claudiaHelper = require("lambda-helpers")("app-v1");
 
 if(process.env.DATA && process.env.DATA.toLowerCase()=="local")
@@ -18,8 +20,9 @@ else
 
 const eventQueue = require('./eventQueue/htmlnow')(dataStorage,htmlStorage);
 const data = require('./model/data')(dataStorage);
-const html = require('./views/html')(htmlStorage);
+const html = require('storyclub-views')(htmlStorage,"./src/club/views");
 
+console.log(html.viewHome);
 const themeController = require('./controllers/theme')(data,html);
 
 var ApiBuilder = require('claudia-api-builder'),
@@ -35,7 +38,7 @@ claudiaHelper.get(api,'/api/themes/listEverything', async ()=>data.cache_getThem
 claudiaHelper.get(api,'/api/themes/listRecentEverything', async ()=>data.cache_getThemesAndStoriesRecentEverything());
 
 claudiaHelper.get(api,'/api/site/refreshStaticPages', async ()=>{    
-    await require('./views/html')(htmlStorage).buildStaticPages();    
+    await html.buildStaticPages();    
     return {"result":"done"};
 });
 

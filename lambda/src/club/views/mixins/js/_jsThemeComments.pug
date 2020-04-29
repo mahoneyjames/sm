@@ -1,0 +1,35 @@
+mixin jsThemeComments()
+    script.
+        $(document).ready(function(){
+
+            var commentIcons = $(".theme.commentCount");
+            var themeIds = [];
+            commentIcons.each(function(index){                    
+                themeIds.push($(this).attr("data-themeId"));
+            });
+
+            console.log(themeIds);
+            var url = window.apiUrl + "/ajax/comments/counts/forThemesByThemes?jsonThemeIdArray=" + encodeURIComponent(JSON.stringify(themeIds));
+            console.log(url);
+            $.ajax(url, {                
+                type: "GET",
+                success: function(data){
+                            //console.log(data);
+                            //alert(data);
+                            console.log("forThemesByThemes:success");
+                            commentIcons.each(function()
+                            {
+                                var themeId = $(this).attr("data-themeId");
+                                var themeDetails = data.themes[themeId];
+                                if(themeDetails!=null && themeDetails!=undefined)
+                                {
+                                    $(this).text(themeDetails.total);
+                                }
+                            });
+
+                            },
+                error: function(error){console.log("forThemesByThemes:failed");console.log(error)}});
+
+
+                
+        });

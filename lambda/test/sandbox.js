@@ -1,5 +1,5 @@
 
-describe("sandbox-comment-tree", function(){
+describe.skip("sandbox-comment-tree", function(){
 
     const storage = require('storage-1').local({path:"_site/club/"});
     // before(async function(){

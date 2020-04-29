@@ -1,9 +1,9 @@
 const {groupStoriesByAuthor} = require("../model/data-helpers");
-module.exports = function(storage)
+module.exports = function(storage, viewHome)
 {
     var module = {};
     
-    this.htmlBuilder = require('../views/html')(storage);
+    this.htmlBuilder = require('storyclub-views')(storage, viewHome);
     this.data = require('../model/data')(storage);
     
     this.buildAuthorsPage = async()=>{

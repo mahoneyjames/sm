@@ -1,0 +1,24 @@
+mixin jsRecentComments()
+    script.
+        $(document).ready(function(){
+            //-loadRecentComments(".recentComments");
+            var feedbackHost = $(".recentComments");
+            var template = $(".template").html();
+               $.get(window.apiUrl + "/ajax/comments/recent", function(data){
+                //console.log(data);
+                    console.log("recent:success");
+                    for (var index in data)
+                    {
+                        var comment = data[index];
+                        var html = template;
+                        html = html.replace("$userId", comment.userId);
+                        html = html.replace("$when", comment.whenFromNow);
+                        html = html.replace("$comment", comment.html);
+                        html = html.replace("$storyPath", comment.storyPath);
+                        html = html.replace("$storyTitle", comment.storyTitle);
+                        feedbackHost.append(html);
+                    }
+
+                    $(".loading").remove();
+                });
+        });

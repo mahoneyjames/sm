@@ -8,7 +8,7 @@ module.exports = async function(storageLoader){
     let controller = null;
     before(async function(){
         storage = await storageLoader();
-        controller = require('../../src/club/controllers/pageController')(storage);
+        controller = require('../../src/club/controllers/pageController')(storage,"./src/club/views");
     });
     
 
