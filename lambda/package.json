@@ -40,6 +40,8 @@
     "pug": "^2.0.4",
     "q": "~0.9.6",
     "scotty": "0.0.2",
+    "storage-1": "file:../../storyclub/core/legacy/storage-1",
+    "storyclub-views": "file:../../storyclub/web/views",
     "uniqid": "5.0.3"
   },
   "devDependencies": {

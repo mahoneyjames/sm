@@ -6,14 +6,14 @@ const claudiaHelper = require("lambda-helpers")("app-v1");
 if(process.env.DATA && process.env.DATA.toLowerCase()=="local")
 {
     console.log("running locally");
-    dataStorage = require('./storage/storage-local')({path:process.env.SITEPATH});
-    htmlStorage = require('./storage/storage-local')({path:process.env.SITEPATH});
+    dataStorage = require('storage-1').local({path:process.env.SITEPATH});
+    htmlStorage = require('storage-1').local({path:process.env.SITEPATH});
 }
 else
 {
     console.log(`running with s3:${process.env.BUCKET}`);
-    dataStorage = require('./storage/storage-s3')({bucket:process.env.BUCKET});
-    htmlStorage = require('./storage/storage-s3')({bucket:process.env.BUCKET});    
+    dataStorage = require('storage-1').s3({bucket:process.env.BUCKET});
+    htmlStorage = require('storage-1').s3({bucket:process.env.BUCKET});    
 }
 
 const eventQueue = require('./eventQueue/htmlnow')(dataStorage,htmlStorage);

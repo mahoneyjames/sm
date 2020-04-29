@@ -1,8 +1,0 @@
-mixin themeBreadcrumb(theme)
-    if theme && theme.path
-        nav.breadcrumb(aria-label="breadcrumbs")
-            ul
-                li
-                    a(href="/") Home
-                li 
-                    a(href=`/${theme.path}`) #{theme.themeText}

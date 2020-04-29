@@ -30,7 +30,7 @@ async function dataLayerTests(dataLayer)
 async function rebuildThemes()
 {
   var dataStorage = require('../src/club/storage/storage-s3.js')({bucket:"www.storyclub.co.uk"});
-  var htmlStorage = require('../src/club/storage/storage-local.js')({path:"_site/club/"});
+  var htmlStorage = require('storage-1').local({path:"_site/club/"});
 
   var themeController = require('../src/club/controllers/theme')(dataStorage,htmlStorage);
   await themeController.buildThemesPage();
@@ -85,7 +85,7 @@ var something = null;
 
 async function testUsers()
 {
-  var storage = require('../src/club/model/data.js')(require('../src/club/storage/storage-local.js')({path:"_site/club/"}));
+  var storage = require('../src/club/model/data.js')(require('storage-1').local({path:"_site/club/"}));
   debug(await storage.loadUsers());
 } 
 

@@ -13,8 +13,8 @@ describe("local-api: brand new site", function(){
     //TODO - filter this out of the standard test run?
     //TODO option to run this by itself via package.json?
 
-        var storage = require('../src/club/storage/storage-local.js')({path:"test/inputs/api-test-1/"});
-        var storageForSite = require("../src/club/storage/storage-local")({path:"_site/club/data/"});
+        var storage = require('storage-1').local({path:"test/inputs/api-test-1/"});
+        var storageForSite = require('storage-1').local({path:"_site/club/data/"});
         
         it("check target", async function(){
             expect(await get('/hello')).to.equal("hello world:localstorage");
@@ -297,7 +297,7 @@ describe("local-api: brand new site", function(){
 });
 
 describe.skip("local-api-real-data", async function(){
-    await loadDataToSiteViaApi(require('../src/club/storage/storage-local.js')({path:"test/inputs/api-test-3/"}));    
+    await loadDataToSiteViaApi(require('storage-1').local({path:"test/inputs/api-test-3/"}));    
     
 });
 

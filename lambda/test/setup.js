@@ -37,7 +37,7 @@ module.exports = function(options={})
         debug(`Copying contents from '%s' to '%s'`, sourcePath, targetPath);
 
         await copy(sourcePath, targetPath);
-        return require('../src/club/storage/storage-local.js')({path:targetPath});
+        return require('storage-1').local({path:targetPath});
     }
 
     return module;

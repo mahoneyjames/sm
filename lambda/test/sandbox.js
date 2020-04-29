@@ -1,7 +1,7 @@
 
 describe("sandbox-comment-tree", function(){
 
-    const storage = require("../src/club/storage/storage-local")({path:"_site/club/"});
+    const storage = require('storage-1').local({path:"_site/club/"});
     // before(async function(){
     //     storage = await setup.initLocalStorage("sandbox-comment-tree");        
     // });

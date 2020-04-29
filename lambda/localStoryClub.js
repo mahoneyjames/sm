@@ -9,7 +9,7 @@ process.on('unhandledRejection', error => {
 async function blah()
 {    
     //const storage = (require('./src/club/storage/storage-s3.js')({bucket:process.env.BUCKET}));
-    const storage = require('./src/club/storage/storage-local.js')({path:"_site/club/"});
+    const storage = require('storage-1').local({path:"_site/club/"});
     const disqusController = require('./src/club/controllers/disqusController')(process.env.disqus_accessToken, process.env.disqus_apiKey, process.env.disqus_apiSecret, "storyclub",storage,storage);
 
 
