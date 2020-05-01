@@ -81,10 +81,8 @@ claudiaHelper.get(api,'/api/site/home', async (request)=>{
 });
 
 
-claudiaHelper.get(api,'/api/site/no-comments', async (request)=>{    
-    var controller = require('./controllers/siteController')(data,html);
-    await controller.rebuildAuthorMissingCommentsPages();
-    return {result:"done"};
+claudiaHelper.get(api,'/api/site/no-comments', async (request)=>{        
+    return {result:"done-deprecated"};
 });
 
 claudiaHelper.post(api, '/api/themes/save', async (request)=>{

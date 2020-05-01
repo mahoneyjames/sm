@@ -14,7 +14,7 @@ module.exports = async function(storageLoader){
         storageForData = await storageLoader();
 
         data = require('../../src/club/model/data')(storageForData);
-        controller = require('../../src/club/controllers/theme')(data,require('../../src/club/views/html')(storageForData, "./src/club/views"));
+        controller = require('../../src/club/controllers/theme')(data,require('storyclub-views')(storageForData, "./src/club/views"));
 
     });
 
@@ -79,15 +79,7 @@ module.exports = async function(storageLoader){
             expect(persistedTheme.status).to.equal("complete");
         });
 
-        it('add comments and rebuild theme', async function(){
 
-            await data.saveAllComments({comments:[
-                //TODO - add some comments!
-            ]});
-            await controller.rebuildThemePage(themeText);
-            var persistedTheme = await storageForData.readObjectFromJson(`/data/themes/${themeText}.json`);
-            expect(persistedTheme.status).to.equal("complete");
-        });
 
     });
 

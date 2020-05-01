@@ -2,7 +2,6 @@ const validateTheme = require('../model/theme/validate');
 const {sanitiseId} = require('../helpers');
 const validateStory = require('../model/story/validate');
 const generateStoryHtml = require('../model/story/buildContentHtml')
-const {addCommentCountsToStories,addCommentCountsToThemes} = require("../model/comment/commentHelpers");
 
 module.exports =  function(data, html){   
 
@@ -52,12 +51,8 @@ module.exports =  function(data, html){
 
     module.buildThemesPage = async()=>
     {
-        var themes = await this.data.cache_getThemesAndStories();
-        const commentsDoc = await this.data.cache_getAllComments();
-
-        addCommentCountsToThemes(themes,commentsDoc.comments);
-        themes = this.data.sortThemesByDate(themes);
-        
+        var themes = await this.data.cache_getThemesAndStories();        
+        themes = this.data.sortThemesByDate(themes);        
         await this.htmlBuilder.buildThemesPage(themes);
     }
     return module;
@@ -119,11 +114,19 @@ function editThemeStory(themeId, story)
 async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
 {    
     //load the theme json
-    const theme = (await dataLayer.cache_listThemes()).find(t=>t.publicId==publicThemeId);
+    const theme = (await dataLayer.loadTheme(publicThemeId));
 
     //load stories for the theme
-    const allStories = await dataLayer.cache_getThemeStories(publicThemeId);
+    const allStories = await dataLayer.listThemeStories(publicThemeId);
+
     
+    
+    // //load the theme json
+    // const theme = (await dataLayer.cache_listThemes()).find(t=>t.publicId==publicThemeId);
+
+    // //load stories for the theme
+    // const allStories = await dataLayer.cache_getThemeStories(publicThemeId);
+
     //console.log(allStories.length);
 
     const users = await dataLayer.cache_getUsers();
@@ -167,13 +170,14 @@ async function publishTheme(pageBuilder, dataLayer, publicThemeId, themeStatus)
     {
         theme.status=themeStatus;
     }
-    const commentsForTheme = await dataLayer.cache_getCommentsForTheme(publicThemeId);
-    addCommentCountsToStories(allStories, commentsForTheme);
-
+    
     const displayAuthor = themeStatus==="complete"? true: false;
 
-    await pageBuilder.buildThemeNavigation(theme,allStories, displayAuthor,commentsForTheme);
+    await pageBuilder.buildThemeNavigation(theme,allStories, displayAuthor);
     
+    //Need to push the stories into the theme instance, because that will go into the cache...
+    theme.stories = allStories;
+
     await dataLayer.saveTheme(theme);
 
     return theme;

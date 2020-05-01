@@ -16,10 +16,6 @@ describe('local-data-methods-themes-and-stories', function (){
     
 });
 
-// describe('local-data-methods-comments', function (){
-//     require('./_tests/data-methods/_test-data-methods-comments')(()=>setup.initLocalStorage('empty','data-tests-comments-1'));
-    
-// });
 describe ('helper-methods--data', function(){
     const data = require("../src/club/model/data")(null);
     it("group themes by year", function(){

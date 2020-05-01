@@ -2,7 +2,6 @@ const logger = require("log2")("data");
 const trackCache =(thing)=> logger.track("cache").logThing(thing);
 const uniqid = require('uniqid');
 const moment = require('moment');
-const {Comment} = require('./comment');
 const {groupByIsoDate,mapToArray} = require('../helpers');
 
 module.exports =  function(storage){   
@@ -15,10 +14,8 @@ module.exports =  function(storage){
     const CACHE_USERS = "users";
     const CACHE_THEMES_AND_STORIES = "all-themes-and-stories";
     const CACHE_THEMES_AND_STORIES_RECENT = "recent-themes-and-stories";
-    const CACHE_COMMENTS = "comments";
 
     module.resetCache = ()=>{module.cache={}};
-    module.resetCacheForComments = ()=>{module.cache[CACHE_COMMENTS] = null;};
     
     module.getCacheItem = async (key, loader, reloadFromStorage=false)=>
     {
@@ -224,68 +221,9 @@ module.exports =  function(storage){
         //TODO - update the cache?
 
     }
-    // module.saveCommentDoc = async(fullDoc)=>{
-    //     await storage.writeFile(`data/everything.json`, JSON.stringify(fullDoc),"application/json");
-    // }
 
-    // module.loadCommentDoc = async()=>{
-    //     return await storage.readObjectFromJson(`data/everything.json`);
-    // }
 
-    module.saveAllComments = async(commentsDoc)=>{
 
-        if(commentsDoc.comments==undefined)
-        {
-            commentsDoc.comments = [];
-        }
-
-        if(commentsDoc.lastCommentData==undefined)
-        {
-            commentsDoc.lastCommentDate = null;
-        }
-        await storage.writeFile(`data/comments.json`, JSON.stringify(commentsDoc),"application/json");
-
-        module.setCacheItem(CACHE_COMMENTS,commentsDoc);
-    }
-
-    module.cache_getCommentsForTheme = async(publicThemeId, reloadFromStorage=false)=>
-    {
-        return (await module.cache_getAllComments(reloadFromStorage)).comments.filter(c=>c.themeId==publicThemeId);
-    }
-
-    module.cache_getAllComments = async(reloadFromStorage=false)=>{
-        return await module.getCacheItem(CACHE_COMMENTS, module.listAllComments, reloadFromStorage);
-    }
-
-    /*
-        {
-            lastCommentDate:"datetime",
-            comments:[]
-        }
-    */
-    module.listAllComments = async()=>{
-        let commentsDoc = null;
-
-        try
-        {
-            commentsDoc = await storage.readObjectFromJson(`data/comments.json`);
-        }
-        catch(error)
-        {            
-            logger.error("listAllComments:" + error);
-            return {comments:[]};
-        }
-        if(commentsDoc.comments)
-        {
-            commentsDoc.comments = commentsDoc.comments.map((comment)=>new Comment(comment));
-        }
-        else
-        {
-            commentsDoc.comments=[];
-        }
-
-        return commentsDoc;             
-    }
 
     module.sortThemesByDate = (themes)=>{
         return themes.sort((a,b)=>{

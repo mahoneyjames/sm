@@ -40,12 +40,7 @@ module.exports.listThemeIdsForCommentIds = (comments, commentIds)=>{
         }
     );
 }
-/*
-    Returns only comments for the specified theme
-*/
-module.exports.listCommentsForTheme = (publicThemeId, commentsDoc)=>{
-    return commentsDoc.comments.filter(c=>c.themeId==publicThemeId);
-}
+
 
 
 /*

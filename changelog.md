@@ -26,5 +26,12 @@ Added a method to build pages for each user listing stories they have not commen
 # 27 Mar 2019
 Changed the way we do logging. Now we output JSON
 
-#4 April 2019
+# 4 April 2019
 Loads of unit testing, refactoring, and added some caching around the data - our s3 reads and writes were MASSIVE
+
+# 29 Apr 2020
+Moved the HTML views out to the new storyclub repoistory
+# 30 Apr 2020
+Altered theme publish to *stop* using the cache. The initial takes around 20 seconds, which then causes the API gateway to timeout the request.
+We introduced the cache because comment sync v1 was causing our S3 writes to be massive. But since comment sync now hits a DynamoDb I don't think we need the cache any more.
+Yes, we'll end up hitting S3 a little more when publishing, but we don't publish very often...
