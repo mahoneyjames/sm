@@ -106,6 +106,31 @@ module.exports =  function(storage){
         }
     }
 
+    module.cache_getUserStories = async (authorId, reloadFromStorage=false)=>
+    {
+        const all = await module.cache_getThemesAndStories(reloadFromStorage); 
+        const storiesForUser = [];
+
+        for (const theme of all)
+        {
+            if(theme.stories)
+            {
+                for(const story of theme.stories)
+                {
+                    //debug(story.author);
+                    if(story.author.toLowerCase()==authorId)
+                    {
+                        story.themeId = theme.publicId;
+                        story.deadline = theme.deadline;
+                        storiesForUser.push(story);
+                    }
+                }
+            }
+        }
+
+        return storiesForUser;
+    }
+
     module.listThemeStories = async (publicThemeId)=>{
         return await storage.listObjectsFromJson(`data/${publicThemeId}/stories`);
     };

@@ -185,6 +185,13 @@ describe("local-api: brand new site", function(){
 
         });
 
+        it.only("api-list-stories", async function(){
+            const result = await get("/api/stories/list/james");
+            expect(result.length).to.equal(3);
+            console.log(result);
+
+        });
+
         it("save users again (to force a rebuild of user pages)",async function(){
             const userResult = await post('/api/users/save',await storage.readObjectFromJson("users.json"));
             expect(userResult.errors.length).to.equal(0);

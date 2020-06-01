@@ -36,7 +36,7 @@ claudiaHelper.get(api, '/exception', async () =>{ throw "aargh";});
 claudiaHelper.get(api,'/api/themes/list', async ()=>data.cache_listThemes());
 claudiaHelper.get(api,'/api/themes/listEverything', async ()=>data.cache_getThemesAndStories());
 claudiaHelper.get(api,'/api/themes/listRecentEverything', async ()=>data.cache_getThemesAndStoriesRecentEverything());
-
+claudiaHelper.get(api, '/api/stories/list/{userId}', async (request)=>data.cache_getUserStories(request.pathParams.userId));
 claudiaHelper.get(api,'/api/site/refreshStaticPages', async ()=>{    
     await html.buildStaticPages();    
     return {"result":"done"};
