@@ -185,7 +185,7 @@ describe("local-api: brand new site", function(){
 
         });
 
-        it.only("api-list-stories", async function(){
+        it("api-list-stories", async function(){
             const result = await get("/api/stories/list/james");
             expect(result.length).to.equal(3);
             console.log(result);

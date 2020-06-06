@@ -51,7 +51,9 @@ module.exports =  function(data, html){
 
     module.buildThemesPage = async()=>
     {
-        var themes = await this.data.cache_getThemesAndStories();        
+        var themes = (await this.data.cache_getThemesAndStories())
+                    .filter(theme=>theme.status=="review" || theme.status=="complete");
+                            
         themes = this.data.sortThemesByDate(themes);        
         await this.htmlBuilder.buildThemesPage(themes);
     }
